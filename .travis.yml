@@ -27,10 +27,14 @@ android:
   - build-tools-${ANDROID_BUILD_TOOLS}
   - extra
 
-  licenses:
-    - 'android-sdk-preview-license-52d11cd2'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
+licenses:
+  - 'android-sdk-preview-license-52d11cd2'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+  
+before_install:
+  - yes | sdkmanager "platforms;android-27"
+  
 
 script:
 - ./gradlew clean test build
