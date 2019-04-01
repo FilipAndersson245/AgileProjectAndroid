@@ -27,5 +27,10 @@ android:
   - build-tools-${ANDROID_BUILD_TOOLS}
   - extra
 
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
 script:
 - ./gradlew clean test build
