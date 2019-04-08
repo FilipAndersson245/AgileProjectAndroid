@@ -1,17 +1,11 @@
 package se.ju.agileandroidproject
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity: AppCompatActivity() {
 
     object APIHandler
-
-    private val gpsHandler = GPSHandler()
-
-    private val gantry = Gantry()
-
-    private val invoice = Invoice()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
