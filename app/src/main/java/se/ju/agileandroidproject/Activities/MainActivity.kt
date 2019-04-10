@@ -10,9 +10,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.content.Intent
 import android.content.Context
-import android.content.pm.PackageManager
 import android.widget.Toast
-import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.Models.Gantry
@@ -40,20 +38,24 @@ class MainActivity : AppCompatActivity() {
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET)
+                Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1)
 
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.INTERNET)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.INTERNET),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     1)
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
