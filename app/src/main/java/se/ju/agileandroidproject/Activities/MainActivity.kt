@@ -31,41 +31,17 @@ class MainActivity : AppCompatActivity() {
     private val invoice = Invoice()
 
     private fun checkPermissions() {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR)
-//            != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted
-//        }
-
-        // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1)
+                REQUEST_PERMISSION_LOCATION)
 
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    1)
+            // TODO: Handle if the user denies access to GPS and then show a popup that explains why the app needs access to GPS.
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
