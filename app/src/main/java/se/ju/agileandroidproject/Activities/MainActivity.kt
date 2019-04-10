@@ -6,12 +6,25 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.location.Location
+import android.location.LocationManager
+import android.content.Intent
+import android.content.Context
+import android.content.pm.PackageManager
+import android.widget.Toast
+import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AlertDialog
 import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
 
+
 class MainActivity : AppCompatActivity() {
+
+    private val REQUEST_PERMISSION_LOCATION = 10
+
+    object APIHandler
 
     private val gpsHandler = GPSHandler()
 
@@ -60,4 +73,19 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
 
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_PERMISSION_LOCATION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
+                //TODO: Gör saker för att börja läsa GPS-koordinater
+            } else {
+                Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+
+
 }
