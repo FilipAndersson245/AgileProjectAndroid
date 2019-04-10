@@ -1,4 +1,4 @@
-package se.ju.agileandroidproject
+package se.ju.agileandroidproject.Activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +10,10 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
+import se.ju.agileandroidproject.GPSHandler
+import se.ju.agileandroidproject.Models.Gantry
+import se.ju.agileandroidproject.Models.Invoice
+import se.ju.agileandroidproject.R
 
 
 class MainActivity : AppCompatActivity() {

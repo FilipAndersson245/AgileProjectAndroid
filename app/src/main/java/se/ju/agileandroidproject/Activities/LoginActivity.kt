@@ -1,11 +1,10 @@
-package se.ju.agileandroidproject
+package se.ju.agileandroidproject.Activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import se.ju.agileandroidproject.R
 
 class LoginActivity: AppCompatActivity() {
-
-    object APIHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
