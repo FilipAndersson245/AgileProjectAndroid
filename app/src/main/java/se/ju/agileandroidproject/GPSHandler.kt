@@ -27,7 +27,6 @@ class GPSHandler constructor(val context: Context) {
 
     lateinit var lastKnownLocation: Location
 
-
     val locationListener = object : LocationListener {
 
         override fun onProviderDisabled(provider: String?) {
