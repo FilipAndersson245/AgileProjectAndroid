@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     object APIHandler
 
-    private val gpsHandler = GPSHandler()
+    private val gpsHandler = GPSHandler(applicationContext)
 
     private val gantry = Gantry()
 
