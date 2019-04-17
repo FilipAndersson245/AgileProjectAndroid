@@ -10,6 +10,10 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 
+private const val FIVE_SECONDS: Long = 5 * 1000
+
+private const val TEN_SECONDS: Long = 10 * 1000
+
 class GPSHandler(context: Context): Thread() {
 
     private val context: Context = context
@@ -17,8 +21,6 @@ class GPSHandler(context: Context): Thread() {
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     lateinit var location: Location
-
-    private val updateInterval = 5
 
     private val locationProvider: String = LocationManager.GPS_PROVIDER
 
@@ -61,6 +63,42 @@ class GPSHandler(context: Context): Thread() {
 
         } else{
             //TODO: Handle it.
+        }
+    }
+
+    public fun stopListening(){
+        locationManager.removeUpdates(locationListener)
+    }
+
+    //Determine if the new GPS coordinate is accurate enough to warrant an update
+    fun isBetterLocation(location: Location, currentBestLocation: Location?): Boolean {
+        if (currentBestLocation == null) {
+
+            return true
+        }
+
+        val timeDelta: Long = location.time - currentBestLocation.time
+        val isSignificantlyNewer: Boolean = timeDelta > TEN_SECONDS
+        val isSignificantlyOlder:Boolean = timeDelta < - TEN_SECONDS
+
+        when {
+            isSignificantlyNewer -> return true
+            isSignificantlyOlder -> return false
+        }
+
+        val isNewer: Boolean = timeDelta > 0L
+        val accuracyDelta: Float = location.accuracy - currentBestLocation.accuracy
+        val isLessAccurate: Boolean = accuracyDelta > 0f
+        val isMoreAccurate: Boolean = accuracyDelta < 0f
+        val isSignificantlyLessAccurate: Boolean = accuracyDelta > 200f
+
+        val isFromSameProvider: Boolean = location.provider == currentBestLocation.provider
+
+        return when {
+            isMoreAccurate -> true
+            isNewer && !isLessAccurate -> true
+            isNewer && !isSignificantlyLessAccurate && isFromSameProvider -> true
+            else -> false
         }
     }
 
