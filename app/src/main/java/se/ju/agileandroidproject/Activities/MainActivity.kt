@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     object APIHandler
 
-    private val gpsHandler = GPSHandler(applicationContext)
+    lateinit var gpsHandler: GPSHandler
 
     private val gantry = Gantry()
 
@@ -48,6 +48,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //checkPermissions()
+
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
 
     }
@@ -57,6 +66,11 @@ class MainActivity : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
                 //TODO: Gör saker för att börja läsa GPS-koordinater
+
+
+                gpsHandler.startListening()
+
+
             } else {
                 Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
             }

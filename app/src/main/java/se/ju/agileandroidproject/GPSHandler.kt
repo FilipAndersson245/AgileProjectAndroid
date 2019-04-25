@@ -7,16 +7,17 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.nfc.Tag
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
+import kotlin.math.log
 
 private const val FIVE_SECONDS: Long = 5 * 1000
 
 private const val TEN_SECONDS: Long = 10 * 1000
 
-class GPSHandler(context: Context): Thread() {
-
-    private val context: Context = context
+class GPSHandler constructor(val context: Context) {
 
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -25,6 +26,7 @@ class GPSHandler(context: Context): Thread() {
     private val locationProvider: String = LocationManager.GPS_PROVIDER
 
     lateinit var lastKnownLocation: Location
+
 
     val locationListener = object : LocationListener {
 
@@ -42,23 +44,28 @@ class GPSHandler(context: Context): Thread() {
 
         override fun onLocationChanged(location: Location?) {
             //TODO: Do somewthing with new location.
+            Log.d("EH", location.toString())
         }
 
     }
 
 
 
-    public override fun run() {
+    public fun startListening() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f,locationListener)
+            Log.d("EH", "bok")
 
         } else{
             //TODO: Handle it.
         }
     }
 
+
     public fun getLastLocation(){
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+
             lastKnownLocation = locationManager.getLastKnownLocation(locationProvider)
 
         } else{
