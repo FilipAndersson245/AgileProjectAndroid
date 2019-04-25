@@ -14,13 +14,6 @@ import android.util.Log
 import kotlin.math.log
 
 private const val FIVE_SECONDS: Long = 5 * 1000
-<<<<<<< HEAD
-=======
-
-private const val TEN_SECONDS: Long = 10 * 1000
-
-class GPSHandler(context: Context): Thread() {
->>>>>>> 70866e7... Adds WIP on GPSHandler class.
 
 private const val TEN_SECONDS: Long = 10 * 1000
 
