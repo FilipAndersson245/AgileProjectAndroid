@@ -16,15 +16,18 @@ import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
+import se.ju.agileandroidproject.APIHandler
+import kotlinx.coroutines.*
+import kotlin.system.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    object APIHandler
+    //object APIHandler
 
-    private val gpsHandler = GPSHandler()
+    lateinit var gpsHandler: GPSHandler
 
     private val gantry = Gantry()
 
@@ -48,7 +51,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+    }
+
+    // Remove "= runBlocking" when not using async here
+    // This is "inprogress" code.
+    override fun onStart() = runBlocking {
+        super.onStart()
+        gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
+
+
+        // Remove later
+        async {
+            APIHandler.testAsync()
+        }
+        println("--------------------> DONE")
+        // Remove above
 
     }
 
@@ -57,6 +75,11 @@ class MainActivity : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
                 //TODO: Gör saker för att börja läsa GPS-koordinater
+
+
+                gpsHandler.startListening()
+
+
             } else {
                 Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
             }
