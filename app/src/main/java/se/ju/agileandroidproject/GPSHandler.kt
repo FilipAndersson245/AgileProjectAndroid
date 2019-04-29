@@ -13,20 +13,21 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import kotlin.math.log
 
-private const val FIVE_SECONDS: Long = 5 * 1000
-
 private const val TEN_SECONDS: Long = 10 * 1000
 
 class GPSHandler constructor(val context: Context) {
 
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-    lateinit var location: Location
+    lateinit var currentLocation: Location
 
-    private val locationProvider: String = LocationManager.GPS_PROVIDER
+    private var locationProvider: String = LocationManager.GPS_PROVIDER
 
-    lateinit var lastKnownLocation: Location
+    private var lastKnownLocation: Location? = null
 
+    private var updateTime: Long = 30 * 1000
+
+    private var newUpdateTime: Long = 30 * 1000
 
     val locationListener = object : LocationListener {
 
@@ -45,16 +46,35 @@ class GPSHandler constructor(val context: Context) {
         override fun onLocationChanged(location: Location?) {
             //TODO: Do somewthing with new location.
             Log.d("EH", location.toString())
+            if (location != null){
+                if (isBetterLocation(location, lastKnownLocation)){
+                    currentLocation = location
+                    lastKnownLocation = location
+                    Log.d("EH","updated location")
+                }
+            }
+
+
+
         }
 
     }
 
+    fun setUpdateTime(newTime: Long){
+        newUpdateTime = newTime
+        if (newUpdateTime != updateTime){
+            stopListening()
+            Log.d("EH", "Stopped listening with " + updateTime / 1000 + " second interval")
+            startListening(newUpdateTime)
+            Log.d("EH", "Started listening with " + newUpdateTime / 1000 + " second interval")
+            updateTime = newUpdateTime
+        }
+    }
 
 
-    public fun startListening() {
+    public fun startListening(updateTime: Long) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f,locationListener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 0f,locationListener)
             Log.d("EH", "bok")
 
         } else{
@@ -67,7 +87,9 @@ class GPSHandler constructor(val context: Context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
 
             lastKnownLocation = locationManager.getLastKnownLocation(locationProvider)
-
+            if (lastKnownLocation != null){
+                currentLocation = lastKnownLocation!!
+            }
         } else{
             //TODO: Handle it.
         }
@@ -79,6 +101,8 @@ class GPSHandler constructor(val context: Context) {
 
     //Determine if the new GPS coordinate is accurate enough to warrant an update
     fun isBetterLocation(location: Location, currentBestLocation: Location?): Boolean {
+        Log.d("EH", "new location" + location.toString())
+        Log.d("EH", "last known: " + currentBestLocation.toString())
         if (currentBestLocation == null) {
 
             return true
