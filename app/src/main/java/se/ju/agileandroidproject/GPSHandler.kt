@@ -18,7 +18,7 @@ private const val TEN_SECONDS: Long = 10 * 1000
 class GPSHandler constructor(val context: Context) {
 
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    
+
     lateinit var currentLocation: Location
 
     private var locationProvider: String = LocationManager.GPS_PROVIDER
