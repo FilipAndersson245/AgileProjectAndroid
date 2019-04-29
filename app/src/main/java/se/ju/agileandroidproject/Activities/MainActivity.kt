@@ -12,6 +12,8 @@ import android.content.Intent
 import android.content.Context
 import android.widget.Toast
 import android.support.v7.app.AlertDialog
+import android.widget.AdapterView
+import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
@@ -47,6 +49,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+<<<<<<< HEAD
+=======
+
+        val btnOne = findViewById(R.id.btn_one_sec) as Button
+
+        btnOne.setOnClickListener {
+            updateOne()
+        }
+
+        val btnFive = findViewById(R.id.btn_five_sec) as Button
+
+        btnFive.setOnClickListener {
+            updateFive()
+        }
+
+        val btnTen = findViewById(R.id.btn_ten_sec) as Button
+
+        btnTen.setOnClickListener {
+            updateTen()
+        }
+
+
+
+>>>>>>> 98bcae9... Adds WIP on GPS updates. Updates GPS with different timers.
     }
 
     // Remove "= runBlocking" when not using async here
@@ -73,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                 //TODO: Gör saker för att börja läsa GPS-koordinater
 
 
-                gpsHandler.startListening()
+                gpsHandler.startListening(30000)
 
 
             } else {
@@ -84,5 +110,16 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    fun updateOne(){
+        gpsHandler.setUpdateTime(1000)
+    }
+
+    fun updateFive(){
+        gpsHandler.setUpdateTime(5000)
+    }
+
+    fun updateTen(){
+        gpsHandler.setUpdateTime(10000)
+    }
 
 }
