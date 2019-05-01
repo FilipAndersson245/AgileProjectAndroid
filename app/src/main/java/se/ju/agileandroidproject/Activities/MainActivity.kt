@@ -29,10 +29,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var gpsHandler: GPSHandler
 
-    private val gantry = Gantry()
-
-    private val invoice = Invoice()
-
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)

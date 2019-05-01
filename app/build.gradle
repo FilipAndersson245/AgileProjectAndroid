@@ -26,6 +26,23 @@ android {
     }
 }
 
+
+
+apply plugin: 'kotlin' // or 'kotlin-multiplatform' for multiplatform projects
+apply plugin: 'kotlinx-serialization'
+
+buildscript {
+    ext.kotlin_version = '$kotlin_version'
+    repositories { jcenter() }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
+}
+
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -39,5 +56,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.github.kittinunf.fuel:fuel:2.0.1'
     implementation 'com.github.kittinunf.fuel:fuel-coroutines:2.0.1'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0"
 }
 
