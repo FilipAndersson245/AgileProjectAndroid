@@ -27,11 +27,8 @@ class GPSHandler constructor(val context: Context) {
 
     private var updateTime: Long = 30 * 1000
 
-<<<<<<< HEAD
-=======
     private var newUpdateTime: Long = 30 * 1000
 
->>>>>>> 98bcae9... Adds WIP on GPS updates. Updates GPS with different timers.
     val locationListener = object : LocationListener {
 
         override fun onProviderDisabled(provider: String?) {

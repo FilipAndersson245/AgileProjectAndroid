@@ -1,11 +1,15 @@
 package se.ju.agileandroidproject.Models
 
 import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
-
-import se.ju.agileandroidproject.Models.Coordinate
 
 @Serializable
-class Gantry(val id: String, val Coordinates: Coordinate, val lastUpdated: String, val Price: Float) {
+class Gantry(
+    val id: String,
+    val position: List<Float>,
+    val lastUpdated: String,
+    val price: Float) {
+
+    @Transient
+    val coordinates = Coordinate(position[0], position[1])
 
 }
