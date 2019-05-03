@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.Context
 import android.widget.Toast
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
@@ -80,12 +81,12 @@ class MainActivity : AppCompatActivity() {
         // Remove later, for remember purpose only
         async {
             val a = APIHandler.returnGantry()
-            println("---------------------------> RESULT GANTRY START")
-            println(a.id)
-            println(a.coordinates)
-            println(a.lastUpdated)
-            println(a.price)
-            println("---------------------------> RESULT GANTRY END")
+            Log.d("EH","---------------------------> RESULT GANTRY START")
+            Log.d("EH", a.id)
+            Log.d("EH", a.coordinates.toString())
+            Log.d("EH", a.lastUpdated)
+            Log.d("EH", a.price.toString())
+            Log.d("EH", "---------------------------> RESULT GANTRY END")
         }
     }
 
