@@ -29,7 +29,6 @@ class GPSHandler constructor(val context: Context) {
 
     private var newUpdateTime: Long = 30 * 1000
 
-
     val locationListener = object : LocationListener {
 
         override fun onProviderDisabled(provider: String?) {
@@ -54,8 +53,6 @@ class GPSHandler constructor(val context: Context) {
                     Log.d("EH","updated location")
                 }
             }
-
-
         }
 
     }
