@@ -31,10 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var gpsHandler: GPSHandler
 
-    private val gantry = Gantry()
-
-    private val invoice = Invoice()
-
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -57,8 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Remove "= runBlocking" when not using async here
-    // This is "inprogress" code.
-    override fun onStart() = runBlocking {
+    override fun onStart() = runBlocking<Unit> {
         super.onStart()
         gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
@@ -82,13 +77,16 @@ class MainActivity : AppCompatActivity() {
             updateTen()
         }
 
-        // Remove later
+        // Remove later, for remember purpose only
         async {
-            APIHandler.testAsync()
+            val a = APIHandler.returnGantry()
+            println("---------------------------> RESULT GANTRY START")
+            println(a.id)
+            println(a.coordinates)
+            println(a.lastUpdated)
+            println(a.price)
+            println("---------------------------> RESULT GANTRY END")
         }
-        println("--------------------> DONE")
-        // Remove above
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

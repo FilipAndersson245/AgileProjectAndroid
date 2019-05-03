@@ -1,58 +1,37 @@
 package se.ju.agileandroidproject
 
-import kotlinx.coroutines.*
-import java.net.URL
-import kotlin.system.*
 import com.github.kittinunf.fuel.*
-import com.github.kittinunf.fuel.coroutines.awaitObjectResponse
-import com.github.kittinunf.fuel.coroutines.awaitObjectResult
+import com.github.kittinunf.fuel.core.extensions.authentication
+import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
-import com.github.kittinunf.result.Result
+import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
 
+import se.ju.agileandroidproject.Models.Gantry
 
 object APIHandler {
 
-    suspend fun testAsync() {
-        println("---------------------------> Start fetch")
+    val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
+    val token = "fhsakdjhjkfds"
 
-        println("---------------------------> REQUEST")
-        val (request, response, result) = Fuel.get("https://www.google.se/").awaitStringResponseResult()
+    @UnstableDefault
+    suspend fun returnGantry() : Gantry {
+        val (request, response, result) =
+            Fuel.post(url + "/gantries/" + "abc123")
+                .authentication()
+                .bearer(token)
+                .jsonBody("{ \"position\": [3.213134, 12.438324] }")
+                .awaitStringResponseResult()
 
-        println("---------------------------> RESPONSE")
-        println(response.responseMessage)
+        lateinit var responseData : Gantry
+        result.fold(
+            { data ->
+                responseData = Json.parse(Gantry.serializer(), data)
+            },
+            { error ->
+                println("An error of type ${error.exception} happened: ${error.message}")
+            })
 
-//        println("---------------------------> RESULT")
-//        result.fold(
-//            { data -> println(data) /* "{"origin":"127.0.0.1"}" */ },
-//            { error -> println("An error of type ${error.exception} happened: ${error.message}") }
-//        )
-        println("---------------------------> END")
-
-
-//        Fuel.get("https://www.google.se/")
-//            .response() { request, response, result ->
-//                println("---------------------------> REQUEST")
-//                println(request)
-//                println("---------------------------> RESPONSE")
-//                println(response.responseMessage)
-//                println("---------------------------> END")
-//            }
-
-//        Fuel.get("https://www.google.se/")
-//            .response() { request, response, result ->
-//                println("---------------------------> REQUEST")
-//                println(request)
-//                println("---------------------------> RESPONSE")
-//                println(response.responseMessage)
-////                println("---------------------------> RESULT")
-////                val (bytes, error) = result
-////                if (bytes != null) {
-////                    println("[response bytes] ${String(bytes)})
-////                }
-//                println("---------------------------> END")
-//            }
-
-
-        println("------------------------------> Done test")
+        return responseData
     }
 }
