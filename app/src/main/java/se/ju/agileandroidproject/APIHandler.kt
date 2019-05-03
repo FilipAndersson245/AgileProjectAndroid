@@ -15,7 +15,8 @@ object APIHandler {
     val token = "fhsakdjhjkfds"
 
     @UnstableDefault
-    suspend fun returnGantry() : Gantry {
+    suspend fun returnGantry(lon : Float, lat : Float) : List<Gantry> {
+
         val (request, response, result) =
             Fuel.post(url + "/gantries/" + "abc123")
                 .authentication()
@@ -23,10 +24,12 @@ object APIHandler {
                 .jsonBody("{ \"position\": [3.213134, 12.438324] }")
                 .awaitStringResponseResult()
 
-        lateinit var responseData : Gantry
+
+        var responseData = mutableListOf<Gantry>()
+
         result.fold(
             { data ->
-                responseData = Json.parse(Gantry.serializer(), data)
+                responseData.add(Json.parse(Gantry.serializer(), data))
             },
             { error ->
                 println("An error of type ${error.exception} happened: ${error.message}")

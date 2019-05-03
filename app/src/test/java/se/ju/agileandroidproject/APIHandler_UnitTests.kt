@@ -16,6 +16,6 @@ class APIHandler_UnitTests {
     @Test
     fun getGantry_notNull() = runBlocking<Unit> {
         // Assert
-        assertNotNull(APIHandler.returnGantry())
+        assertNotNull(APIHandler.returnGantry(5f, 5f))
     }
 }
