@@ -27,7 +27,7 @@ class GPSHandler constructor(val context: Context) {
 
     private var newUpdateTime: Long = 30 * 1000
 
-    lateinit var coordinateOfClosestGantry: Coordinate
+    private var coordinateOfClosestGantry: Coordinate? = null
 
     private var distanceToClosestGantry: Int? = null
 
@@ -77,9 +77,13 @@ class GPSHandler constructor(val context: Context) {
                     var distance = coordinatesDistance(currentLocation.latitude.toFloat(), currentLocation.longitude.toFloat(), coordinate.lat, coordinate.lon)
                     if (distanceToClosestGantry == null){
                         distanceToClosestGantry = distance.toInt()
+                        coordinateOfClosestGantry = coordinate
+                        Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
                     }
                     else if (distance.toInt() < distanceToClosestGantry!!){
                         distanceToClosestGantry = distance.toInt()
+                        coordinateOfClosestGantry = coordinate
+                        Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
                     }
                 }
             }
