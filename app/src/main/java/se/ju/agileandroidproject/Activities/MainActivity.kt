@@ -80,12 +80,12 @@ class MainActivity : AppCompatActivity() {
 
         // Remove later, for remember purpose only
         async {
-            val a = APIHandler.returnGantry()
+            val a = APIHandler.returnGantry(5f, 5f)
             Log.d("EH","---------------------------> RESULT GANTRY START")
-            Log.d("EH", a.id)
-            Log.d("EH", a.coordinates.toString())
-            Log.d("EH", a.lastUpdated)
-            Log.d("EH", a.price.toString())
+            Log.d("EH", a[0].id)
+            Log.d("EH", a[0].coordinates.toString())
+            Log.d("EH", a[0].lastUpdated)
+            Log.d("EH", a[0].price.toString())
             Log.d("EH", "---------------------------> RESULT GANTRY END")
         }
     }
