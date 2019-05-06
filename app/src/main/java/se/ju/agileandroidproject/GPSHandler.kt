@@ -1,11 +1,6 @@
 package se.ju.agileandroidproject
 
 import android.Manifest
-<<<<<<< HEAD
-import android.app.PendingIntent.getActivity
-import android.content.AsyncTaskLoader
-=======
->>>>>>> ad6fafbc7951c6f23ff50ac3443a54bee3df5669
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -14,15 +9,11 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
-<<<<<<< HEAD
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import se.ju.agileandroidproject.Models.Coordinate
-import kotlin.math.log
-=======
-import se.ju.agileandroidproject.Models.Coordinate
->>>>>>> ad6fafbc7951c6f23ff50ac3443a54bee3df5669
+
 
 private const val TEN_SECONDS: Long = 10 * 1000
 
@@ -40,12 +31,9 @@ class GPSHandler constructor(val context: Context) {
 
     private var newUpdateTime: Long = 30 * 1000
 
-<<<<<<< HEAD
-=======
     private var coordinateOfClosestGantry: Coordinate? = null
 
     private var distanceToClosestGantry: Int? = null
->>>>>>> ad6fafbc7951c6f23ff50ac3443a54bee3df5669
 
     val locationListener = object : LocationListener {
 
@@ -82,7 +70,7 @@ class GPSHandler constructor(val context: Context) {
 
     }
 
-    fun coordinatesDistance(lat1: Float, lng1: Float, lat2: Float, lng2: Float): Float {
+    fun coordinatesDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
         val earthRadius = 6371000.0 //meters
         val latDistance = Math.toRadians((lat2 - lat1).toDouble())
         val lonDistance = Math.toRadians((lng2 - lng1).toDouble())
@@ -90,14 +78,14 @@ class GPSHandler constructor(val context: Context) {
                 Math.cos(Math.toRadians(lat2.toDouble())) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)
         val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
-        return (earthRadius * c).toFloat()
+        return (earthRadius * c)
     }
 
     fun updateClosestGantry(coordinates: List<Coordinate>){
         if (coordinates != null){
             for (coordinate in coordinates){
                 if (currentLocation != null){
-                    var distance = coordinatesDistance(currentLocation.latitude.toFloat(), currentLocation.longitude.toFloat(), coordinate.lat, coordinate.lon)
+                    var distance = coordinatesDistance(currentLocation.latitude, currentLocation.longitude, coordinate.lat, coordinate.lon)
                     if (distanceToClosestGantry == null){
                         distanceToClosestGantry = distance.toInt()
                         coordinateOfClosestGantry = coordinate
