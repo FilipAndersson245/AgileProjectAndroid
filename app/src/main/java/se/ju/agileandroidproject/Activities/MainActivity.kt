@@ -63,19 +63,19 @@ class MainActivity : AppCompatActivity() {
         val btnOne = findViewById(R.id.btn_one_sec) as Button
 
         btnOne.setOnClickListener {
-            updateOne()
+            changeUpdateTime(1000)
         }
 
         val btnFive = findViewById(R.id.btn_five_sec) as Button
 
         btnFive.setOnClickListener {
-            updateFive()
+            changeUpdateTime(5000)
         }
 
         val btnTen = findViewById(R.id.btn_ten_sec) as Button
 
         btnTen.setOnClickListener {
-            updateTen()
+            changeUpdateTime(10000)
         }
 
         // Remove later, for remember purpose only
@@ -107,16 +107,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    fun updateOne(){
-        gpsHandler.setUpdateTime(1000)
+    fun changeUpdateTime(updateTime: Long){
+        gpsHandler.setUpdateTime(updateTime)
     }
 
-    fun updateFive(){
-        gpsHandler.setUpdateTime(5000)
-    }
-
-    fun updateTen(){
-        gpsHandler.setUpdateTime(10000)
-    }
 
 }
