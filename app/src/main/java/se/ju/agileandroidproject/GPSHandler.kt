@@ -1,17 +1,15 @@
 package se.ju.agileandroidproject
 
 import android.Manifest
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.nfc.Tag
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import kotlin.math.log
+import se.ju.agileandroidproject.Models.Coordinate
 
 private const val TEN_SECONDS: Long = 10 * 1000
 
@@ -28,6 +26,10 @@ class GPSHandler constructor(val context: Context) {
     private var updateTime: Long = 30 * 1000
 
     private var newUpdateTime: Long = 30 * 1000
+
+    lateinit var coordinateOfClosestGantry: Coordinate
+
+    private var distanceToClosestGantry: Int? = null
 
     val locationListener = object : LocationListener {
 
@@ -55,6 +57,33 @@ class GPSHandler constructor(val context: Context) {
             }
         }
 
+    }
+
+    fun coordinatesDistance(lat1: Float, lng1: Float, lat2: Float, lng2: Float): Float {
+        val earthRadius = 6371000.0 //meters
+        val latDistance = Math.toRadians((lat2 - lat1).toDouble())
+        val lonDistance = Math.toRadians((lng2 - lng1).toDouble())
+        val a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1.toDouble())) *
+                Math.cos(Math.toRadians(lat2.toDouble())) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return (earthRadius * c).toFloat()
+    }
+
+    fun updateClosestGantry(coordinates: List<Coordinate>){
+        if (coordinates != null){
+            for (coordinate in coordinates){
+                if (currentLocation != null){
+                    var distance = coordinatesDistance(currentLocation.latitude.toFloat(), currentLocation.longitude.toFloat(), coordinate.lat, coordinate.lon)
+                    if (distanceToClosestGantry == null){
+                        distanceToClosestGantry = distance.toInt()
+                    }
+                    else if (distance.toInt() < distanceToClosestGantry!!){
+                        distanceToClosestGantry = distance.toInt()
+                    }
+                }
+            }
+        }
     }
 
     fun setUpdateTime(newTime: Long){
