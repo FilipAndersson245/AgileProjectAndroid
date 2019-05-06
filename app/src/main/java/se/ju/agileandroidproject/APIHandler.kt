@@ -4,8 +4,10 @@ import com.github.kittinunf.fuel.*
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
+import com.github.kittinunf.result.Result
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import se.ju.agileandroidproject.Models.Coordinate
 
 import se.ju.agileandroidproject.Models.Gantry
 
@@ -15,7 +17,7 @@ object APIHandler {
     val token = "fhsakdjhjkfds"
 
     @UnstableDefault
-    suspend fun returnGantry(lon : Float, lat : Float) : List<Gantry> {
+    suspend fun returnGantry(coordinate : Coordinate) : List<Gantry> {
 
         val (request, response, result) =
             Fuel.post(url + "/gantries/" + "abc123")
@@ -36,5 +38,36 @@ object APIHandler {
             })
 
         return responseData
+    }
+
+    @UnstableDefault
+    suspend fun getClosestGantries(coordinate : Coordinate) : List<Coordinate> {
+
+        val (request, response, result) =
+            Fuel.get(url + "/gantries", listOf("lon" to coordinate.lon, "lat" to coordinate.lat))
+                .authentication()
+                .bearer(token)
+                .awaitStringResponseResult()
+
+
+        var responseData = mutableListOf<Gantry>()
+
+        result.fold(
+            { data ->
+                responseData.add(Json.parse(Gantry.serializer(), data))
+            },
+            { error ->
+                println("An error of type ${error.exception} happened: ${error.message}")
+            })
+
+        var postitionData = mutableListOf<Coordinate>()
+
+        for (gantry in responseData)
+        {
+            postitionData.add(gantry.coordinates)
+        }
+
+
+        return postitionData
     }
 }

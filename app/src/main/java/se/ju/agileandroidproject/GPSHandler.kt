@@ -2,6 +2,7 @@ package se.ju.agileandroidproject
 
 import android.Manifest
 import android.app.PendingIntent.getActivity
+import android.content.AsyncTaskLoader
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -11,6 +12,10 @@ import android.nfc.Tag
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import se.ju.agileandroidproject.Models.Coordinate
 import kotlin.math.log
 
 private const val TEN_SECONDS: Long = 10 * 1000
@@ -29,6 +34,7 @@ class GPSHandler constructor(val context: Context) {
 
     private var newUpdateTime: Long = 30 * 1000
 
+
     val locationListener = object : LocationListener {
 
         override fun onProviderDisabled(provider: String?) {
@@ -43,7 +49,7 @@ class GPSHandler constructor(val context: Context) {
 
         }
 
-        override fun onLocationChanged(location: Location?) {
+        override fun onLocationChanged(location: Location?) = runBlocking {
             //TODO: Do somewthing with new location.
             Log.d("EH", location.toString())
             if (location != null){
@@ -52,6 +58,13 @@ class GPSHandler constructor(val context: Context) {
                     lastKnownLocation = location
                     Log.d("EH","updated location")
                 }
+
+                async {
+                    delay(1000)
+                    val positions = APIHandler.returnGantry(Coordinate(currentLocation.longitude, currentLocation.latitude))
+                    Log.d("EH", "Done!")
+                }
+
             }
         }
 

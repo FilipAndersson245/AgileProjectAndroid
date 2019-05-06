@@ -6,22 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.location.Location
-import android.location.LocationManager
-import android.content.Intent
-import android.content.Context
-import android.widget.Toast
-import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.widget.AdapterView
+import android.widget.Toast
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
-import se.ju.agileandroidproject.Models.Gantry
-import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
-import se.ju.agileandroidproject.APIHandler
 import kotlinx.coroutines.*
-import kotlin.system.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -75,18 +65,7 @@ class MainActivity : AppCompatActivity() {
         val btnTen = findViewById(R.id.btn_ten_sec) as Button
 
         btnTen.setOnClickListener {
-            changeUpdateTime(10000)
-        }
-
-        // Remove later, for remember purpose only
-        async {
-            val a = APIHandler.returnGantry(5f, 5f)
-            Log.d("EH","---------------------------> RESULT GANTRY START")
-            Log.d("EH", a[0].id)
-            Log.d("EH", a[0].coordinates.toString())
-            Log.d("EH", a[0].lastUpdated)
-            Log.d("EH", a[0].price.toString())
-            Log.d("EH", "---------------------------> RESULT GANTRY END")
+            Log.d("EH", "Clicked")
         }
     }
 
