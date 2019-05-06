@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
 
-
         val btnOne = findViewById(R.id.btn_one_sec) as Button
 
         btnOne.setOnClickListener {
