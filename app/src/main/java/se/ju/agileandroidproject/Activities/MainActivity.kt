@@ -16,6 +16,8 @@ import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
+import android.widget.ArrayAdapter
+import android.widget.ListView
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(se.ju.agileandroidproject.R.layout.activity_main)
 
         checkPermissions()
 
