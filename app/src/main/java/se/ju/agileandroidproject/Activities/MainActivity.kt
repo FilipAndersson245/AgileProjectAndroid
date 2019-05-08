@@ -12,15 +12,24 @@ import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.R
 import kotlinx.coroutines.*
+import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Models.Coordinate
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    //object APIHandler
+    private val ENTER_TRAVEL = true
+
+    private val EXIT_TRAVEL = false
+
+    private var isTraveling = false
 
     lateinit var gpsHandler: GPSHandler
+
+    lateinit var threadLoop : Thread
 
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
@@ -46,8 +55,24 @@ class MainActivity : AppCompatActivity() {
     // Remove "= runBlocking" when not using async here
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
-        gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
+        gpsHandler = GPSHandler(applicationContext)
+
+        Log.d("EH","${Thread.currentThread()} has run.")
+
+        threadLoop =  thread(start = false, name = "ThreadLoop") {
+            Log.d("EH","${Thread.currentThread()} has run.")
+            launch {
+                threadLoop()
+            }
+        }
+
+
+
+//        launch(newSingleThreadContext("ThreadLoop")) {
+//            Log.d("EH","${Thread.currentThread()} has run.")
+//            threadLoop()
+//        }
 
         val btnOne = findViewById(R.id.btn_one_sec) as Button
 
@@ -64,7 +89,29 @@ class MainActivity : AppCompatActivity() {
         val btnTen = findViewById(R.id.btn_ten_sec) as Button
 
         btnTen.setOnClickListener {
-            Log.d("EH", "Clicked")
+            changeUpdateTime(10000)
+        }
+
+        val start_travel = findViewById(R.id.start_travel) as Button
+        start_travel.setOnClickListener {
+            Log.d("EH", "Clicked start")
+
+            if (!isTraveling) {
+                Log.d("EH", "START TRAVEL")
+                isTraveling = ENTER_TRAVEL
+                threadLoop.start()
+            }
+
+        }
+
+        val stop_travel = findViewById(R.id.stop_travel) as Button
+        stop_travel.setOnClickListener {
+            Log.d("EH", "Clicked stop")
+
+            if (isTraveling) {
+                Log.d("EH", "STOP TRAVEL")
+                isTraveling = EXIT_TRAVEL
+            }
         }
     }
 
@@ -85,8 +132,22 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    fun changeUpdateTime(updateTime: Long){
-        gpsHandler.setUpdateTime(updateTime)
+    fun changeUpdateTime(updateTime: Int){
+        gpsHandler.setGPSUpdateTime(updateTime)
+    }
+
+
+    suspend fun threadLoop() {
+
+        while (isTraveling) {
+
+            if (gpsHandler.currentLocation != null) {
+                val positions = APIHandler.getClosestGantries(Coordinate(gpsHandler.currentLocation.longitude, gpsHandler.currentLocation.latitude))
+                Log.d("EH", "Done!")
+            }
+
+            delay(gpsHandler.updateTime.toLong())
+        }
     }
 
 

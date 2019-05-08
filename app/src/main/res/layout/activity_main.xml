@@ -25,5 +25,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" tools:layout_editor_absoluteY="395dp"
                 tools:layout_editor_absoluteX="161dp" android:id="@+id/btn_ten_sec"/>
+        <Button
+                android:text="Start Travel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" tools:layout_editor_absoluteY="395dp"
+                tools:layout_editor_absoluteX="161dp" android:id="@+id/start_travel"/>
+        <Button
+                android:text="Stop Travel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" tools:layout_editor_absoluteY="395dp"
+                tools:layout_editor_absoluteX="161dp" android:id="@+id/stop_travel"/>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

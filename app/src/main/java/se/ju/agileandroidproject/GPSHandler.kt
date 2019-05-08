@@ -9,10 +9,9 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import se.ju.agileandroidproject.Models.Coordinate
+import kotlin.concurrent.thread
 
 
 private const val TEN_SECONDS: Long = 10 * 1000
@@ -27,9 +26,9 @@ class GPSHandler constructor(val context: Context) {
 
     private var lastKnownLocation: Location? = null
 
-    private var updateTime: Long = 30 * 1000
+    var updateTime = 30 * 1000
 
-    private var newUpdateTime: Long = 30 * 1000
+    private var newUpdateTime = 30 * 1000
 
     private var coordinateOfClosestGantry: Coordinate? = null
 
@@ -49,8 +48,8 @@ class GPSHandler constructor(val context: Context) {
 
         }
 
-        override fun onLocationChanged(location: Location?) = runBlocking {
-            //TODO: Do somewthing with new location.
+        override fun onLocationChanged(location: Location?) {
+//            //TODO: Do somewthing with new location.
             Log.d("EH", location.toString())
             if (location != null){
                 if (isBetterLocation(location, lastKnownLocation)){
@@ -58,13 +57,6 @@ class GPSHandler constructor(val context: Context) {
                     lastKnownLocation = location
                     Log.d("EH","updated location")
                 }
-
-                async {
-                    delay(1000)
-                    val positions = APIHandler.returnGantry(Coordinate(currentLocation.longitude, currentLocation.latitude))
-                    Log.d("EH", "Done!")
-                }
-
             }
         }
 
@@ -82,26 +74,24 @@ class GPSHandler constructor(val context: Context) {
     }
 
     fun updateClosestGantry(coordinates: List<Coordinate>){
-        if (coordinates != null){
-            for (coordinate in coordinates){
-                if (currentLocation != null){
-                    var distance = coordinatesDistance(currentLocation.latitude, currentLocation.longitude, coordinate.lat, coordinate.lon)
-                    if (distanceToClosestGantry == null){
-                        distanceToClosestGantry = distance.toInt()
-                        coordinateOfClosestGantry = coordinate
-                        Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
-                    }
-                    else if (distance.toInt() < distanceToClosestGantry!!){
-                        distanceToClosestGantry = distance.toInt()
-                        coordinateOfClosestGantry = coordinate
-                        Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
-                    }
+        for (coordinate in coordinates){
+            if (currentLocation != null){
+                val distance = coordinatesDistance(currentLocation.latitude, currentLocation.longitude, coordinate.lat, coordinate.lon)
+                if (distanceToClosestGantry == null){
+                    distanceToClosestGantry = distance.toInt()
+                    coordinateOfClosestGantry = coordinate
+                    Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
+                }
+                else if (distance.toInt() < distanceToClosestGantry!!){
+                    distanceToClosestGantry = distance.toInt()
+                    coordinateOfClosestGantry = coordinate
+                    Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
                 }
             }
         }
     }
 
-    fun setUpdateTime(newTime: Long){
+    fun setGPSUpdateTime(newTime: Int) {
         newUpdateTime = newTime
         if (newUpdateTime != updateTime){
             stopListening()
@@ -113,9 +103,9 @@ class GPSHandler constructor(val context: Context) {
     }
 
 
-    public fun startListening(updateTime: Long) {
+    public fun startListening(updateTime: Int) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 0f,locationListener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime.toLong(), 0f,locationListener)
             Log.d("EH", "bok")
 
         } else{
