@@ -21,6 +21,7 @@ import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
 import se.ju.agileandroidproject.APIHandler
 import kotlinx.coroutines.*
+import se.ju.agileandroidproject.BackgroundTravelService
 import kotlin.system.*
 
 
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
 
+        startBackgroundService()
 
         val btnOne = findViewById(R.id.btn_one_sec) as Button
 
@@ -111,5 +113,10 @@ class MainActivity : AppCompatActivity() {
         gpsHandler.setUpdateTime(updateTime)
     }
 
+    fun startBackgroundService(){
+        var serviceIntent = Intent(applicationContext, MainActivity::class.java)
+        var backgroundTravelService = BackgroundTravelService()
+        backgroundTravelService.startService(serviceIntent)
+    }
 
 }
