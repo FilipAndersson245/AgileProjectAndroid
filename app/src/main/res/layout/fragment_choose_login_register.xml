@@ -9,10 +9,21 @@
               android:background="#fcfcfc"
               android:gravity="center">
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="-100dp"
+            android:textSize="30dp"
+            android:text="TOLLGATE v0.01"
+            android:textColor="@color/cardview_dark_background"
+            android:textStyle="bold" />
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
+            android:layout_marginTop="70dp"
             android:gravity="center"
             android:orientation="horizontal">
 

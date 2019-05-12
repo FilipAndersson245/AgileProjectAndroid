@@ -13,6 +13,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/KapschOrange"
             android:layout_gravity="center"
             android:layout_marginTop="-60dp"
             android:textSize="18dp"
@@ -146,6 +147,8 @@
     </LinearLayout>
     <Button
             android:text="Confirm Changes"
+            android:textColor="@color/KapschOrange"
+            android:background="@color/cardview_light_background"
             android:layout_marginRight="-10dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content" android:id="@+id/button"/>

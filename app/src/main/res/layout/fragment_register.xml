@@ -10,14 +10,31 @@
               android:gravity="center">
 
 
-    <TextView
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="-60dp"
-            android:textSize="18dp"
-            android:text="Registration for TOLLGATE v0.01"
-            android:textStyle="bold" />
+            android:orientation="horizontal" >
+        <android.support.v7.widget.AppCompatImageView
+                android:layout_marginLeft="110dp"
+                android:layout_width="130dp"
+                android:layout_height="44dp"
+                android:background="@drawable/kapscharrow"/>
+    </LinearLayout>>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="56dp"
+                android:textSize="18dp"
+                android:textColor="@color/KapschOrange"
+                android:text="Registration for TOLLGATE v0.01"
+                android:textStyle="bold" />
+    </LinearLayout>>
 
     <LinearLayout
             android:clipToPadding="false"
@@ -252,7 +269,9 @@
     </LinearLayout>
     <Button
             android:text="Confirm Registration"
-            android:layout_marginRight="-10dp"
+            android:layout_marginRight="-2dp"
+            android:background="@color/cardview_light_background"
+            android:textColor="@color/KapschOrange"
             android:layout_width="300dp"
             android:layout_height="wrap_content" android:id="@+id/button"/>
 </LinearLayout>
