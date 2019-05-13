@@ -6,20 +6,8 @@
               tools:context=".Fragments.ChooseLoginRegister"
               android:orientation="vertical"
               android:padding="10dp"
-              android:background="#fcfcfc"
+              android:background="#FFFFFF"
               android:gravity="center">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-80dp"
-            android:orientation="horizontal" >
-        <android.support.v7.widget.AppCompatImageView
-                android:layout_marginLeft="130dp"
-                android:layout_width="130dp"
-                android:layout_height="44dp"
-                android:background="@drawable/kapscharrow"/>
-    </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +19,7 @@
 
         <androidx.cardview.widget.CardView
                 android:layout_width="160dp"
-                android:layout_height="110dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp"
                 android:clickable="true"
                 android:id="@+id/Login">
@@ -47,10 +35,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:textSize="30dp"
+                        android:textSize="20dp"
                         android:textColor="@color/KapschOrange"
                         android:text="Login"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"/>
 
 
             </LinearLayout>
@@ -67,7 +55,7 @@
                 android:clickable="true"
                 android:id="@+id/Register"
                 android:layout_width="160dp"
-                android:layout_height="110dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp">
 
             <LinearLayout
@@ -81,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:textSize="30dp"
+                        android:textSize="20dp"
                         android:textColor="@color/KapschOrange"
                         android:text="Register"
                         android:textStyle="normal" />
