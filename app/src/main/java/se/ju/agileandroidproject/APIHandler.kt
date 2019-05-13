@@ -104,4 +104,27 @@ object APIHandler {
             }
         }
     }
+
+    fun registerGantryRequest(personalId: String, gantryId: String): Boolean {
+        val (_, _, result) = runBlocking {
+            Fuel.post("$url/passages/")
+                .jsonBody("{ \"personalId\": \"$personalId\", \"gantryId\": \"$gantryId\"}")
+                .authentication()
+                .bearer(token)
+                .awaitStringResponseResult()
+        }
+        return result.fold({ true }, { error -> print(error.message); false })
+    }
+
+    fun registerGantry(personalId: String, gantryId: String): Boolean {
+        return when {
+            (personalId.length == 10 || personalId.length == 12) && gantryId.isNotEmpty() -> {
+                registerGantryRequest(
+                    personalId,
+                    gantryId
+                )
+            }
+            else -> false
+        }
+    }
 }
