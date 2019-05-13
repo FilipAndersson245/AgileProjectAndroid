@@ -8,6 +8,7 @@ import kotlinx.serialization.UnstableDefault
 import org.junit.Test
 
 import org.junit.Assert.*
+import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
 
@@ -21,9 +22,45 @@ import se.ju.agileandroidproject.Models.User
 class APIHandler_tests {
 
     @Test
-    fun getGantry_notNull() = runBlocking {
-        // Assert
-        assertNotNull(APIHandler.returnGantry(5f, 5f))
+    fun gantry_should_be_good() = runBlocking {
+        val spy = spyk(APIHandler)
+        val mockGantries = listOf( Gantry("foo", listOf<Float>(1.7f, 14.2f),"123", 10f) )
+
+        every { spy.requestGantries(any(), any()) } answers { mockGantries }
+        every { spy.token } answers { "token" }
+
+        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
+        assertTrue(result)
+        assertEquals(gantries, mockGantries)
+        assertTrue(spy.token == "token")
+    }
+
+    @Test
+    fun gantry_should_fail_with_bad_request() = runBlocking {
+        val spy = spyk(APIHandler)
+        val mockGantries = listOf<Gantry>()
+
+        every { spy.requestGantries(any(), any()) } answers { mockGantries }
+        every { spy.token } answers { "token" }
+
+        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
+        assertFalse(result)
+        assertEquals(gantries, mockGantries)
+        assertTrue(spy.token == "token")
+    }
+
+    @Test
+    fun gantry_should_be_fail_with_no_token() = runBlocking {
+        val spy = spyk(APIHandler)
+        val mockGantries = listOf( Gantry("foo", listOf<Float>(1.7f, 14.2f),"123", 10f) )
+
+        every { spy.requestGantries(any(), any()) } answers { mockGantries }
+        every { spy.token } answers { "" }
+
+        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
+        assertFalse(result)
+        assertTrue(gantries.isEmpty())
+        assertTrue(spy.token == "")
     }
 
 

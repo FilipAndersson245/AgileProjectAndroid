@@ -22,14 +22,13 @@ object APIHandler {
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
 
-    suspend fun returnGantry(lon: Float, lat: Float): List<Gantry> {
-
-        val (_, _, result) =
-            Fuel.post("$url/gantries/abc123")
+    fun requestGantries(lon: Float, lat: Float): List<Gantry> {
+        val (_, _, result) = runBlocking {
+            Fuel.get("$url/gantrie?lat=$lat&lon=$lon")
                 .authentication()
                 .bearer(token)
-                .jsonBody("{ \"position\": [3.213134, 12.438324] }")
                 .awaitStringResponseResult()
+        }
 
 
         val responseData = mutableListOf<Gantry>()
@@ -39,10 +38,18 @@ object APIHandler {
                 responseData.add(Json.parse(Gantry.serializer(), data))
             },
             { error ->
-                println("An error of type ${error.exception} happened: ${error.message}")
+                print("An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData
+    }
+
+    fun gantries(lon: Float, lat: Float): Pair<Boolean, List<Gantry>> {
+        val gantries = when (token) {
+            "" -> listOf<Gantry>()
+            else -> requestGantries(lon, lat)
+        }
+        return gantries.isNotEmpty() to gantries
     }
 
     fun loginRequest(username: String, password: String): Session {
