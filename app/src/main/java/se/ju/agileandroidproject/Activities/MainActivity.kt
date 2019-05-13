@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var gpsHandler: GPSHandler
 
-    lateinit var threadLoop : Thread
+    lateinit var isTravelingThreadLoop : Thread
 
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
@@ -45,10 +45,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) = runBlocking<Unit> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        gpsHandler = GPSHandler(applicationContext)
+
+        Log.d("EH","${Thread.currentThread()} has run.")
+
+        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+            Log.d("EH","${Thread.currentThread()} has run.")
+            travelingThreadLoop()
+            Log.d("EH","Thread Ended!!")
+
+//            launch {
+//                Log.d("EH","Thing in launch!!")
+////                travelingThreadLoop()
+//            }
+        }
+
+
+//        Log.d("EH", "Important stuff: " + isTravelingThreadLoop.state.toString())
 
     }
 
@@ -56,16 +73,20 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
         checkPermissions()
-        gpsHandler = GPSHandler(applicationContext)
 
-        Log.d("EH","${Thread.currentThread()} has run.")
+        Log.d("EH","${Thread.currentThread()} has run. (Should be main)")
 
-        threadLoop =  thread(start = false, name = "ThreadLoop") {
-            Log.d("EH","${Thread.currentThread()} has run.")
-            launch {
-                threadLoop()
-            }
-        }
+//        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+//            Log.d("EH","${Thread.currentThread()} has run.")
+//            launch {
+//                Log.d("EH","DELAY")
+//                delay(2000)
+//                Log.d("EH","DELAY")
+//                travelingThreadLoop()
+//                delay(2000)
+//                Log.d("EH","AFTER DELAY")
+//            }
+//        }
 
 
 
@@ -89,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         val btnTen = findViewById(R.id.btn_ten_sec) as Button
 
         btnTen.setOnClickListener {
-            changeUpdateTime(10000)
+            Log.d("EH", "Useless button!!!")
         }
 
         val start_travel = findViewById(R.id.start_travel) as Button
@@ -98,8 +119,15 @@ class MainActivity : AppCompatActivity() {
 
             if (!isTraveling) {
                 Log.d("EH", "START TRAVEL")
+
+                isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+                    Log.d("EH","${Thread.currentThread()} has run.")
+                    travelingThreadLoop()
+                    Log.d("EH","Thread Ended!!")
+                }
+
                 isTraveling = ENTER_TRAVEL
-                threadLoop.start()
+                isTravelingThreadLoop.start()
             }
 
         }
@@ -111,6 +139,7 @@ class MainActivity : AppCompatActivity() {
             if (isTraveling) {
                 Log.d("EH", "STOP TRAVEL")
                 isTraveling = EXIT_TRAVEL
+                isTravelingThreadLoop.join()
             }
         }
     }
@@ -137,17 +166,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    suspend fun threadLoop() {
+    fun travelingThreadLoop() = runBlocking<Unit> {
 
-        while (isTraveling) {
+        launch {
+            while (isTraveling) {
 
-            if (gpsHandler.currentLocation != null) {
-                val positions = APIHandler.getClosestGantries(Coordinate(gpsHandler.currentLocation.longitude, gpsHandler.currentLocation.latitude))
-                Log.d("EH", "Done!")
+                Log.d("EH", "LOOOOOOOOOOOOOOOOP!")
+                Log.d("EH","${Thread.currentThread()} has run.")
+//                if (gpsHandler.currentLocation != null) {
+//                    val positions = APIHandler.getClosestGantries(Coordinate(gpsHandler.currentLocation.longitude, gpsHandler.currentLocation.latitude))
+//                    Log.d("EH", "Done!")
+//                }
+
+                
+                delay(1000)
             }
-
-            delay(gpsHandler.updateTime.toLong())
         }
+
     }
 
 
