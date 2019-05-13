@@ -22,6 +22,8 @@ import se.ju.agileandroidproject.R
 import se.ju.agileandroidproject.APIHandler
 import kotlinx.coroutines.*
 import kotlin.system.*
+import android.widget.ArrayAdapter
+import android.widget.ListView
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(se.ju.agileandroidproject.R.layout.activity_main)
 
 
     }
