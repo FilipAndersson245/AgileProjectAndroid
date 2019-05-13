@@ -77,17 +77,6 @@ class MainActivity : AppCompatActivity() {
         btnTen.setOnClickListener {
             changeUpdateTime(10000)
         }
-
-        // Remove later, for remember purpose only
-        async {
-            val a = APIHandler.returnGantry(5f, 5f)
-            Log.d("EH","---------------------------> RESULT GANTRY START")
-            Log.d("EH", a[0].id)
-            Log.d("EH", a[0].coordinates.toString())
-            Log.d("EH", a[0].lastUpdated)
-            Log.d("EH", a[0].price.toString())
-            Log.d("EH", "---------------------------> RESULT GANTRY END")
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
