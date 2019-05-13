@@ -62,23 +62,23 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
 
 
-        val btnOne = findViewById(R.id.btn_one_sec) as Button
-
-        btnOne.setOnClickListener {
-            changeUpdateTime(1000)
-        }
-
-        val btnFive = findViewById(R.id.btn_five_sec) as Button
-
-        btnFive.setOnClickListener {
-            changeUpdateTime(5000)
-        }
-
-        val btnTen = findViewById(R.id.btn_ten_sec) as Button
-
-        btnTen.setOnClickListener {
-            changeUpdateTime(10000)
-        }
+//        val btnOne = findViewById(R.id.btn_one_sec) as Button
+//
+//        btnOne.setOnClickListener {
+//            changeUpdateTime(1000)
+//        }
+//
+//        val btnFive = findViewById(R.id.btn_five_sec) as Button
+//
+//        btnFive.setOnClickListener {
+//            changeUpdateTime(5000)
+//        }
+//
+//        val btnTen = findViewById(R.id.btn_ten_sec) as Button
+//
+//        btnTen.setOnClickListener {
+//            changeUpdateTime(10000)
+//        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

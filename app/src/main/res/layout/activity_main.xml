@@ -8,23 +8,12 @@
     android:layout_height="match_parent">
 
 <!-- The first child in the layout is for the main Activity UI-->
-<RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        tools:context=".MainActivity"
-        android:background="#ffffffff">
-</RelativeLayout>
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/fragment_holder">
 
-<!-- Side navigation drawer UI -->
-<ListView
-        android:id="@+id/navList"
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="left|start"
-        android:background="#ffeeeeee"/>
+    </FrameLayout>
+
+    <!-- Side navigation drawer UI -->
 
 </android.support.v4.widget.DrawerLayout>
