@@ -1,5 +1,6 @@
 package se.ju.agileandroidproject
 
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
@@ -22,17 +23,23 @@ import se.ju.agileandroidproject.Models.User
 class APIHandler_tests {
 
     @Test
-    fun gantry_should_be_good() = runBlocking {
+    fun gantry_should_be_good() {
         val spy = spyk(APIHandler)
-        val mockGantries = listOf( Gantry("foo", listOf<Float>(1.7f, 14.2f),"123", 10f) )
+        val mockGantries = listOf(Gantry("foo", listOf<Float>(1.7f, 14.2f), "123", 10f))
 
-        every { spy.requestGantries(any(), any()) } answers { mockGantries }
-        every { spy.token } answers { "token" }
+        coEvery { spy.requestGantries(any(), any()) } answers { mockGantries }
+        coEvery { spy.token } answers { "token" }
 
-        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
-        assertTrue(result)
-        assertEquals(gantries, mockGantries)
-        assertTrue(spy.token == "token")
+        runBlocking {
+            spy.gantries(10.3f, 2.3f) {
+                run {
+                    assertTrue(it.first)
+                    assertEquals(it.second, mockGantries)
+                    assertTrue(spy.token == "token")
+                }
+            }
+        }
+
     }
 
     @Test
@@ -40,27 +47,38 @@ class APIHandler_tests {
         val spy = spyk(APIHandler)
         val mockGantries = listOf<Gantry>()
 
-        every { spy.requestGantries(any(), any()) } answers { mockGantries }
+        coEvery { spy.requestGantries(any(), any()) } answers { mockGantries }
         every { spy.token } answers { "token" }
 
-        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
-        assertFalse(result)
-        assertEquals(gantries, mockGantries)
-        assertTrue(spy.token == "token")
+        runBlocking {
+            spy.gantries(10.3f, 2.3f) {
+                run {
+                    assertFalse(it.first)
+                    assertEquals(it.second, mockGantries)
+                    assertTrue(spy.token == "token")
+                }
+            }
+        }
+
     }
 
     @Test
     fun gantry_should_be_fail_with_no_token() = runBlocking {
         val spy = spyk(APIHandler)
-        val mockGantries = listOf( Gantry("foo", listOf<Float>(1.7f, 14.2f),"123", 10f) )
+        val mockGantries = listOf(Gantry("foo", listOf<Float>(1.7f, 14.2f), "123", 10f))
 
-        every { spy.requestGantries(any(), any()) } answers { mockGantries }
+        coEvery { spy.requestGantries(any(), any()) } answers { mockGantries }
         every { spy.token } answers { "" }
 
-        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
-        assertFalse(result)
-        assertTrue(gantries.isEmpty())
-        assertTrue(spy.token == "")
+        runBlocking {
+            spy.gantries(10.3f, 2.3f) {
+                run {
+                    assertFalse(it.first)
+                    assertTrue(it.second.isEmpty())
+                    assertTrue(spy.token == "")
+                }
+            }
+        }
     }
 
 
@@ -68,53 +86,65 @@ class APIHandler_tests {
     fun login_should_succeed() {
         val spy = spyk(APIHandler)
 
-        every { spy.loginRequest(any(), any()) } answers { Session(true, "token") }
+        coEvery { spy.loginRequest(any(), any()) } answers { Session(true, "token") }
 
-        val result = runBlocking { spy.login("foo", "bar") }
-        assertTrue(result)
-        assertTrue(spy.token == "token")
+        val result = runBlocking {
+            spy.login("foo", "bar") {
+                run {
+                    assertTrue(it)
+                    assertTrue(spy.token == "token")
+                }
+            }
+        }
     }
 
     @Test
     fun login_should_fail() {
         val spy = spyk(APIHandler)
 
-        every { spy.loginRequest(any(), any()) } answers { Session(false, "") }
+        coEvery { spy.loginRequest(any(), any()) } answers { Session(false, "") }
 
-        val result = runBlocking { spy.login("foo", "bar") }
-        assertFalse(result)
-        assertTrue(spy.token == "")
+        runBlocking {
+            spy.login("foo", "bar") {
+                run {
+                    assertFalse(it)
+                    assertTrue(spy.token == "")
+                }
+            }
+        }
     }
 
     @Test
     fun login_should_work_with_user() {
         val spy = spyk(APIHandler)
 
-        every { spy.loginRequest(any(), any()) } answers { Session(true, "token") }
+        coEvery { spy.loginRequest(any(), any()) } answers { Session(true, "token") }
 
-        val result =
-            runBlocking {
-                spy.login(
-                    User(
-                        "bob",
-                        "123456789",
-                        "foo",
-                        "abc@gmail.com",
-                        "london",
-                        "bob",
-                        "kent"
-                    )
+        runBlocking {
+            spy.login(
+                User(
+                    "bob",
+                    "123456789",
+                    "foo",
+                    "abc@gmail.com",
+                    "london",
+                    "bob",
+                    "kent"
                 )
+            ) {
+                run {
+                    assertTrue(it)
+                    assertTrue(spy.token == "token")
+                }
             }
-        assertTrue(result)
-        assertTrue(spy.token == "token")
+        }
     }
 
     @Test
     fun login_should_fail_with_user() {
         val spy = spyk(APIHandler)
 
-        every { spy.loginRequest(any(), any()) } answers { Session(false, "") }
+        coEvery { spy.loginRequest(any(), any()) } answers { Session(false, "") }
 
         val result =
             runBlocking {
@@ -128,34 +158,41 @@ class APIHandler_tests {
                         "bob",
                         "kent"
                     )
-                )
+                ) {
+                    run {
+                        assertFalse(it)
+                        assertTrue(spy.token == "")
+                    }
+                }
             }
-        assertFalse(result)
-        assertTrue(spy.token == "")
+
     }
 
     @Test
     fun register_should_work() {
         val spy = spyk(APIHandler)
 
-        every { spy.loginRequest(any(), any()) } answers { Session(true, "token") }
-        every { spy.registerRequest(any()) } answers { true }
+        coEvery { spy.loginRequest(any(), any()) } answers { Session(true, "token") }
+        coEvery { spy.registerRequest(any()) } answers { true }
 
-        val result =
-            runBlocking {
-                spy.register(
-                    User(
-                        "bob",
-                        "123456789",
-                        "foo",
-                        "abc@gmail.com",
-                        "london",
-                        "bob",
-                        "kent"
-                    )
+        runBlocking {
+            spy.register(
+                User(
+                    "bob",
+                    "123456789",
+                    "foo",
+                    "abc@gmail.com",
+                    "london",
+                    "bob",
+                    "kent"
                 )
+            ) {
+                run {
+                    assertTrue(it)
+                    assertTrue(spy.token == "token")
+                }
             }
-        assertTrue(result)
-        assertTrue(spy.token == "token")
+        }
+
     }
 }

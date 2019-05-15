@@ -14,6 +14,7 @@ import kotlinx.serialization.stringify
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
+import javax.security.auth.callback.Callback
 
 @UnstableDefault
 @ImplicitReflectionSerializer
@@ -22,8 +23,8 @@ object APIHandler {
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
 
-    fun requestGantries(lon: Float, lat: Float): List<Gantry> {
-        val (_, _, result) = runBlocking {
+    suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
+        val (_, _, result) = run {
             Fuel.get("$url/gantrie?lat=$lat&lon=$lon")
                 .authentication()
                 .bearer(token)
@@ -44,16 +45,16 @@ object APIHandler {
         return responseData
     }
 
-    fun gantries(lon: Float, lat: Float): Pair<Boolean, List<Gantry>> {
+    suspend fun gantries(lon: Float, lat: Float, callback: (Pair<Boolean, List<Gantry>>) -> Unit) {
         val gantries = when (token) {
             "" -> listOf<Gantry>()
             else -> requestGantries(lon, lat)
         }
-        return gantries.isNotEmpty() to gantries
+        callback(gantries.isNotEmpty() to gantries)
     }
 
-    fun loginRequest(username: String, password: String): Session {
-        val (_, _, result) = runBlocking {
+    suspend fun loginRequest(username: String, password: String): Session {
+        val (_, _, result) = run {
             Fuel.post("$url/sessions/")
                 .jsonBody("{ \"username\": \"$username\", \"password\": \"$password\", \"grant_type\": \"password\" }")
                 .awaitStringResponseResult()
@@ -69,23 +70,26 @@ object APIHandler {
         return token
     }
 
-    fun login(username: String, password: String): Boolean {
+    suspend fun login(username: String, password: String, callback: (success: Boolean) -> Unit) {
         val session = loginRequest(username, password)
-        return when (session.auth) {
-            true -> {
-                this.token = session.token
-                true
+        callback(
+            when (session.auth) {
+                true -> {
+                    this.token = session.token
+                    true
+                }
+                else -> {
+                    token = ""
+                    false
+                }
             }
-            else -> {
-                token = ""
-                false
-            }
-        }
+        )
     }
 
-    fun login(user: User): Boolean = login(user.personalIdNumber, user.password)
+    suspend fun login(user: User, callback: (successful: Boolean) -> Unit) =
+        login(user.personalIdNumber, user.password, callback)
 
-    fun registerRequest(user: User): Boolean {
+    suspend fun registerRequest(user: User): Boolean {
         val (_, _, result) = runBlocking {
             Fuel.post("$url/user/")
                 .jsonBody(Json.stringify(user))
@@ -94,14 +98,16 @@ object APIHandler {
         return result.fold({ true }, { error -> print(error.message); false })
     }
 
-    fun register(user: User): Boolean {
-        return when (registerRequest(user)) {
-            true -> {
-                login(user)
+    suspend fun register(user: User, callback: (successful: Boolean) -> Unit) {
+        callback(
+            when (registerRequest(user)) {
+                false -> {
+                    print("Registration failed!"); false
+                }
+                else -> {
+                    true
+                }
             }
-            else -> {
-                print("Registration failed!"); false
-            }
-        }
+        )
     }
 }
