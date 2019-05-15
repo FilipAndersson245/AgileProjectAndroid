@@ -73,7 +73,7 @@ class GPSHandler constructor(val context: Context) {
         return (earthRadius * c)
     }
 
-    fun updateClosestGantry(coordinates: List<Coordinate>){
+    public fun updateClosestGantry(coordinates: List<Coordinate>){
         for (coordinate in coordinates){
             if (currentLocation != null){
                 val distance = coordinatesDistance(currentLocation.latitude, currentLocation.longitude, coordinate.lat, coordinate.lon)

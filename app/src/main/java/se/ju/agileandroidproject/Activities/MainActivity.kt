@@ -50,23 +50,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         gpsHandler = GPSHandler(applicationContext)
-
-        Log.d("EH","${Thread.currentThread()} has run.")
-
-        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
-            Log.d("EH","${Thread.currentThread()} has run.")
-            travelingThreadLoop()
-            Log.d("EH","Thread Ended!!")
-
-//            launch {
-//                Log.d("EH","Thing in launch!!")
-////                travelingThreadLoop()
-//            }
-        }
-
-
-//        Log.d("EH", "Important stuff: " + isTravelingThreadLoop.state.toString())
-
     }
 
     // Remove "= runBlocking" when not using async here
@@ -74,75 +57,40 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         checkPermissions()
 
-        Log.d("EH","${Thread.currentThread()} has run. (Should be main)")
+        Log.d("EH", "${Thread.currentThread()} has run. (Should be main)")
+    }
 
-//        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
-//            Log.d("EH","${Thread.currentThread()} has run.")
-//            launch {
-//                Log.d("EH","DELAY")
-//                delay(2000)
-//                Log.d("EH","DELAY")
-//                travelingThreadLoop()
-//                delay(2000)
-//                Log.d("EH","AFTER DELAY")
+
+
+//        val start_travel = findViewById(R.id.start_travel) as Button
+//        start_travel.setOnClickListener {
+//            Log.d("EH", "Clicked start")
+//
+//            if (!isTraveling) {
+//                Log.d("EH", "START TRAVEL")
+//
+//                isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+//                    Log.d("EH","${Thread.currentThread()} has run.")
+//                    travelingThreadLoop()
+//                    Log.d("EH","Thread Ended!!")
+//                }
+//
+//                isTraveling = ENTER_TRAVEL
+//                isTravelingThreadLoop.start()
+//            }
+//
+//        }
+//
+//        val stop_travel = findViewById(R.id.stop_travel) as Button
+//        stop_travel.setOnClickListener {
+//            Log.d("EH", "Clicked stop")
+//
+//            if (isTraveling) {
+//                Log.d("EH", "STOP TRAVEL")
+//                isTraveling = EXIT_TRAVEL
+//                isTravelingThreadLoop.join()
 //            }
 //        }
-
-
-
-//        launch(newSingleThreadContext("ThreadLoop")) {
-//            Log.d("EH","${Thread.currentThread()} has run.")
-//            threadLoop()
-//        }
-
-        val btnOne = findViewById(R.id.btn_one_sec) as Button
-
-        btnOne.setOnClickListener {
-            changeUpdateTime(1000)
-        }
-
-        val btnFive = findViewById(R.id.btn_five_sec) as Button
-
-        btnFive.setOnClickListener {
-            changeUpdateTime(5000)
-        }
-
-        val btnTen = findViewById(R.id.btn_ten_sec) as Button
-
-        btnTen.setOnClickListener {
-            Log.d("EH", "Useless button!!!")
-        }
-
-        val start_travel = findViewById(R.id.start_travel) as Button
-        start_travel.setOnClickListener {
-            Log.d("EH", "Clicked start")
-
-            if (!isTraveling) {
-                Log.d("EH", "START TRAVEL")
-
-                isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
-                    Log.d("EH","${Thread.currentThread()} has run.")
-                    travelingThreadLoop()
-                    Log.d("EH","Thread Ended!!")
-                }
-
-                isTraveling = ENTER_TRAVEL
-                isTravelingThreadLoop.start()
-            }
-
-        }
-
-        val stop_travel = findViewById(R.id.stop_travel) as Button
-        stop_travel.setOnClickListener {
-            Log.d("EH", "Clicked stop")
-
-            if (isTraveling) {
-                Log.d("EH", "STOP TRAVEL")
-                isTraveling = EXIT_TRAVEL
-                isTravelingThreadLoop.join()
-            }
-        }
-    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_PERMISSION_LOCATION){
@@ -168,22 +116,35 @@ class MainActivity : AppCompatActivity() {
 
     fun travelingThreadLoop() = runBlocking<Unit> {
 
-        launch {
-            while (isTraveling) {
+        while (isTraveling) {
 
-                Log.d("EH", "LOOOOOOOOOOOOOOOOP!")
-                Log.d("EH","${Thread.currentThread()} has run.")
-//                if (gpsHandler.currentLocation != null) {
+            Log.d("EH", "LOOOOOOOOOOOOOOOOP!")
+            Log.d("EH","${Thread.currentThread()} has run.")
+
+            launch {
+
+                //                if (gpsHandler.currentLocation != null) {
 //                    val positions = APIHandler.getClosestGantries(Coordinate(gpsHandler.currentLocation.longitude, gpsHandler.currentLocation.latitude))
 //                    Log.d("EH", "Done!")
 //                }
 
-                
-                delay(1000)
-            }
-        }
+                Log.d("EH", "Get Gantries!")
 
+                // get gantries
+
+                Log.d("EH", "Update Gantries!")
+
+                // gpsHandler.updateClosestGantry()
+            }
+
+
+
+            delay(gpsHandler.updateTime.toLong())
+
+            Log.d("EH", "HERE WE GO AGAIN")
+        }
     }
+
 
 
 }
