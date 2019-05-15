@@ -24,12 +24,12 @@ class APIHandler_tests {
     @Test
     fun gantry_should_be_good() = runBlocking {
         val spy = spyk(APIHandler)
-        val mockGantries = listOf( Gantry("foo", listOf<Float>(1.7f, 14.2f),"123", 10f) )
+        val mockGantries = listOf(Gantry("foo", listOf<Float>(1.7f, 14.2f), "123", 10f))
 
         every { spy.requestGantries(any(), any()) } answers { mockGantries }
         every { spy.token } answers { "token" }
 
-        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
+        val (result, gantries) = runBlocking { spy.gantries(10.3f, 2.3f) }
         assertTrue(result)
         assertEquals(gantries, mockGantries)
         assertTrue(spy.token == "token")
@@ -43,7 +43,7 @@ class APIHandler_tests {
         every { spy.requestGantries(any(), any()) } answers { mockGantries }
         every { spy.token } answers { "token" }
 
-        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
+        val (result, gantries) = runBlocking { spy.gantries(10.3f, 2.3f) }
         assertFalse(result)
         assertEquals(gantries, mockGantries)
         assertTrue(spy.token == "token")
@@ -52,12 +52,12 @@ class APIHandler_tests {
     @Test
     fun gantry_should_be_fail_with_no_token() = runBlocking {
         val spy = spyk(APIHandler)
-        val mockGantries = listOf( Gantry("foo", listOf<Float>(1.7f, 14.2f),"123", 10f) )
+        val mockGantries = listOf(Gantry("foo", listOf<Float>(1.7f, 14.2f), "123", 10f))
 
         every { spy.requestGantries(any(), any()) } answers { mockGantries }
         every { spy.token } answers { "" }
 
-        val (result, gantries) = runBlocking { spy.gantries(10.3f,2.3f )}
+        val (result, gantries) = runBlocking { spy.gantries(10.3f, 2.3f) }
         assertFalse(result)
         assertTrue(gantries.isEmpty())
         assertTrue(spy.token == "")
@@ -158,4 +158,69 @@ class APIHandler_tests {
         assertTrue(result)
         assertTrue(spy.token == "token")
     }
+
+    @Test
+    fun register_gantry_should_succeed() {
+        val spy = spyk(APIHandler)
+
+        every { spy.registerGantryRequest(any(), any()) } answers { true }
+        every { spy.token } answers { "token" }
+
+        val result =
+            runBlocking {
+                spy.registerGantry("1234567890", "abc123xyz")
+            }
+
+        assertTrue(result)
+    }
+
+    @Test
+    fun register_gantry_should_fail_to_short_person_number() {
+        val spy = spyk(APIHandler)
+
+        val result =
+            runBlocking {
+                spy.registerGantry("1234590", "abc123xyz")
+            }
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun register_gantry_should_fail_to_long_person_number() {
+        val spy = spyk(APIHandler)
+
+        val result =
+            runBlocking {
+                spy.registerGantry("12345944567830", "abc123xyz")
+            }
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun register_gantry_should_fail_must_have_gantry_id() {
+        val spy = spyk(APIHandler)
+
+        val result =
+            runBlocking {
+                spy.registerGantry("12345944567830", "")
+            }
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun register_gantry_fail_when_user_dosent_exist() {
+        val spy = spyk(APIHandler)
+
+        every { spy.registerGantryRequest(any(), any()) } answers { false }
+
+        val result =
+            runBlocking {
+                spy.registerGantry("1234567890", "abc123xyz")
+            }
+        assertFalse(result)
+    }
+
 }
