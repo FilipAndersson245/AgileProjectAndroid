@@ -16,6 +16,7 @@ import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
 import java.util.logging.Handler
+import javax.security.auth.callback.Callback
 
 @UnstableDefault
 @ImplicitReflectionSerializer
@@ -24,14 +25,13 @@ object APIHandler {
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
 
-    suspend fun returnGantry(lon: Float, lat: Float): List<Gantry> {
-
-        val (_, _, result) =
-            Fuel.post("$url/gantries/abc123")
+    suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
+        val (_, _, result) = run {
+            Fuel.get("$url/gantrie?lat=$lat&lon=$lon")
                 .authentication()
                 .bearer(token)
-                .jsonBody("{ \"position\": [3.213134, 12.438324] }")
                 .awaitStringResponseResult()
+        }
 
 
         val responseData = mutableListOf<Gantry>()
@@ -41,14 +41,22 @@ object APIHandler {
                 responseData.add(Json.parse(Gantry.serializer(), data))
             },
             { error ->
-                println("An error of type ${error.exception} happened: ${error.message}")
+                print("An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData
     }
 
-    fun loginRequest(username: String, password: String): Session {
-        val (_, _, result) = runBlocking {
+    suspend fun gantries(lon: Float, lat: Float, callback: (Pair<Boolean, List<Gantry>>) -> Unit) {
+        val gantries = when (token) {
+            "" -> listOf<Gantry>()
+            else -> requestGantries(lon, lat)
+        }
+        callback(gantries.isNotEmpty() to gantries)
+    }
+
+    suspend fun loginRequest(username: String, password: String): Session {
+        val (_, _, result) = run {
             Fuel.post("$url/sessions/")
                 .jsonBody("{ \"username\": \"$username\", \"password\": \"$password\", \"grant_type\": \"password\" }")
                 .awaitStringResponseResult()
@@ -64,23 +72,26 @@ object APIHandler {
         return token
     }
 
-    fun login(username: String, password: String): Boolean {
+    suspend fun login(username: String, password: String, callback: (success: Boolean) -> Unit) {
         val session = loginRequest(username, password)
-        return when (session.auth) {
-            true -> {
-                this.token = session.token
-                true
+        callback(
+            when (session.auth) {
+                true -> {
+                    this.token = session.token
+                    true
+                }
+                else -> {
+                    token = ""
+                    false
+                }
             }
-            else -> {
-                token = ""
-                false
-            }
-        }
+        )
     }
 
-    fun login(user: User): Boolean = login(user.personalIdNumber, user.password)
+    suspend fun login(user: User, callback: (successful: Boolean) -> Unit) =
+        login(user.personalIdNumber, user.password, callback)
 
-    fun registerRequest(user: User): Boolean {
+    suspend fun registerRequest(user: User): Boolean {
         val (_, _, result) = runBlocking {
             Fuel.post("$url/users/")
                 .jsonBody(Json.stringify(user))
@@ -89,14 +100,39 @@ object APIHandler {
         return result.fold({ true }, { error -> print(error.message); false })
     }
 
-    fun register(user: User): Boolean {
-        return when (registerRequest(user)) {
-            true -> {
-                login(user)
+    suspend fun register(user: User, callback: (successful: Boolean) -> Unit) {
+        callback(
+            when (registerRequest(user)) {
+                false -> {
+                    print("Registration failed!"); false
+                }
+                else -> {
+                    true
+                }
             }
-            else -> {
-                print("Registration failed!"); false
+        )
+    }
+
+    fun registerGantryRequest(personalId: String, gantryId: String): Boolean {
+        val (_, _, result) = runBlocking {
+            Fuel.post("$url/passages/")
+                .jsonBody("{ \"personalId\": \"$personalId\", \"gantryId\": \"$gantryId\"}")
+                .authentication()
+                .bearer(token)
+                .awaitStringResponseResult()
+        }
+        return result.fold({ true }, { error -> print(error.message); false })
+    }
+
+    fun registerGantry(personalId: String, gantryId: String): Boolean {
+        return when {
+            (personalId.length == 10 || personalId.length == 12) && gantryId.isNotEmpty() -> {
+                registerGantryRequest(
+                    personalId,
+                    gantryId
+                )
             }
+            else -> false
         }
     }
 }
