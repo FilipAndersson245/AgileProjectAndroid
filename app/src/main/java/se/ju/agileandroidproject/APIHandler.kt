@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.parse
 import kotlinx.serialization.stringify
 import se.ju.agileandroidproject.Models.Coordinate
 
@@ -26,22 +27,25 @@ object APIHandler {
     var token = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
-        val (_, _, result) = run {
-            Fuel.get("$url/gantrie?lat=$lat&lon=$lon")
+        val (_, _, result) =
+            Fuel.get(url + "/gantries", listOf("lon" to lon, "lat" to lat))
                 .authentication()
                 .bearer(token)
                 .awaitStringResponseResult()
-        }
 
 
         val responseData = mutableListOf<Gantry>()
 
         result.fold(
             { data ->
-                responseData.add(Json.parse(Gantry.serializer(), data))
+                // DATAN KAN INTE PARSEA FRÅN EN LISTA!!!!!!
+                for (value in data) {
+                    responseData.add(Json.parse(Gantry.serializer(), value.toString()))
+                }
+
             },
             { error ->
-                Log.d("EH","An error of type ${error.exception} happened: ${error.message}")
+                Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData

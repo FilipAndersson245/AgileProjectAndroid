@@ -21,6 +21,10 @@ import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
 import se.ju.agileandroidproject.APIHandler
 import kotlinx.coroutines.*
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
+import se.ju.agileandroidproject.Models.Coordinate
+import kotlin.concurrent.thread
 import kotlin.system.*
 
 
@@ -75,11 +79,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Remove "= runBlocking" when not using async here
+    @ImplicitReflectionSerializer
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
         checkPermissions()
 
         Log.d("EH", "${Thread.currentThread()} has run. (Should be main)")
+
+        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+            Log.d("EH","${Thread.currentThread()} has run.")
+            travelingThreadLoop()
+            Log.d("EH","Thread Ended!!")
+        }
+
+        isTraveling = ENTER_TRAVEL
+        isTravelingThreadLoop.start()
     }
 
 
@@ -119,6 +133,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun travelingThreadLoop() = runBlocking<Unit> {
 
         while (isTraveling) {
@@ -135,11 +151,19 @@ class MainActivity : AppCompatActivity() {
 
                 Log.d("EH", "Get Gantries!")
 
-                // get gantries
+                val closeGantries = APIHandler.requestGantries(0f, 0f)
 
                 Log.d("EH", "Update Gantries!")
 
-                // gpsHandler.updateClosestGantry()
+                val coordinatesList = mutableListOf<Coordinate>()
+
+                for (gantry in closeGantries) {
+                    coordinatesList.add(Coordinate(gantry.longitude, gantry.latitude))
+                }
+
+                gpsHandler.updateClosestGantry(coordinatesList)
+
+                Log.d("EH", "DONE GETTING COORDS!")
             }
 
 

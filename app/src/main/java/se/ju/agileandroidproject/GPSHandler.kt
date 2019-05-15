@@ -26,7 +26,7 @@ class GPSHandler constructor(val context: Context) {
 
     private var lastKnownLocation: Location? = null
 
-    var updateTime = 30 * 1000
+    var updateTime = 3 * 1000
 
     private var newUpdateTime = 30 * 1000
 
@@ -62,7 +62,7 @@ class GPSHandler constructor(val context: Context) {
 
     }
 
-    fun coordinatesDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
+    fun coordinatesDistance(lat1: Double, lng1: Double, lat2: Float, lng2: Float): Double {
         val earthRadius = 6371000.0 //meters
         val latDistance = Math.toRadians((lat2 - lat1).toDouble())
         val lonDistance = Math.toRadians((lng2 - lng1).toDouble())

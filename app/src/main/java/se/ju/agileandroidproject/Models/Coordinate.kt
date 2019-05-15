@@ -3,5 +3,5 @@ package se.ju.agileandroidproject.Models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Coordinate(val lon: Double, val lat: Double) {
+data class Coordinate(val lon: Float, val lat: Float) {
 }
