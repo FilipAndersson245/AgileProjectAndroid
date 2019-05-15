@@ -6,20 +6,28 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
+import android.location.Location
+import android.location.LocationManager
+import android.content.Intent
+import android.content.Context
 import android.widget.Toast
+import android.support.v7.app.AlertDialog
+import android.widget.AdapterView
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
+import se.ju.agileandroidproject.Models.Gantry
+import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
-import kotlinx.coroutines.*
 import se.ju.agileandroidproject.APIHandler
-import se.ju.agileandroidproject.Models.Coordinate
-import kotlin.concurrent.thread
+import kotlinx.coroutines.*
+import kotlin.system.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
+
+    //object APIHandler
 
     private val ENTER_TRAVEL = true
 
@@ -45,7 +53,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) = runBlocking<Unit> {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_PERMISSION_LOCATION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
+                //TODO: Gör saker för att börja läsa GPS-koordinater
+
+                gpsHandler.startListening(30000)
+
+
+            } else {
+                Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -91,23 +114,7 @@ class MainActivity : AppCompatActivity() {
 //                isTravelingThreadLoop.join()
 //            }
 //        }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_PERMISSION_LOCATION){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
-                //TODO: Gör saker för att börja läsa GPS-koordinater
-
-                gpsHandler.startListening(30000)
-
-
-            } else {
-                Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
-
-
 
     fun changeUpdateTime(updateTime: Int){
         gpsHandler.setGPSUpdateTime(updateTime)
@@ -123,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
             launch {
 
-                //                if (gpsHandler.currentLocation != null) {
+//                if (gpsHandler.currentLocation != null) {
 //                    val positions = APIHandler.getClosestGantries(Coordinate(gpsHandler.currentLocation.longitude, gpsHandler.currentLocation.latitude))
 //                    Log.d("EH", "Done!")
 //                }
