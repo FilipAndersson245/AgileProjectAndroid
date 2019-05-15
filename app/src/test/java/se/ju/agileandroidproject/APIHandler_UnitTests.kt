@@ -39,7 +39,6 @@ class APIHandler_tests {
                 }
             }
         }
-
     }
 
     @Test
@@ -59,7 +58,6 @@ class APIHandler_tests {
                 }
             }
         }
-
     }
 
     @Test
@@ -195,4 +193,69 @@ class APIHandler_tests {
         }
 
     }
+
+    @Test
+    fun register_gantry_should_succeed() {
+        val spy = spyk(APIHandler)
+
+        every { spy.registerGantryRequest(any(), any()) } answers { true }
+        every { spy.token } answers { "token" }
+
+        val result =
+            runBlocking {
+                spy.registerGantry("1234567890", "abc123xyz")
+            }
+
+        assertTrue(result)
+    }
+
+    @Test
+    fun register_gantry_should_fail_to_short_person_number() {
+        val spy = spyk(APIHandler)
+
+        val result =
+            runBlocking {
+                spy.registerGantry("1234590", "abc123xyz")
+            }
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun register_gantry_should_fail_to_long_person_number() {
+        val spy = spyk(APIHandler)
+
+        val result =
+            runBlocking {
+                spy.registerGantry("12345944567830", "abc123xyz")
+            }
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun register_gantry_should_fail_must_have_gantry_id() {
+        val spy = spyk(APIHandler)
+
+        val result =
+            runBlocking {
+                spy.registerGantry("12345944567830", "")
+            }
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun register_gantry_fail_when_user_dosent_exist() {
+        val spy = spyk(APIHandler)
+
+        every { spy.registerGantryRequest(any(), any()) } answers { false }
+
+        val result =
+            runBlocking {
+                spy.registerGantry("1234567890", "abc123xyz")
+            }
+        assertFalse(result)
+    }
+
 }
