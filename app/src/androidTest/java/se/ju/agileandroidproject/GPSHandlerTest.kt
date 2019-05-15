@@ -20,7 +20,7 @@ class GPSHandlerTest {
     }
 
     @Test
-    fun updatesCoordsWhenBetter(){
+    fun updatesCoordsWhenBetter() {
 
         val appContext = InstrumentationRegistry.getTargetContext()
 
