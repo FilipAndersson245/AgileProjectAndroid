@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.Context
 import android.widget.Toast
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
@@ -26,8 +27,6 @@ import kotlin.system.*
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
-
-    //object APIHandler
 
     private val ENTER_TRAVEL = true
 
@@ -114,7 +113,6 @@ class MainActivity : AppCompatActivity() {
 //                isTravelingThreadLoop.join()
 //            }
 //        }
-    }
 
     fun changeUpdateTime(updateTime: Int){
         gpsHandler.setGPSUpdateTime(updateTime)

@@ -11,6 +11,7 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.stringify
+import se.ju.agileandroidproject.Models.Coordinate
 
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
@@ -43,14 +44,7 @@ object APIHandler {
                 Log.d("EH","An error of type ${error.exception} happened: ${error.message}")
             })
 
-        var postitionData = mutableListOf<Coordinate>()
-
-        for (gantry in responseData)
-        {
-            postitionData.add(gantry.coordinates)
-        }
-
-        return postitionData
+        return responseData
     }
 
     suspend fun gantries(lon: Float, lat: Float, callback: (Pair<Boolean, List<Gantry>>) -> Unit) {
