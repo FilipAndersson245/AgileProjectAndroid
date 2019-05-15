@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context=".Fragments.Login"
+              android:orientation="vertical"
+              android:padding="10dp"
+              android:background="#fcfcfc"
+              android:gravity="center">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="120dp"
+                android:textSize="30dp"
+                android:textColor="#000000"
+                android:text="My invoice"
+                android:textStyle="bold" />
+    </LinearLayout>
+
 <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,8 +33,11 @@
         android:name="se.ju.agileandroidproject.InvoiceFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".Fragments.InvoiceFragment"
         tools:listitem="@layout/fragment_invoice"/>
+
+</LinearLayout>
