@@ -2,66 +2,74 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="80dp"
-              android:id="@+id/invoice_background"
+              android:background="#000000"
+              android:padding="2dp"
               android:orientation="horizontal">
 
 
-    <TextView
-            android:text="Gantry cordinate: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+    <LinearLayout android:orientation="vertical"
+                  android:background="#FFFFFF"
+                  android:id="@+id/gntry_background"
+                  android:layout_width="match_parent"
+                  android:layout_height="78dp">
 
-    <TextView
-            android:id="@+id/gantry_cordinates"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginTop="16dp"
-            android:text="x.x.x.x"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+                android:text="Cordinates: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-            android:text="Time: "
-            android:layout_marginLeft="-178dp"
-            android:layout_marginTop="32dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+                android:id="@+id/item_number"
+                android:layout_marginLeft="104dp"
+                android:layout_marginTop="-38dp"
+                android:text="xx:xx:xx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-            android:id="@+id/item_number"
-            android:text="x.x.x.x"
-            android:layout_marginTop="32dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+                android:text="Time: "
+                android:layout_marginLeft="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-            android:text="Fee:"
-            android:textSize="22dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginLeft="170dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+                android:id="@+id/due_date"
+                android:text="xx:xx:xx"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="-22dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-            android:id="@+id/invoice_payment"
-            android:text="xxx sek"
-            android:textSize="22dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginLeft="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+                android:text="Fee:"
+                android:textSize="22dp"
+                android:layout_marginTop="-34dp"
+                android:layout_marginLeft="220dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+                android:id="@+id/invoice_payment"
+                android:text="xxx sek"
+                android:textSize="22dp"
+                android:layout_marginTop="-30dp"
+                android:layout_marginLeft="267dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"/>
+
+        <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:textAppearance="?attr/textAppearanceListItem"/>
+    </LinearLayout>
 </LinearLayout>
 
