@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import se.ju.agileandroidproject.Fragments.Login
+import se.ju.agileandroidproject.Fragments.Register
 
 class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,7 +41,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         super.onStart()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_holder, Login.newInstance())
+        fragmentTransaction.add(R.id.fragment_holder, Register.newInstance())
         fragmentTransaction.commit()
     }
 

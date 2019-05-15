@@ -1,5 +1,6 @@
 package se.ju.agileandroidproject.Fragments
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Models.User
@@ -51,16 +54,30 @@ class Register : Fragment() {
             val password = view!!.findViewById<EditText>(R.id.Password).text.toString()
             val password2 = view!!.findViewById<EditText>(R.id.PasswordConfirmation).text.toString()
             val emailAddress = view!!.findViewById<EditText>(R.id.EmailAdress).text.toString()
-            val firstName = view!!.findViewById<EditText>(R.id.FirstName).text.toString()
-            val lastName = view!!.findViewById<EditText>(R.id.LastName).text.toString()
+            val firstName = view!!.findViewById<EditText>(R.id.UserFirstName).text.toString()
+            val lastName = view!!.findViewById<EditText>(R.id.UserLastName).text.toString()
             val billingAddress = view!!.findViewById<EditText>(R.id.UserBillingAddress).text.toString()
-            val personalId = view!!.findViewById<EditText>(R.id.PersonalID).text.toString()
+            val personalId = view!!.findViewById<EditText>(R.id.UserPersonalSocialNumber).text.toString()
+
+            if(password != password2) {
+                Toast.makeText(activity, "Passwords does not match.", Toast.LENGTH_LONG).show()
+                return@OnClickListener
+            }
 
             val user = User(username, personalId, password, emailAddress, billingAddress, firstName, lastName)
 
-            val didRegister = APIHandler.register(user)
+            val validResponse = user.validate()
 
-            Toast.makeText(activity, didRegister.toString(), Toast.LENGTH_SHORT).show()
+            if(validResponse.first) {
+                if(APIHandler.register(user)) {
+                    Toast.makeText(activity, "Registed correctly!", Toast.LENGTH_LONG).show()
+                }
+                else {
+                    Toast.makeText(activity, "Register failed.", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(activity, "Invalid ${validResponse.second}.", Toast.LENGTH_LONG).show()
+            }
         })
     }
 

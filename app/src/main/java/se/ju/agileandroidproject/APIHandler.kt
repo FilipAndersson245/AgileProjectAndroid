@@ -5,6 +5,7 @@ import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.result.Result
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -14,6 +15,7 @@ import kotlinx.serialization.stringify
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
+import java.util.logging.Handler
 
 @UnstableDefault
 @ImplicitReflectionSerializer
@@ -80,7 +82,7 @@ object APIHandler {
 
     fun registerRequest(user: User): Boolean {
         val (_, _, result) = runBlocking {
-            Fuel.post("$url/user/")
+            Fuel.post("$url/users/")
                 .jsonBody(Json.stringify(user))
                 .awaitStringResponseResult()
         }
