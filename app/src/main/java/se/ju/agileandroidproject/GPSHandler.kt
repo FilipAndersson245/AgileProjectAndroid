@@ -1,17 +1,18 @@
 package se.ju.agileandroidproject
 
 import android.Manifest
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.nfc.Tag
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
-import kotlin.math.log
+import kotlinx.coroutines.*
+import se.ju.agileandroidproject.Models.Coordinate
+import kotlin.concurrent.thread
+
 
 private const val TEN_SECONDS: Long = 10 * 1000
 
@@ -25,9 +26,13 @@ class GPSHandler constructor(val context: Context) {
 
     private var lastKnownLocation: Location? = null
 
-    private var updateTime: Long = 30 * 1000
+    var updateTime = 30 * 1000
 
-    private var newUpdateTime: Long = 30 * 1000
+    private var newUpdateTime = 30 * 1000
+
+    private var coordinateOfClosestGantry: Coordinate? = null
+
+    private var distanceToClosestGantry: Int? = null
 
     val locationListener = object : LocationListener {
 
@@ -44,7 +49,7 @@ class GPSHandler constructor(val context: Context) {
         }
 
         override fun onLocationChanged(location: Location?) {
-            //TODO: Do somewthing with new location.
+//            //TODO: Do somewthing with new location.
             Log.d("EH", location.toString())
             if (location != null){
                 if (isBetterLocation(location, lastKnownLocation)){
@@ -57,7 +62,36 @@ class GPSHandler constructor(val context: Context) {
 
     }
 
-    fun setUpdateTime(newTime: Long){
+    fun coordinatesDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
+        val earthRadius = 6371000.0 //meters
+        val latDistance = Math.toRadians((lat2 - lat1).toDouble())
+        val lonDistance = Math.toRadians((lng2 - lng1).toDouble())
+        val a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1.toDouble())) *
+                Math.cos(Math.toRadians(lat2.toDouble())) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return (earthRadius * c)
+    }
+
+    public fun updateClosestGantry(coordinates: List<Coordinate>){
+        for (coordinate in coordinates){
+            if (currentLocation != null){
+                val distance = coordinatesDistance(currentLocation.latitude, currentLocation.longitude, coordinate.lat, coordinate.lon)
+                if (distanceToClosestGantry == null){
+                    distanceToClosestGantry = distance.toInt()
+                    coordinateOfClosestGantry = coordinate
+                    Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
+                }
+                else if (distance.toInt() < distanceToClosestGantry!!){
+                    distanceToClosestGantry = distance.toInt()
+                    coordinateOfClosestGantry = coordinate
+                    Log.d("EH", "Updated closest coordinate to" + coordinate.toString())
+                }
+            }
+        }
+    }
+
+    fun setGPSUpdateTime(newTime: Int) {
         newUpdateTime = newTime
         if (newUpdateTime != updateTime){
             stopListening()
@@ -69,9 +103,9 @@ class GPSHandler constructor(val context: Context) {
     }
 
 
-    public fun startListening(updateTime: Long) {
+    public fun startListening(updateTime: Int) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 0f,locationListener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime.toLong(), 0f,locationListener)
             Log.d("EH", "bok")
 
         } else{

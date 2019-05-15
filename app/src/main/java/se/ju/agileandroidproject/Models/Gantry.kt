@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 @Serializable
 class Gantry(
     val id: String,
-    val position: List<Float>,
+    val position: List<Double>,
     val lastUpdated: String,
     val price: Float) {
 

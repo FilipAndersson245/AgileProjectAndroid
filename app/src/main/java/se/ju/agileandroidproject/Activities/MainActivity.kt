@@ -12,7 +12,6 @@ import android.content.Intent
 import android.content.Context
 import android.widget.Toast
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.widget.AdapterView
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
@@ -63,19 +62,30 @@ class MainActivity : AppCompatActivity() {
         val btnOne = findViewById(R.id.btn_one_sec) as Button
 
         btnOne.setOnClickListener {
-            changeUpdateTime(1000)
+            updateOne()
         }
 
         val btnFive = findViewById(R.id.btn_five_sec) as Button
 
         btnFive.setOnClickListener {
-            changeUpdateTime(5000)
+            updateFive()
         }
 
         val btnTen = findViewById(R.id.btn_ten_sec) as Button
 
         btnTen.setOnClickListener {
-            changeUpdateTime(10000)
+            updateTen()
+        }
+
+        // Remove later, for remember purpose only
+        async {
+            val a = APIHandler.returnGantry()
+            println("---------------------------> RESULT GANTRY START")
+            println(a.id)
+            println(a.coordinates)
+            println(a.lastUpdated)
+            println(a.price)
+            println("---------------------------> RESULT GANTRY END")
         }
     }
 
@@ -96,9 +106,16 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    fun changeUpdateTime(updateTime: Long){
-        gpsHandler.setUpdateTime(updateTime)
+    fun updateOne(){
+        gpsHandler.setUpdateTime(1000)
     }
 
+    fun updateFive(){
+        gpsHandler.setUpdateTime(5000)
+    }
+
+    fun updateTen(){
+        gpsHandler.setUpdateTime(10000)
+    }
 
 }

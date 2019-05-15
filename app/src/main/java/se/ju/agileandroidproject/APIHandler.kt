@@ -1,5 +1,6 @@
 package se.ju.agileandroidproject
 
+import android.util.Log
 import com.github.kittinunf.fuel.*
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
@@ -39,10 +40,17 @@ object APIHandler {
                 responseData.add(Json.parse(Gantry.serializer(), data))
             },
             { error ->
-                print("An error of type ${error.exception} happened: ${error.message}")
+                Log.d("EH","An error of type ${error.exception} happened: ${error.message}")
             })
 
-        return responseData
+        var postitionData = mutableListOf<Coordinate>()
+
+        for (gantry in responseData)
+        {
+            postitionData.add(gantry.coordinates)
+        }
+
+        return postitionData
     }
 
     suspend fun gantries(lon: Float, lat: Float, callback: (Pair<Boolean, List<Gantry>>) -> Unit) {
