@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     public val CHANNEL_ID = "backgroundServiceChannel"
 
-    lateinit var gpsHandler: GPSHandler
-
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -62,7 +60,6 @@ class MainActivity : AppCompatActivity() {
     // Remove "= runBlocking" when not using async here
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
-        //gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
 
         startBackgroundService()
@@ -84,17 +81,6 @@ class MainActivity : AppCompatActivity() {
         btnTen.setOnClickListener {
             changeUpdateTime(10000)
         }
-
-        // Remove later, for remember purpose only
-        /*async {
-            val a = APIHandler.returnGantry(5f, 5f)
-            Log.d("EH","---------------------------> RESULT GANTRY START")
-            Log.d("EH", a[0].id)
-            Log.d("EH", a[0].coordinates.toString())
-            Log.d("EH", a[0].lastUpdated)
-            Log.d("EH", a[0].price.toString())
-            Log.d("EH", "---------------------------> RESULT GANTRY END")
-        }*/
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -102,8 +88,6 @@ class MainActivity : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
                 //TODO: Gör saker för att börja läsa GPS-koordinater
-
-                //gpsHandler.startListening(30000)
 
 
             } else {
@@ -115,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun changeUpdateTime(updateTime: Long){
-        //gpsHandler.setUpdateTime(updateTime)
+        GPSHandler.setUpdateTime(updateTime)
     }
 
     fun startBackgroundService(){

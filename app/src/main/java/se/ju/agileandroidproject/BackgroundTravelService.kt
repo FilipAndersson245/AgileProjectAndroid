@@ -13,15 +13,14 @@ class BackgroundTravelService: Service(){
 
     public val CHANNEL_ID = "backgroundServiceChannel"
 
-    lateinit var gpsHandler: GPSHandler
-
     override fun onCreate() {
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        gpsHandler = GPSHandler(applicationContext)
+        GPSHandler.initializeContext(this)
+
         var notificationIntent = Intent(this, MainActivity::class.java)
         var pendingIntent = PendingIntent.getActivity(this,
             0, notificationIntent,0)
@@ -41,7 +40,7 @@ class BackgroundTravelService: Service(){
             gpsHandler.startListening(1000)
         }*/
 
-        gpsHandler.startListening(1000)
+        GPSHandler.startListening(1000)
 
         return START_NOT_STICKY
     }
