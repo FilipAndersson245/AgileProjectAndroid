@@ -1,35 +1,28 @@
 package se.ju.agileandroidproject.Activities
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.location.Location
-import android.location.LocationManager
-import android.content.Intent
-import android.content.Context
 import android.widget.Toast
-import android.support.v7.app.AlertDialog
-import android.util.Log
-import android.widget.AdapterView
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
-import se.ju.agileandroidproject.Models.Gantry
-import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
-import se.ju.agileandroidproject.APIHandler
 import kotlinx.coroutines.*
 import se.ju.agileandroidproject.BackgroundTravelService
-import kotlin.system.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    //object APIHandler
+    public val CHANNEL_ID = "backgroundServiceChannel"
 
     lateinit var gpsHandler: GPSHandler
 
@@ -51,13 +44,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        createNotificationChannel()
 
+    }
+
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val serviceChannel = NotificationChannel(CHANNEL_ID,
+                "backgroundService",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            var manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(serviceChannel)
+        }
     }
 
     // Remove "= runBlocking" when not using async here
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
-        gpsHandler = GPSHandler(applicationContext)
+        //gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
 
         startBackgroundService()
@@ -81,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Remove later, for remember purpose only
-        async {
+        /*async {
             val a = APIHandler.returnGantry(5f, 5f)
             Log.d("EH","---------------------------> RESULT GANTRY START")
             Log.d("EH", a[0].id)
@@ -89,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("EH", a[0].lastUpdated)
             Log.d("EH", a[0].price.toString())
             Log.d("EH", "---------------------------> RESULT GANTRY END")
-        }
+        }*/
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -98,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
                 //TODO: Gör saker för att börja läsa GPS-koordinater
 
-                gpsHandler.startListening(30000)
+                //gpsHandler.startListening(30000)
 
 
             } else {
@@ -110,13 +115,17 @@ class MainActivity : AppCompatActivity() {
 
 
     fun changeUpdateTime(updateTime: Long){
-        gpsHandler.setUpdateTime(updateTime)
+        //gpsHandler.setUpdateTime(updateTime)
     }
 
     fun startBackgroundService(){
-        var serviceIntent = Intent(applicationContext, MainActivity::class.java)
-        var backgroundTravelService = BackgroundTravelService()
-        backgroundTravelService.startService(serviceIntent)
+        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        startService(serviceIntent)
+    }
+
+    fun stopBackgroundService(){
+        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        stopService(serviceIntent)
     }
 
 }

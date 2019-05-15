@@ -22,8 +22,7 @@
             </intent-filter>
         </activity>
         <service
-                android:name=".BackgroundTravelService"
-                android:exported="false"/>
+                android:name=".BackgroundTravelService" />
 
     </application>
 
