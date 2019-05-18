@@ -46,7 +46,7 @@
         <androidx.cardview.widget.CardView
                 android:clickable="true"
                 android:id="@+id/Register"
-                android:layout_width="240dp"
+                android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_margin="10dp">
 
@@ -59,10 +59,10 @@
 
                 <EditText
                         android:id="@+id/Username"
-                        android:layout_width="100dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textPersonName"/>
+                        android:inputType="number|textPersonName"/>
 
             </LinearLayout>
 
@@ -75,11 +75,11 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="-60dp"
+                        android:layout_marginLeft="-120dp"
                         android:layout_marginTop="11dp"
                         android:textSize="18dp"
-                        android:text="Username:"
-                        android:textStyle="italic" />
+                        android:text="Personal id:"
+                        android:textStyle="italic"/>
 
             </LinearLayout>
 
@@ -94,7 +94,7 @@
 
                 <EditText
                         android:id="@+id/Password"
-                        android:layout_width="100dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:inputType="textPassword"/>
@@ -111,11 +111,11 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="-60dp"
+                        android:layout_marginLeft="-120dp"
                         android:layout_marginTop="11dp"
                         android:textSize="18dp"
                         android:text="Password:"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"/>
 
             </LinearLayout>
 

@@ -24,24 +24,11 @@
                 android:clickable="true"
                 android:id="@+id/Login">
 
-            <LinearLayout
+            <Button
+                    android:text="Sign in"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="#000000"
-                    android:orientation="vertical">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:textSize="20dp"
-                        android:textColor="@color/KapschOrange"
-                        android:text="Login"
-                        android:textStyle="normal"/>
-
-
-            </LinearLayout>
+                    android:layout_height="match_parent" android:id="@+id/loginButton" android:background="#000000"
+                    android:textColor="@color/KapschOrange" android:textSize="16sp"/>
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
@@ -58,23 +45,11 @@
                 android:layout_height="60dp"
                 android:layout_margin="10dp">
 
-            <LinearLayout
+            <Button
+                    android:text="Register"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:background="#000000"
-                    android:orientation="vertical">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:textSize="20dp"
-                        android:textColor="@color/KapschOrange"
-                        android:text="Register"
-                        android:textStyle="normal" />
-
-            </LinearLayout>
+                    android:layout_height="match_parent" android:id="@+id/registerButton" android:background="#000000"
+                    android:textColor="@color/KapschOrange" android:textSize="16sp"/>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 </LinearLayout>

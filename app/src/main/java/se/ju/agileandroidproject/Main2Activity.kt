@@ -3,6 +3,7 @@ package se.ju.agileandroidproject
 import android.app.Fragment
 import android.app.FragmentManager
 import android.app.FragmentTransaction
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -14,8 +15,10 @@ import android.support.design.widget.NavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
+import se.ju.agileandroidproject.Activities.LoginActivity
 import se.ju.agileandroidproject.Fragments.Login
 import se.ju.agileandroidproject.Fragments.Register
+import se.ju.agileandroidproject.Fragments.StartTravelFragment
 
 class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,7 +44,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         super.onStart()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_holder, Register.newInstance())
+        fragmentTransaction.add(R.id.fragment_holder, StartTravelFragment.newInstance())
         fragmentTransaction.commit()
     }
 
@@ -52,6 +55,15 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         } else {
             super.onBackPressed()
         }
+    }
+
+    fun switchFragment(fragment: android.support.v4.app.Fragment)
+    {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.addToBackStack("")
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+        fragmentTransaction.replace(R.id.fragment_holder, fragment)
+        fragmentTransaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -74,19 +86,18 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
 
             }
-            R.id.nav_slideshow -> {
+            R.id.nav_invoices -> {
 
             }
-            R.id.nav_tools -> {
+            R.id.nav_passages -> {
 
             }
-            R.id.nav_send -> {
+            R.id.nav_logout -> {
+//                APIHandler.logout()
 
+                startActivity(Intent(this, LoginActivity::class.java))
             }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)

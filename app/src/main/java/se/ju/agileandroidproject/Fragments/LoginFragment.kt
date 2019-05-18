@@ -1,6 +1,7 @@
 package se.ju.agileandroidproject.Fragments
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -14,6 +15,7 @@ import android.widget.Toast
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Main2Activity
 import se.ju.agileandroidproject.R
 
 
@@ -33,10 +35,6 @@ private const val ARG_PARAM2 = "param2"
  */
 class Login : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     @ImplicitReflectionSerializer
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,10 +51,11 @@ class Login : Fragment() {
 
         val button = view!!.findViewById<Button>(R.id.button)
 
-        button.setOnClickListener(View.OnClickListener {
+        button.setOnClickListener {
             val username = view!!.findViewById<EditText>(R.id.Username).text.toString()
             val password = view!!.findViewById<EditText>(R.id.Password).text.toString()
-
+    //
+    //            Toast.makeText(activity, "$username $password", Toast.LENGTH_SHORT).show()
 
             Thread {
                 runBlocking {
@@ -64,25 +63,18 @@ class Login : Fragment() {
                         val didLogin = it
 
                         activity?.runOnUiThread {
-                            Toast.makeText(activity, "Signed in successfully!", Toast.LENGTH_SHORT).show()
+                            if (didLogin) {
+                                Toast.makeText(activity, "Signed in successfully!", Toast.LENGTH_SHORT).show()
+
+                                startActivity(Intent(activity, Main2Activity::class.java))
+                            } else {
+                                Toast.makeText(activity, "Failed signing in.", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
-            }
-        })
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed() {
-
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
+            }.start()
+        }
     }
 
     companion object {

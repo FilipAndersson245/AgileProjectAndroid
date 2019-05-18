@@ -2,6 +2,7 @@ package se.ju.agileandroidproject.Fragments
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -15,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Activities.LoginActivity
 import se.ju.agileandroidproject.Main2Activity
 import se.ju.agileandroidproject.Models.User
 import se.ju.agileandroidproject.R
@@ -78,6 +80,8 @@ class Register : Fragment() {
                             activity?.runOnUiThread {
                                 if (didRegister) {
                                     Toast.makeText(activity, "Registed successfully!", Toast.LENGTH_LONG).show()
+
+                                    (activity as LoginActivity).switchFragment(Login.newInstance())
                                 } else {
                                     Toast.makeText(activity, "Registration failed.", Toast.LENGTH_LONG).show()
                                 }
