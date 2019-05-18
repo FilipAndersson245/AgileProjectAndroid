@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.stringify
 
 import se.ju.agileandroidproject.Models.Gantry
+import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
 
@@ -130,5 +131,34 @@ object APIHandler {
             }
             else -> false
         }
+    }
+
+    fun invoiceRequest(personalId: String): List<Invoice> {
+        val (_, _, result) = runBlocking {
+            Fuel.get("$url/invoices?personalId=$personalId")
+                .authentication()
+                .bearer(token)
+                .awaitStringResponseResult()
+        }
+
+        val responseData = mutableListOf<Invoice>()
+
+        result.fold(
+            { data ->
+                responseData.add(Json.parse(Invoice.serializer(), data))
+            },
+            { error ->
+                print("An error of type ${error.exception} happened: ${error.message}")
+            })
+
+        return responseData
+    }
+
+    fun invoices(personalId: String): Pair<Boolean, List<Invoice>> {
+        val gantries = when (token) {
+            "" -> listOf()
+            else -> invoiceRequest(personalId)
+        }
+        return gantries.isNotEmpty() to gantries
     }
 }
