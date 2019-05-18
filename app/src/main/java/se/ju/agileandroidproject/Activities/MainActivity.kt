@@ -84,49 +84,13 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         checkPermissions()
 
-        Log.d("EH", "${Thread.currentThread()} has run. (Should be main)")
-
         isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
-            Log.d("EH","${Thread.currentThread()} has run.")
             travelingThreadLoop()
-            Log.d("EH","Thread Ended!!")
         }
 
         isTraveling = ENTER_TRAVEL
         isTravelingThreadLoop.start()
     }
-
-
-
-//        val start_travel = findViewById(R.id.start_travel) as Button
-//        start_travel.setOnClickListener {
-//            Log.d("EH", "Clicked start")
-//
-//            if (!isTraveling) {
-//                Log.d("EH", "START TRAVEL")
-//
-//                isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
-//                    Log.d("EH","${Thread.currentThread()} has run.")
-//                    travelingThreadLoop()
-//                    Log.d("EH","Thread Ended!!")
-//                }
-//
-//                isTraveling = ENTER_TRAVEL
-//                isTravelingThreadLoop.start()
-//            }
-//
-//        }
-//
-//        val stop_travel = findViewById(R.id.stop_travel) as Button
-//        stop_travel.setOnClickListener {
-//            Log.d("EH", "Clicked stop")
-//
-//            if (isTraveling) {
-//                Log.d("EH", "STOP TRAVEL")
-//                isTraveling = EXIT_TRAVEL
-//                isTravelingThreadLoop.join()
-//            }
-//        }
 
     fun changeUpdateTime(updateTime: Int){
         gpsHandler.setGPSUpdateTime(updateTime)
@@ -139,21 +103,10 @@ class MainActivity : AppCompatActivity() {
 
         while (isTraveling) {
 
-            Log.d("EH", "LOOOOOOOOOOOOOOOOP!")
-            Log.d("EH","${Thread.currentThread()} has run.")
-
             launch {
 
-//                if (gpsHandler.currentLocation != null) {
-//                    val positions = APIHandler.getClosestGantries(Coordinate(gpsHandler.currentLocation.longitude, gpsHandler.currentLocation.latitude))
-//                    Log.d("EH", "Done!")
-//                }
-
-                Log.d("EH", "Get Gantries!")
-
+                // Change later
                 val closeGantries = APIHandler.requestGantries(0f, 0f)
-
-                Log.d("EH", "Update Gantries!")
 
                 val coordinatesList = mutableListOf<Coordinate>()
 
@@ -163,14 +116,9 @@ class MainActivity : AppCompatActivity() {
 
                 gpsHandler.updateClosestGantry(coordinatesList)
 
-                Log.d("EH", "DONE GETTING COORDS!")
             }
 
-
-
             delay(gpsHandler.updateTime.toLong())
-
-            Log.d("EH", "HERE WE GO AGAIN")
         }
     }
 

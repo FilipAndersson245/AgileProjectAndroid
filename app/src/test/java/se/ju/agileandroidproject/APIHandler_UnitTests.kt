@@ -25,7 +25,7 @@ class APIHandler_tests {
     @Test
     fun gantry_should_be_good() {
         val spy = spyk(APIHandler)
-        val mockGantries = listOf(Gantry("foo", 1.7, 14.2, "123", 10f))
+        val mockGantries = listOf(Gantry("foo", 1.7f, 14.2f, "123", 10f))
 
         coEvery { spy.requestGantries(any(), any()) } answers { mockGantries }
         coEvery { spy.token } answers { "token" }
@@ -63,7 +63,7 @@ class APIHandler_tests {
     @Test
     fun gantry_should_be_fail_with_no_token() = runBlocking {
         val spy = spyk(APIHandler)
-        val mockGantries = listOf(Gantry("foo", 1.7, 14.2, "123", 10f))
+        val mockGantries = listOf(Gantry("foo", 1.7f, 14.2f, "123", 10f))
 
         coEvery { spy.requestGantries(any(), any()) } answers { mockGantries }
         every { spy.token } answers { "" }

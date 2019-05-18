@@ -7,7 +7,7 @@ class Gantry(
     val id: String,
     val longitude: Float,
     val latitude: Float,
-    val lastUpdated: String,
+    val lastUpdate: String,
     val price: Float) {
 
 }

@@ -7,16 +7,14 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import com.github.kittinunf.result.Result
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.parse
-import kotlinx.serialization.stringify
 import se.ju.agileandroidproject.Models.Coordinate
 
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
+import java.util.*
 import javax.security.auth.callback.Callback
 
 @UnstableDefault
@@ -33,16 +31,12 @@ object APIHandler {
                 .bearer(token)
                 .awaitStringResponseResult()
 
-
-        val responseData = mutableListOf<Gantry>()
+        var responseData = listOf<Gantry>()
 
         result.fold(
             { data ->
-                // DATAN KAN INTE PARSEA FRÅN EN LISTA!!!!!!
-                for (value in data) {
-                    responseData.add(Json.parse(Gantry.serializer(), value.toString()))
-                }
-
+                responseData = Json.parse(Gantry.serializer().list, data.toString())
+                return responseData
             },
             { error ->
                 Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
