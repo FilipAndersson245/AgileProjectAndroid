@@ -1,6 +1,8 @@
 package se.ju.agileandroidproject
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -16,13 +18,16 @@ import kotlin.concurrent.thread
 
 private const val TEN_SECONDS: Long = 10 * 1000
 
-class GPSHandler constructor(val context: Context) {
+@SuppressLint("StaticFieldLeak")
+object GPSHandler {
 
-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    lateinit var context: Context
+
+    lateinit var locationManager: LocationManager
 
     lateinit var currentLocation: Location
 
-    private var locationProvider: String = LocationManager.GPS_PROVIDER
+    lateinit var locationProvider: String
 
     private var lastKnownLocation: Location? = null
 
@@ -33,6 +38,12 @@ class GPSHandler constructor(val context: Context) {
     private var coordinateOfClosestGantry: Coordinate? = null
 
     private var distanceToClosestGantry: Int? = null
+
+    fun initializeContext(context: Context){
+        this.context = context
+        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationProvider = LocationManager.GPS_PROVIDER
+    }
 
     val locationListener = object : LocationListener {
 
