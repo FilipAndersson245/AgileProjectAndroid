@@ -21,6 +21,7 @@ object APIHandler {
 
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
+    var personalId = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
         val (_, _, result) = run {
@@ -76,6 +77,7 @@ object APIHandler {
             }
             else -> {
                 token = ""
+                personalId = ""
                 true
             }
         }
@@ -87,6 +89,7 @@ object APIHandler {
             when (session.auth) {
                 true -> {
                     this.token = session.token
+                    this.personalId = username
                     true
                 }
                 else -> {
