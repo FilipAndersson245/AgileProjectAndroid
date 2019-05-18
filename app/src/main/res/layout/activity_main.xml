@@ -10,20 +10,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <Button
-                android:text="Update every 1 second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" tools:layout_editor_absoluteY="88dp"
-                tools:layout_editor_absoluteX="161dp" android:id="@+id/btn_one_sec"/>
-        <Button
-                android:text="Update every 5 seconds"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" tools:layout_editor_absoluteY="238dp"
-                tools:layout_editor_absoluteX="161dp" android:id="@+id/btn_five_sec"/>
-        <Button
-                android:text="Update every 10 seconds"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" tools:layout_editor_absoluteY="395dp"
-                tools:layout_editor_absoluteX="161dp" android:id="@+id/btn_ten_sec"/>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

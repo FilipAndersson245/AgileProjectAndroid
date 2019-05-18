@@ -1,19 +1,21 @@
 package se.ju.agileandroidproject
 
+import android.util.Log
 import com.github.kittinunf.fuel.*
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.stringify
+import se.ju.agileandroidproject.Models.Coordinate
 
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
+import java.util.*
+import javax.security.auth.callback.Callback
 
 @UnstableDefault
 @ImplicitReflectionSerializer
@@ -23,22 +25,21 @@ object APIHandler {
     var token = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
-        val (_, _, result) = run {
-            Fuel.get("$url/gantrie?lat=$lat&lon=$lon")
+        val (_, _, result) =
+            Fuel.get(url + "/gantries", listOf("lon" to lon, "lat" to lat))
                 .authentication()
                 .bearer(token)
                 .awaitStringResponseResult()
-        }
 
-
-        val responseData = mutableListOf<Gantry>()
+        var responseData = listOf<Gantry>()
 
         result.fold(
             { data ->
-                responseData.add(Json.parse(Gantry.serializer(), data))
+                responseData = Json.parse(Gantry.serializer().list, data.toString())
+                return responseData
             },
             { error ->
-                print("An error of type ${error.exception} happened: ${error.message}")
+                Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData
