@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Main2Activity
 import se.ju.agileandroidproject.Models.User
 import se.ju.agileandroidproject.R
 
@@ -69,12 +70,22 @@ class Register : Fragment() {
             val validResponse = user.validate()
 
             if(validResponse.first) {
-                if(APIHandler.register(user)) {
-                    Toast.makeText(activity, "Registed correctly!", Toast.LENGTH_LONG).show()
-                }
-                else {
-                    Toast.makeText(activity, "Register failed.", Toast.LENGTH_LONG).show()
-                }
+                Thread {
+                    runBlocking {
+                        APIHandler.register(user) {
+                            val didRegister = it
+
+                            activity?.runOnUiThread {
+                                if (didRegister) {
+                                    Toast.makeText(activity, "Registed successfully!", Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(activity, "Registration failed.", Toast.LENGTH_LONG).show()
+                                }
+                            }
+
+                        }
+                    }
+                }.start()
             } else {
                 Toast.makeText(activity, "Invalid ${validResponse.second}.", Toast.LENGTH_LONG).show()
             }

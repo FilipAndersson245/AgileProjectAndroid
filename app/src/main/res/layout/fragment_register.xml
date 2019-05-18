@@ -74,7 +74,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textPersonName" android:text="a"/>
             </LinearLayout>
 
             <LinearLayout
@@ -101,7 +101,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPassword"/>
+                        android:inputType="textPassword" android:text="aaa111"/>
             </LinearLayout>
 
             <LinearLayout
@@ -128,7 +128,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPassword"/>
+                        android:inputType="textPassword" android:text="aaa111"/>
             </LinearLayout>
 
             <LinearLayout
@@ -154,7 +154,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textEmailAddress"/>
+                        android:inputType="textEmailAddress" android:text="a@a.a"/>
             </LinearLayout>
 
             <LinearLayout
@@ -181,7 +181,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textPersonName" android:text="a"/>
             </LinearLayout>
 
             <LinearLayout
@@ -208,7 +208,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textPersonName" android:text="a"/>
             </LinearLayout>
 
             <LinearLayout
@@ -234,7 +234,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress" android:text="a"/>
             </LinearLayout>
 
             <LinearLayout
@@ -261,7 +261,7 @@
                         android:layout_marginRight="40dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:inputType="textShortMessage"/>
+                        android:inputType="textShortMessage" android:text="11111111"/>
             </LinearLayout>
 
 

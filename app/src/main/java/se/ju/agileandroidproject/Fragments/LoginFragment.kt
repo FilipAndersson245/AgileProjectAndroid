@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.R
@@ -56,9 +57,18 @@ class Login : Fragment() {
             val username = view!!.findViewById<EditText>(R.id.Username).text.toString()
             val password = view!!.findViewById<EditText>(R.id.Password).text.toString()
 
-            val didLogin = APIHandler.login(username, password)
 
-            Toast.makeText(activity, didLogin.toString(), Toast.LENGTH_SHORT).show()
+            Thread {
+                runBlocking {
+                    APIHandler.login(username, password) {
+                        val didLogin = it
+
+                        activity?.runOnUiThread {
+                            Toast.makeText(activity, "Signed in successfully!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         })
     }
 
