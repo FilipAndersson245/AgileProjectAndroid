@@ -69,6 +69,18 @@ object APIHandler {
         return token
     }
 
+    fun logout(): Boolean {
+        return when(token) {
+            "" -> {
+                false
+            }
+            else -> {
+                token = ""
+                true
+            }
+        }
+    }
+
     suspend fun login(username: String, password: String, callback: (success: Boolean) -> Unit) {
         val session = loginRequest(username, password)
         callback(
