@@ -1,19 +1,20 @@
 package se.ju.agileandroidproject
 
+import android.util.Log
 import com.github.kittinunf.fuel.*
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
-import com.github.kittinunf.result.Result
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.stringify
+import se.ju.agileandroidproject.Models.Coordinate
 
 import se.ju.agileandroidproject.Models.Gantry
+import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
+import java.util.*
 import javax.security.auth.callback.Callback
 
 @UnstableDefault
@@ -24,22 +25,21 @@ object APIHandler {
     var token = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
-        val (_, _, result) = run {
-            Fuel.get("$url/gantrie?lat=$lat&lon=$lon")
+        val (_, _, result) =
+            Fuel.get(url + "/gantries", listOf("lon" to lon, "lat" to lat))
                 .authentication()
                 .bearer(token)
                 .awaitStringResponseResult()
-        }
 
-
-        val responseData = mutableListOf<Gantry>()
+        var responseData = listOf<Gantry>()
 
         result.fold(
             { data ->
-                responseData.add(Json.parse(Gantry.serializer(), data))
+                responseData = Json.parse(Gantry.serializer().list, data.toString())
+                return responseData
             },
             { error ->
-                print("An error of type ${error.exception} happened: ${error.message}")
+                Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData
@@ -47,7 +47,7 @@ object APIHandler {
 
     suspend fun gantries(lon: Float, lat: Float, callback: (Pair<Boolean, List<Gantry>>) -> Unit) {
         val gantries = when (token) {
-            "" -> listOf<Gantry>()
+            "" -> listOf()
             else -> requestGantries(lon, lat)
         }
         callback(gantries.isNotEmpty() to gantries)
@@ -111,7 +111,7 @@ object APIHandler {
         )
     }
 
-    fun registerGantryRequest(personalId: String, gantryId: String): Boolean {
+    fun registerPassageRequest(personalId: String, gantryId: String): Boolean {
         val (_, _, result) = runBlocking {
             Fuel.post("$url/passages/")
                 .jsonBody("{ \"personalId\": \"$personalId\", \"gantryId\": \"$gantryId\"}")
@@ -122,15 +122,44 @@ object APIHandler {
         return result.fold({ true }, { error -> print(error.message); false })
     }
 
-    fun registerGantry(personalId: String, gantryId: String): Boolean {
+    fun registerPassage(personalId: String, gantryId: String): Boolean {
         return when {
             (personalId.length == 10 || personalId.length == 12) && gantryId.isNotEmpty() -> {
-                registerGantryRequest(
+                registerPassageRequest(
                     personalId,
                     gantryId
                 )
             }
             else -> false
         }
+    }
+
+    fun invoiceRequest(personalId: String): List<Invoice> {
+        val (_, _, result) = runBlocking {
+            Fuel.get("$url/invoices?personalId=$personalId")
+                .authentication()
+                .bearer(token)
+                .awaitStringResponseResult()
+        }
+
+        val responseData = mutableListOf<Invoice>()
+
+        result.fold(
+            { data ->
+                responseData.add(Json.parse(Invoice.serializer(), data))
+            },
+            { error ->
+                print("An error of type ${error.exception} happened: ${error.message}")
+            })
+
+        return responseData
+    }
+
+    fun invoices(personalId: String): Pair<Boolean, List<Invoice>> {
+        val gantries = when (token) {
+            "" -> listOf()
+            else -> invoiceRequest(personalId)
+        }
+        return gantries.isNotEmpty() to gantries
     }
 }

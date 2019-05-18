@@ -2,24 +2,22 @@ package se.ju.agileandroidproject
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.nfc.Tag
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import se.ju.agileandroidproject.Models.Coordinate
-import kotlin.math.log
+import se.ju.agileandroidproject.Models.Gantry
 
-private const val TEN_SECONDS: Long = 10 * 1000
+private const val GANTRY_INNER_CIRCLE_DISTANCE = 25
 
-private const val INNER_GANTRY_CIRCLE_DISTANCE = 25
-
-private const val OUTER_GANTRY_CIRCLE_DISTANCE = 50
+private const val GANTRY_OUTER_CIRCLE_DISTANCE = 50
 
 @SuppressLint("StaticFieldLeak")
 object GPSHandler {
@@ -34,15 +32,17 @@ object GPSHandler {
 
     private var lastKnownLocation: Location? = null
 
-    private var updateTime: Long = 30 * 1000
+    var updateTime = 3 * 1000
 
-    private var newUpdateTime: Long = 30 * 1000
+    var longestUpdateTime = updateTime * 2.5
 
-    private var coordinateOfClosestGantry: Coordinate? = null
+    private var newUpdateTime = 30 * 1000
+
+    private var closestGantry: Gantry? = null
 
     private var distanceToClosestGantry: Int? = null
 
-    public var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
+    var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
 
     fun initializeContext(context: Context){
         this.context = context
@@ -50,6 +50,8 @@ object GPSHandler {
         locationProvider = LocationManager.GPS_PROVIDER
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     val locationListener = object : LocationListener {
 
         override fun onProviderDisabled(provider: String?) {
@@ -65,22 +67,22 @@ object GPSHandler {
         }
 
         override fun onLocationChanged(location: Location?) {
-            //TODO: Do somewthing with new location.
             Log.d("EH", location.toString())
             if (location != null){
                 if (isBetterLocation(location, lastKnownLocation)){
                     currentLocation = location
                     lastKnownLocation = location
                     Log.d("EH","updated location")
-                    if (distanceToClosestGantry != null && coordinateOfClosestGantry != null){
-                        if(distanceToClosestGantry!! < OUTER_GANTRY_CIRCLE_DISTANCE){
+                    if (distanceToClosestGantry != null && closestGantry != null){
+                        if(distanceToClosestGantry!! < GANTRY_OUTER_CIRCLE_DISTANCE){
                             Log.d("EH", "Driving close to a gantry")
                             closeProximityToGantryCoordinatesList.add(Coordinate(currentLocation.longitude.toFloat(), currentLocation.latitude.toFloat()))
                         }
                         else{
                             if (closeProximityToGantryCoordinatesList.size > 0){
-                                if (wasGantryPassed(closeProximityToGantryCoordinatesList, coordinateOfClosestGantry!!)){
-                                    //TODO: Call function to register passage on API
+                                if (wasGantryPassed(closeProximityToGantryCoordinatesList, Coordinate(closestGantry!!.longitude, closestGantry!!.latitude))){
+                                    APIHandler.registerPassage("TEMP", closestGantry!!.id)
+                                    //TODO: Send correct userID to function
                                     Log.d("EH", "Gantry was passed")
                                 }
                                 else{
@@ -97,9 +99,9 @@ object GPSHandler {
 
     fun wasGantryPassed(coordList: List<Coordinate>, closestGantry: Coordinate): Boolean{
         val midPoint = middlePointOfPassage(coordList)
-        //if (coordinatesDistance(midPoint.lat, midPoint.lon, closestGantry.lat, closestGantry.lon) < INNER_GANTRY_CIRCLE_DISTANCE){
-            //return true
-        //}
+        if (coordinatesDistance(midPoint.lat, midPoint.lon, closestGantry.lat, closestGantry.lon) < GANTRY_INNER_CIRCLE_DISTANCE){
+            return true
+        }
         return false
     }
 
@@ -109,7 +111,36 @@ object GPSHandler {
         return Coordinate(midLong, midLat)
     }
 
-    fun setUpdateTime(newTime: Long){
+    fun coordinatesDistance(lat1: Float, lng1: Float, lat2: Float, lng2: Float): Double {
+        val earthRadius = 6371000.0 //meters
+        val latDistance = Math.toRadians((lat2 - lat1).toDouble())
+        val lonDistance = Math.toRadians((lng2 - lng1).toDouble())
+        val a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1.toDouble())) *
+                Math.cos(Math.toRadians(lat2.toDouble())) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2)
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+        return (earthRadius * c)
+    }
+
+    public fun updateClosestGantry(gantries: List<Gantry>){
+        for (gantry in gantries){
+            val distance = coordinatesDistance(currentLocation.latitude.toFloat(), currentLocation.longitude.toFloat(), gantry.latitude, gantry.longitude)
+            if (distanceToClosestGantry == null){
+                distanceToClosestGantry = distance.toInt()
+                closestGantry = gantry
+                Log.d("EH", "Updated closest coordinate to" + gantry.toString())
+            }
+            else if (distance.toInt() < distanceToClosestGantry!!){
+                distanceToClosestGantry = distance.toInt()
+                closestGantry = gantry
+                Log.d("EH", "Updated closest coordinate to" + gantry.toString())
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun setGPSUpdateTime(newTime: Int) {
         newUpdateTime = newTime
         if (newUpdateTime != updateTime){
             stopListening()
@@ -117,13 +148,16 @@ object GPSHandler {
             startListening(newUpdateTime)
             Log.d("EH", "Started listening with " + newUpdateTime / 1000 + " second interval")
             updateTime = newUpdateTime
+            longestUpdateTime = updateTime * 2.5
         }
     }
 
 
-    public fun startListening(updateTime: Long) {
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    public fun startListening(updateTime: Int) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime, 0f,locationListener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, updateTime.toLong(), 0f,locationListener)
             Log.d("EH", "bok")
 
         } else{
@@ -144,6 +178,8 @@ object GPSHandler {
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     public fun stopListening(){
         locationManager.removeUpdates(locationListener)
     }
@@ -158,8 +194,8 @@ object GPSHandler {
         }
 
         val timeDelta: Long = location.time - currentBestLocation.time
-        val isSignificantlyNewer: Boolean = timeDelta > TEN_SECONDS
-        val isSignificantlyOlder:Boolean = timeDelta < - TEN_SECONDS
+        val isSignificantlyNewer: Boolean = timeDelta > longestUpdateTime
+        val isSignificantlyOlder:Boolean = timeDelta < - longestUpdateTime
 
         when {
             isSignificantlyNewer -> return true
@@ -181,6 +217,5 @@ object GPSHandler {
             else -> false
         }
     }
-
 
 }

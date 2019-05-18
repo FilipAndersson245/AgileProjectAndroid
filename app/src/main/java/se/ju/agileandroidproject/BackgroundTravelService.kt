@@ -6,6 +6,8 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import se.ju.agileandroidproject.Activities.MainActivity
 import kotlin.concurrent.thread
 
@@ -17,6 +19,8 @@ class BackgroundTravelService: Service(){
         super.onCreate()
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         GPSHandler.initializeContext(this)
