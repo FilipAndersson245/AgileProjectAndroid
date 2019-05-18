@@ -1,36 +1,28 @@
 package se.ju.agileandroidproject.Activities
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.location.Location
-import android.location.LocationManager
-import android.content.Intent
-import android.content.Context
 import android.widget.Toast
-import android.support.v7.app.AlertDialog
-import android.util.Log
-import android.widget.AdapterView
 import android.widget.Button
 import se.ju.agileandroidproject.GPSHandler
-import se.ju.agileandroidproject.Models.Gantry
-import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
-import se.ju.agileandroidproject.APIHandler
 import kotlinx.coroutines.*
-import kotlin.system.*
+import se.ju.agileandroidproject.BackgroundTravelService
 
 
 class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    //object APIHandler
-
-    lateinit var gpsHandler: GPSHandler
+    public val CHANNEL_ID = "backgroundServiceChannel"
 
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
@@ -50,15 +42,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        createNotificationChannel()
 
+    }
+
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val serviceChannel = NotificationChannel(CHANNEL_ID,
+                "backgroundService",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            var manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(serviceChannel)
+        }
     }
 
     // Remove "= runBlocking" when not using async here
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
-        gpsHandler = GPSHandler(applicationContext)
         checkPermissions()
 
+        startBackgroundService()
 
         val btnOne = findViewById(R.id.btn_one_sec) as Button
 
@@ -85,8 +89,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
                 //TODO: Gör saker för att börja läsa GPS-koordinater
 
-                gpsHandler.startListening(30000)
-
 
             } else {
                 Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
@@ -97,8 +99,17 @@ class MainActivity : AppCompatActivity() {
 
 
     fun changeUpdateTime(updateTime: Long){
-        gpsHandler.setUpdateTime(updateTime)
+        GPSHandler.setUpdateTime(updateTime)
     }
 
+    fun startBackgroundService(){
+        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        startService(serviceIntent)
+    }
+
+    fun stopBackgroundService(){
+        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        stopService(serviceIntent)
+    }
 
 }
