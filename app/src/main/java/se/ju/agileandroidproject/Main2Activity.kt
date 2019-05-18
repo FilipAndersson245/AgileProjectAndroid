@@ -15,6 +15,7 @@ import android.support.design.widget.NavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
+import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.Activities.LoginActivity
 import se.ju.agileandroidproject.Fragments.Login
 import se.ju.agileandroidproject.Fragments.Register
@@ -82,6 +83,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         }
     }
 
+    @ImplicitReflectionSerializer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
@@ -95,7 +97,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
             }
             R.id.nav_logout -> {
-//                APIHandler.logout()
+                APIHandler.logout()
 
                 startActivity(Intent(this, LoginActivity::class.java))
             }
