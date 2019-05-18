@@ -4,7 +4,6 @@ import com.github.kittinunf.fuel.*
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
-import com.github.kittinunf.result.Result
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -14,7 +13,6 @@ import kotlinx.serialization.stringify
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
-import javax.security.auth.callback.Callback
 
 @UnstableDefault
 @ImplicitReflectionSerializer
@@ -47,7 +45,7 @@ object APIHandler {
 
     suspend fun gantries(lon: Float, lat: Float, callback: (Pair<Boolean, List<Gantry>>) -> Unit) {
         val gantries = when (token) {
-            "" -> listOf<Gantry>()
+            "" -> listOf()
             else -> requestGantries(lon, lat)
         }
         callback(gantries.isNotEmpty() to gantries)
@@ -111,7 +109,7 @@ object APIHandler {
         )
     }
 
-    fun registerGantryRequest(personalId: String, gantryId: String): Boolean {
+    fun registerPassageRequest(personalId: String, gantryId: String): Boolean {
         val (_, _, result) = runBlocking {
             Fuel.post("$url/passages/")
                 .jsonBody("{ \"personalId\": \"$personalId\", \"gantryId\": \"$gantryId\"}")
@@ -122,10 +120,10 @@ object APIHandler {
         return result.fold({ true }, { error -> print(error.message); false })
     }
 
-    fun registerGantry(personalId: String, gantryId: String): Boolean {
+    fun registerPassage(personalId: String, gantryId: String): Boolean {
         return when {
             (personalId.length == 10 || personalId.length == 12) && gantryId.isNotEmpty() -> {
-                registerGantryRequest(
+                registerPassageRequest(
                     personalId,
                     gantryId
                 )
