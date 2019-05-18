@@ -22,6 +22,7 @@ import se.ju.agileandroidproject.Models.Coordinate
 import kotlin.concurrent.thread
 import kotlin.system.*
 import se.ju.agileandroidproject.BackgroundTravelService
+import se.ju.agileandroidproject.Models.Gantry
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private var isTraveling = false
 
     lateinit var gpsHandler: GPSHandler
+
     public val CHANNEL_ID = "backgroundServiceChannel"
 
     lateinit var isTravelingThreadLoop : Thread
@@ -53,6 +55,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_PERMISSION_LOCATION){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -87,6 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Remove "= runBlocking" when not using async here
+    @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
@@ -101,6 +106,8 @@ class MainActivity : AppCompatActivity() {
         // isTravelingThreadLoop.start()
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun changeUpdateTime(updateTime: Int){
         gpsHandler.setGPSUpdateTime(updateTime)
     }
@@ -117,13 +124,13 @@ class MainActivity : AppCompatActivity() {
                 // Change later
                 val closeGantries = APIHandler.requestGantries(0f, 0f)
 
-                val coordinatesList = mutableListOf<Coordinate>()
+                val gantriesList = mutableListOf<Gantry>()
 
                 for (gantry in closeGantries) {
-                    coordinatesList.add(Coordinate(gantry.longitude, gantry.latitude))
+                    gantriesList.add(gantry)
                 }
 
-                gpsHandler.updateClosestGantry(coordinatesList)
+                gpsHandler.updateClosestGantry(gantriesList)
 
             }
 
