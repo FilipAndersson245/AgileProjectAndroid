@@ -17,6 +17,7 @@ import se.ju.agileandroidproject.R
 import kotlinx.coroutines.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Models.Coordinate
 import kotlin.concurrent.thread
 import kotlin.system.*
@@ -128,12 +129,6 @@ class MainActivity : AppCompatActivity() {
 
             delay(gpsHandler.updateTime.toLong())
         }
-    }
-
-
-
-    fun changeUpdateTime(updateTime: Long){
-        GPSHandler.setUpdateTime(updateTime)
     }
 
     fun startBackgroundService(){
