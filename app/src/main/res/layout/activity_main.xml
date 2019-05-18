@@ -10,10 +10,7 @@
 <!-- The first child in the layout is for the main Activity UI-->
     <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/fragment_holder">
+            android:layout_height="match_parent">
 
-    </FrameLayout>
-
-    <!-- Side navigation drawer UI -->
-
-</android.support.v4.widget.DrawerLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

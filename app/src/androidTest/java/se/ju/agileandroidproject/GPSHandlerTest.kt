@@ -4,6 +4,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import android.util.Log
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -49,6 +50,21 @@ class GPSHandlerTest {
 
         assertTrue(gpsHandler.isBetterLocation(longTimeLocation, originalLocation))
 
+    }
 
+
+    @Test
+    fun checkDistance() {
+
+        val appContext = InstrumentationRegistry.getTargetContext()
+
+        val gpsHandler = GPSHandler(appContext)
+
+        var jkpgLon: Float = 14.15618.toFloat()
+        var jkpgLat: Float = 57.78145.toFloat()
+        var sthlmLon: Float = 18.063240.toFloat()
+        var sthlmLat: Float = 59.334591.toFloat()
+        var distance = gpsHandler.coordinatesDistance(jkpgLat, jkpgLon, sthlmLat, sthlmLon)
+        assertTrue(distance < 290000 && distance > 280000)
     }
 }

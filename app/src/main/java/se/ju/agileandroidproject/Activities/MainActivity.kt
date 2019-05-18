@@ -18,6 +18,12 @@ import kotlinx.coroutines.*
 import kotlin.system.*
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
+import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Models.Coordinate
+import kotlin.concurrent.thread
+import kotlin.system.*
 import se.ju.agileandroidproject.BackgroundTravelService
 
 
@@ -25,7 +31,16 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSION_LOCATION = 10
 
+    private val ENTER_TRAVEL = true
+
+    private val EXIT_TRAVEL = false
+
+    private var isTraveling = false
+
+    lateinit var gpsHandler: GPSHandler
     public val CHANNEL_ID = "backgroundServiceChannel"
+
+    lateinit var isTravelingThreadLoop : Thread
 
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
@@ -41,12 +56,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == REQUEST_PERMISSION_LOCATION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
+                //TODO: Gör saker för att börja läsa GPS-koordinater
+
+                gpsHandler.startListening(30000)
+
+
+            } else {
+                Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(se.ju.agileandroidproject.R.layout.activity_main)
 
         createNotificationChannel()
-
     }
 
     private fun createNotificationChannel(){
@@ -61,48 +90,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Remove "= runBlocking" when not using async here
+    @ImplicitReflectionSerializer
     override fun onStart() = runBlocking<Unit> {
         super.onStart()
         checkPermissions()
 
+        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+            travelingThreadLoop()
+        }
         startBackgroundService()
 
-//        val btnOne = findViewById(R.id.btn_one_sec) as Button
-//
-//        btnOne.setOnClickListener {
-//            changeUpdateTime(1000)
-//        }
-//
-//        val btnFive = findViewById(R.id.btn_five_sec) as Button
-//
-//        btnFive.setOnClickListener {
-//            changeUpdateTime(5000)
-//        }
-//
-//        val btnTen = findViewById(R.id.btn_ten_sec) as Button
-//
-//        btnTen.setOnClickListener {
-//            changeUpdateTime(10000)
-//        }
+        // isTraveling = ENTER_TRAVEL
+        // isTravelingThreadLoop.start()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_PERMISSION_LOCATION){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
-                //TODO: Gör saker för att börja läsa GPS-koordinater
+    fun changeUpdateTime(updateTime: Int){
+        gpsHandler.setGPSUpdateTime(updateTime)
+    }
 
 
-            } else {
-                Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun travelingThreadLoop() = runBlocking<Unit> {
+
+        while (isTraveling) {
+
+            launch {
+
+                // Change later
+                val closeGantries = APIHandler.requestGantries(0f, 0f)
+
+                val coordinatesList = mutableListOf<Coordinate>()
+
+                for (gantry in closeGantries) {
+                    coordinatesList.add(Coordinate(gantry.longitude, gantry.latitude))
+                }
+
+                gpsHandler.updateClosestGantry(coordinatesList)
+
             }
+
+            delay(gpsHandler.updateTime.toLong())
         }
-    }
-
-
-
-    fun changeUpdateTime(updateTime: Long){
-        GPSHandler.setUpdateTime(updateTime)
     }
 
     fun startBackgroundService(){
