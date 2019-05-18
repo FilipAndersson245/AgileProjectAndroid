@@ -12,9 +12,14 @@ import android.nfc.Tag
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import se.ju.agileandroidproject.Models.Coordinate
 import kotlin.math.log
 
 private const val TEN_SECONDS: Long = 10 * 1000
+
+private const val INNER_GANTRY_CIRCLE_DISTANCE = 25
+
+private const val OUTER_GANTRY_CIRCLE_DISTANCE = 50
 
 @SuppressLint("StaticFieldLeak")
 object GPSHandler {
@@ -32,6 +37,12 @@ object GPSHandler {
     private var updateTime: Long = 30 * 1000
 
     private var newUpdateTime: Long = 30 * 1000
+
+    private var coordinateOfClosestGantry: Coordinate? = null
+
+    private var distanceToClosestGantry: Int? = null
+
+    public var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
 
     fun initializeContext(context: Context){
         this.context = context
@@ -61,10 +72,41 @@ object GPSHandler {
                     currentLocation = location
                     lastKnownLocation = location
                     Log.d("EH","updated location")
+                    if (distanceToClosestGantry != null && coordinateOfClosestGantry != null){
+                        if(distanceToClosestGantry!! < OUTER_GANTRY_CIRCLE_DISTANCE){
+                            Log.d("EH", "Driving close to a gantry")
+                            closeProximityToGantryCoordinatesList.add(Coordinate(currentLocation.longitude.toFloat(), currentLocation.latitude.toFloat()))
+                        }
+                        else{
+                            if (closeProximityToGantryCoordinatesList.size > 0){
+                                if (wasGantryPassed(closeProximityToGantryCoordinatesList, coordinateOfClosestGantry!!)){
+                                    //TODO: Call function to register passage on API
+                                    Log.d("EH", "Gantry was passed")
+                                }
+                                else{
+                                     Log.d("EH", "Gantry was not passed")
+                                }
+                                closeProximityToGantryCoordinatesList.clear()
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
 
+    fun wasGantryPassed(coordList: List<Coordinate>, closestGantry: Coordinate): Boolean{
+        val midPoint = middlePointOfPassage(coordList)
+        //if (coordinatesDistance(midPoint.lat, midPoint.lon, closestGantry.lat, closestGantry.lon) < INNER_GANTRY_CIRCLE_DISTANCE){
+            //return true
+        //}
+        return false
+    }
+
+    fun middlePointOfPassage (coordList: List<Coordinate>): Coordinate{
+        val midLat = (coordList.first().lat + coordList.last().lat) / 2
+        val midLong = (coordList.first().lon + coordList.last().lon) / 2
+        return Coordinate(midLong, midLat)
     }
 
     fun setUpdateTime(newTime: Long){
