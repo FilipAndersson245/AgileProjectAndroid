@@ -6,30 +6,20 @@
               tools:context=".Fragments.ChooseLoginRegister"
               android:orientation="vertical"
               android:padding="10dp"
-              android:background="#fcfcfc"
+              android:background="#FFFFFF"
               android:gravity="center">
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="-100dp"
-            android:textSize="30dp"
-            android:text="TOLLGATE v0.01"
-            android:textColor="@color/cardview_dark_background"
-            android:textStyle="bold" />
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
             android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
                 android:layout_width="160dp"
-                android:layout_height="110dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp"
                 android:clickable="true"
                 android:id="@+id/Login">
@@ -38,16 +28,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:background="#000000"
                     android:orientation="vertical">
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:textSize="30dp"
-                        android:textColor="@android:color/black"
+                        android:textSize="20dp"
+                        android:textColor="@color/KapschOrange"
                         android:text="Login"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"/>
 
 
             </LinearLayout>
@@ -64,21 +55,22 @@
                 android:clickable="true"
                 android:id="@+id/Register"
                 android:layout_width="160dp"
-                android:layout_height="110dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp">
 
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
+                    android:background="#000000"
                     android:orientation="vertical">
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
-                        android:textSize="30dp"
-                        android:textColor="@android:color/black"
+                        android:textSize="20dp"
+                        android:textColor="@color/KapschOrange"
                         android:text="Register"
                         android:textStyle="normal" />
 

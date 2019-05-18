@@ -23,14 +23,14 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="130dp"
                 android:textSize="18dp"
-                android:textColor="@color/KapschOrange"
+                android:textColor="#000000"
                 android:text="Edit user info"
                 android:textStyle="bold" />
     </LinearLayout>
@@ -164,7 +164,7 @@
     <Button
             android:text="Confirm Changes"
             android:textColor="@color/KapschOrange"
-            android:background="@color/cardview_light_background"
+            android:background="#000000"
             android:layout_marginRight="-10dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content" android:id="@+id/button"/>
