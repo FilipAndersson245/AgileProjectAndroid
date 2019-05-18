@@ -23,6 +23,7 @@ object APIHandler {
 
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
+    var personalId = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
         val (_, _, result) =
@@ -70,12 +71,26 @@ object APIHandler {
         return token
     }
 
+    fun logout(): Boolean {
+        return when(token) {
+            "" -> {
+                false
+            }
+            else -> {
+                token = ""
+                personalId = ""
+                true
+            }
+        }
+    }
+
     suspend fun login(username: String, password: String, callback: (success: Boolean) -> Unit) {
         val session = loginRequest(username, password)
         callback(
             when (session.auth) {
                 true -> {
                     this.token = session.token
+                    this.personalId = username
                     true
                 }
                 else -> {
