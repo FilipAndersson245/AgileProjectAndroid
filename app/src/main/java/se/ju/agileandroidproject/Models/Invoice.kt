@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Invoice(
-    id: String,
-    amount: Int,
-    firstName: String,
-    lastName: String,
-    address: String,
-    personalId: String,
-    issuedAt: String,
-    dueDate: String,
-    paid: Boolean
+    val id: String,
+    val amount: Int,
+    val firstName: String,
+    val lastName: String,
+    val address: String,
+    val personalId: String,
+    val issuedAt: String,
+    val dueDate: String,
+    val paid: Boolean
 )
