@@ -67,6 +67,7 @@ class BackgroundTravelService: Service(){
 
     override fun onDestroy() {
         inTravelMode = false
+        isTravelingThreadLoop.join()
         super.onDestroy()
     }
 
