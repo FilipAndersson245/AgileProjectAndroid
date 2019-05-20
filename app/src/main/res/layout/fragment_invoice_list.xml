@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/list"
+        android:id="@+id/invoice_list"
         android:name="se.ju.agileandroidproject.InvoiceFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,4 +11,4 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".Fragments.InvoiceFragment"
-        tools:listitem="@layout/fragment_invoice"/>
+        tools:listitem="@layout/invoice_list_item"/>

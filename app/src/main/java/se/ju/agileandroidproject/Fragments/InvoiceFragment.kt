@@ -9,15 +9,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.serialization.ImplicitReflectionSerializer
+import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Fragments.Adapters.MyInvoiceRecyclerViewAdapter
 import se.ju.agileandroidproject.Models.Gantry
+import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
 
-/**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [InvoiceFragment.OnListFragmentInteractionListener] interface.
- */
+
 class InvoiceFragment : Fragment() {
 
     // TODO: Customize parameters
@@ -25,13 +24,28 @@ class InvoiceFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: RecyclerView.Adapter<MyInvoiceRecyclerViewAdapter.ViewHolder>
+    private lateinit var viewManager: RecyclerView.LayoutManager
+
+    private lateinit var invoiceData : List<Invoice>
+
+    @ImplicitReflectionSerializer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+//        arguments?.let {
+//            columnCount = it.getInt(ARG_COLUMN_COUNT)
+//        }
+
+        val (notEmpty, data) = APIHandler.invoices(APIHandler.personalId)
+
+        if (notEmpty) {
+            invoiceData = data
         }
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,19 +53,19 @@ class InvoiceFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_invoice_list, container, false)
 
-        // Set the adapter
-//        if (view is RecyclerView) {
-//            with(view) {
-//                layoutManager = when {
-//                    columnCount <= 1 -> LinearLayoutManager(context)
-//                    else -> GridLayoutManager(context, columnCount)
-//                }
-//                adapter = MyInvoiceRecyclerViewAdapter(
-//                    DummyContent.ITEMS,
-//                    listener
-//                )
-//            }
-//        }
+        viewManager = LinearLayoutManager(this.context)
+        viewAdapter = MyInvoiceRecyclerViewAdapter(invoiceData)
+
+        recyclerView = view.findViewById<RecyclerView>(R.id.invoice_list).apply {
+            setHasFixedSize(true)
+
+            // use a linear layout manager
+            layoutManager = viewManager
+
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
+        }
+
         return view
     }
 
