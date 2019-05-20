@@ -78,6 +78,7 @@ object APIHandler {
     }
 
     fun logout(): Boolean {
+        isTraveling = false
         return when (token) {
             "" -> {
                 false

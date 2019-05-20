@@ -102,9 +102,11 @@ object GPSHandler {
                             }
                         }
                     }
-
+                    Log.d("EH", "outside distnace check")
                     //Change update time of gps and requests based on distance to Gantry:
                     if (distanceToClosestGantry != null) {
+                        Log.d("EH", "inside distnace check")
+                        Log.d("EH", distanceToClosestGantry.toString())
                         when {
                             distanceToClosestGantry!! > 5000 && updateTime != 30000 -> {
                                 setGPSUpdateTime(30000)

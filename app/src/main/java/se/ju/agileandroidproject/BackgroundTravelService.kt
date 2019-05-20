@@ -1,6 +1,5 @@
 package se.ju.agileandroidproject
 
-import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
@@ -12,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import se.ju.agileandroidproject.Activities.MainActivity
+import se.ju.agileandroidproject.Activities.Main2Activity
 import se.ju.agileandroidproject.Models.Gantry
 import kotlin.concurrent.thread
 
@@ -35,7 +34,7 @@ class BackgroundTravelService : Service() {
 
         GPSHandler.initializeContext(this)
 
-        var notificationIntent = Intent(this, MainActivity::class.java)
+        var notificationIntent = Intent(this, Main2Activity::class.java)
         var pendingIntent = PendingIntent.getActivity(
             this,
             0, notificationIntent, 0
@@ -62,6 +61,7 @@ class BackgroundTravelService : Service() {
         }*/
 
         GPSHandler.startListening(1000)
+        GPSHandler.updateTime = 1000
 
         return START_NOT_STICKY
     }
