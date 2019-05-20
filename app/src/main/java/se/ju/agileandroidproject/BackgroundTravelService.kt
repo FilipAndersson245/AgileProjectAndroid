@@ -41,8 +41,8 @@ class BackgroundTravelService: Service(){
             0, notificationIntent,0)
 
         var notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("service title")
-            .setContentText("test text")
+            .setContentTitle("Toll Gate")
+            .setContentText("You are in travel mode")
             .setSmallIcon(R.drawable.icon_notification)
             .setContentIntent(pendingIntent)
             .build()
