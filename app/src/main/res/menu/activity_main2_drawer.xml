@@ -11,14 +11,14 @@
                 android:id="@+id/nav_invoices"
                 android:title="My Invoice"/>
         <!--<item-->
-                <!--android:id="@+id/nav_edit_profile"-->
-                <!--android:title="Edit Profile"/>-->
+        <!--android:id="@+id/nav_edit_profile"-->
+        <!--android:title="Edit Profile"/>-->
         <item
                 android:id="@+id/nav_passages"
                 android:title="Gantry Passages"/>
         <!--<item-->
-                <!--android:id="@+id/nav_settings"-->
-                <!--android:title="Settings"/>-->
+        <!--android:id="@+id/nav_settings"-->
+        <!--android:title="Settings"/>-->
         <item
                 android:id="@+id/nav_logout"
                 android:title="Logout"/>

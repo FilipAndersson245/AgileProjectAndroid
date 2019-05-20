@@ -22,8 +22,8 @@
         <activity android:name=".Activities.MainActivity">
         </activity>
         <activity
-            android:name=".Activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+                android:name=".Activities.LoginActivity"
+                android:theme="@style/AppTheme.NoActionBar"
         >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <service
-                android:name=".BackgroundTravelService" />
+                android:name=".BackgroundTravelService"/>
 
     </application>
 

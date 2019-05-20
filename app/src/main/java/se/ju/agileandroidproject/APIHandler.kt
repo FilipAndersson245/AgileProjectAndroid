@@ -77,7 +77,7 @@ object APIHandler {
     }
 
     fun logout(): Boolean {
-        return when(token) {
+        return when (token) {
             "" -> {
                 false
             }

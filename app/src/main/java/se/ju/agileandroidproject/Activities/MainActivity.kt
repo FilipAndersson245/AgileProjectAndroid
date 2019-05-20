@@ -42,16 +42,21 @@ class MainActivity : AppCompatActivity() {
 
     public val CHANNEL_ID = "backgroundServiceChannel"
 
-    lateinit var isTravelingThreadLoop : Thread
+    lateinit var isTravelingThreadLoop: Thread
 
     private fun checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
 
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_PERMISSION_LOCATION)
+                REQUEST_PERMISSION_LOCATION
+            )
 
             // TODO: Handle if the user denies access to GPS and then show a popup that explains why the app needs access to GPS.
 
@@ -61,16 +66,16 @@ class MainActivity : AppCompatActivity() {
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_PERMISSION_LOCATION){
+        if (requestCode == REQUEST_PERMISSION_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText( this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
                 //TODO: Gör saker för att börja läsa GPS-koordinater
 
                 gpsHandler.startListening(30000)
 
 
             } else {
-                Toast.makeText( this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -82,9 +87,10 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()
     }
 
-    private fun createNotificationChannel(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val serviceChannel = NotificationChannel(CHANNEL_ID,
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceChannel = NotificationChannel(
+                CHANNEL_ID,
                 "backgroundService",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
@@ -100,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         checkPermissions()
 
-        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+        isTravelingThreadLoop = thread(start = false, name = "ThreadLoop") {
             travelingThreadLoop()
         }
         startBackgroundService()
@@ -111,7 +117,7 @@ class MainActivity : AppCompatActivity() {
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun changeUpdateTime(updateTime: Int){
+    fun changeUpdateTime(updateTime: Int) {
         gpsHandler.setGPSUpdateTime(updateTime)
     }
 
@@ -141,12 +147,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun startBackgroundService(){
+    fun startBackgroundService() {
         var serviceIntent = Intent(this, BackgroundTravelService::class.java)
         startService(serviceIntent)
     }
 
-    fun stopBackgroundService(){
+    fun stopBackgroundService() {
         var serviceIntent = Intent(this, BackgroundTravelService::class.java)
         stopService(serviceIntent)
     }

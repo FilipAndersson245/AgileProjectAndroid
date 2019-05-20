@@ -29,18 +29,16 @@ class MasterTravelFragment : Fragment() {
 
     @ImplicitReflectionSerializer
     fun loadCorrectFragment() {
-        if(APIHandler.isTraveling) {
+        if (APIHandler.isTraveling) {
             Log.d("EH", "Started default")
             switchFragment(DefaultTravelFragment.newInstance())
-        }
-        else {
+        } else {
             Log.d("EH", "Started start")
             switchFragment(StartTravelFragment.newInstance())
         }
     }
 
-    fun switchFragment(fragment: android.support.v4.app.Fragment)
-    {
+    fun switchFragment(fragment: android.support.v4.app.Fragment) {
         val fragmentTransaction = childFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_fragment_holder, fragment)
         fragmentTransaction.commit()

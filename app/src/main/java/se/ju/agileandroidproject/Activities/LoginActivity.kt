@@ -13,7 +13,7 @@ import se.ju.agileandroidproject.Fragments.ChooseLoginRegister
 import se.ju.agileandroidproject.Fragments.Register
 import se.ju.agileandroidproject.R
 
-class LoginActivity: AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     @ImplicitReflectionSerializer
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,18 +24,22 @@ class LoginActivity: AppCompatActivity() {
         APIHandler.token = sharedPref.getString("TOKEN", "")
         APIHandler.personalId = sharedPref.getString("ID", "")
 
-        if(!APIHandler.token.equals("")) {
+        if (!APIHandler.token.equals("")) {
             startActivity(Intent(this, Main2Activity::class.java))
         }
 
         setContentView(R.layout.activity_login)
     }
 
-    fun switchFragment(fragment: Fragment)
-    {
+    fun switchFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack("")
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+        fragmentTransaction.setCustomAnimations(
+            R.anim.slide_in_right,
+            R.anim.slide_out_left,
+            android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right
+        )
         fragmentTransaction.replace(R.id.fragment_holder, fragment)
         fragmentTransaction.commit()
     }

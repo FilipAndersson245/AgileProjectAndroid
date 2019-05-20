@@ -11,7 +11,7 @@ import kotlinx.serialization.UnstableDefault
 import se.ju.agileandroidproject.Activities.MainActivity
 import kotlin.concurrent.thread
 
-class BackgroundTravelService: Service(){
+class BackgroundTravelService : Service() {
     public val CHANNEL_ID = "backgroundServiceChannel"
 
     override fun onCreate() {
@@ -25,8 +25,10 @@ class BackgroundTravelService: Service(){
         GPSHandler.initializeContext(this)
 
         var notificationIntent = Intent(this, MainActivity::class.java)
-        var pendingIntent = PendingIntent.getActivity(this,
-            0, notificationIntent,0)
+        var pendingIntent = PendingIntent.getActivity(
+            this,
+            0, notificationIntent, 0
+        )
 
         var notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("service title")

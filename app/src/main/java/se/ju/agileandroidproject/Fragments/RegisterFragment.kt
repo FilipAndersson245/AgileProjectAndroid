@@ -56,7 +56,7 @@ class Register : Fragment() {
             val billingAddress = view!!.findViewById<EditText>(R.id.UserBillingAddress).text.toString()
             val personalId = view!!.findViewById<EditText>(R.id.UserPersonalSocialNumber).text.toString()
 
-            if(password != password2) {
+            if (password != password2) {
                 Toast.makeText(activity, "Passwords does not match.", Toast.LENGTH_LONG).show()
                 return@OnClickListener
             }
@@ -65,7 +65,7 @@ class Register : Fragment() {
 
             val validResponse = user.validate()
 
-            if(validResponse.first) {
+            if (validResponse.first) {
                 Thread {
                     runBlocking {
                         APIHandler.register(user) {

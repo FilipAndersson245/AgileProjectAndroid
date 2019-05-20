@@ -11,20 +11,20 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-    <android.support.v7.widget.AppCompatImageView
-            android:layout_marginLeft="110dp"
-            android:layout_width="130dp"
-            android:layout_height="44dp"
-            android:background="@drawable/kapscharrow"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <android.support.v7.widget.AppCompatImageView
+                android:layout_marginLeft="110dp"
+                android:layout_width="130dp"
+                android:layout_height="44dp"
+                android:background="@drawable/kapscharrow"/>
     </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 android:textSize="18dp"
                 android:textColor="#000000"
                 android:text="Registration for TOLLGATE v0.01"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
@@ -52,7 +52,7 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal">
 
                 <TextView
                         android:id="@+id/TextViewUsername"

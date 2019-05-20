@@ -12,18 +12,21 @@ class User(
     val email: String,
     val address: String,
     val firstName: String,
-    val lastName: String) {
+    val lastName: String
+) {
 
     init {
-        if (username == "")
-        {
+        if (username == "") {
             username = firstName;
         }
     }
 
     fun validate(): Pair<Boolean, String> {
         return when {
-            !((personalIdNumber.length == 10 || personalIdNumber.length == 12) && (personalIdNumber.toDoubleOrNull() != null)) -> Pair(false, "personal number")
+            !((personalIdNumber.length == 10 || personalIdNumber.length == 12) && (personalIdNumber.toDoubleOrNull() != null)) -> Pair(
+                false,
+                "personal number"
+            )
             !("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.{5,})".toRegex().find(password) != null) -> Pair(false, "password")
             !("\\S+@\\S+\\.\\S+".toRegex().find(email) != null) -> Pair(false, "E-mail")
             address == "" -> Pair(false, "address")
