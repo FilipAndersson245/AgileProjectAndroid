@@ -44,6 +44,8 @@ object GPSHandler {
 
     var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
 
+    var locationExists = false
+
     fun initializeContext(context: Context){
         this.context = context
         locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -71,6 +73,7 @@ object GPSHandler {
             if (location != null){
                 if (isBetterLocation(location, lastKnownLocation)){
                     currentLocation = location
+                    locationExists = true
                     lastKnownLocation = location
                     Log.d("EH","updated location")
                     if (distanceToClosestGantry != null && closestGantry != null){

@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     public val CHANNEL_ID = "backgroundServiceChannel"
 
-    lateinit var isTravelingThreadLoop : Thread
-
     private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -97,13 +95,9 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         checkPermissions()
 
-        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
-            travelingThreadLoop()
-        }
         startBackgroundService()
 
         // isTraveling = ENTER_TRAVEL
-        // isTravelingThreadLoop.start()
     }
 
     @UnstableDefault
@@ -112,31 +106,6 @@ class MainActivity : AppCompatActivity() {
         gpsHandler.setGPSUpdateTime(updateTime)
     }
 
-
-    @UnstableDefault
-    @ImplicitReflectionSerializer
-    fun travelingThreadLoop() = runBlocking<Unit> {
-
-        while (isTraveling) {
-
-            launch {
-
-                // Change later
-                val closeGantries = APIHandler.requestGantries(0f, 0f)
-
-                val gantriesList = mutableListOf<Gantry>()
-
-                for (gantry in closeGantries) {
-                    gantriesList.add(gantry)
-                }
-
-                gpsHandler.updateClosestGantry(gantriesList)
-
-            }
-
-            delay(gpsHandler.updateTime.toLong())
-        }
-    }
 
     fun startBackgroundService(){
         var serviceIntent = Intent(this, BackgroundTravelService::class.java)
