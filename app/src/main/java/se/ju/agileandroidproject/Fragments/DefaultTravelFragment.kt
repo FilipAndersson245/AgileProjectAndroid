@@ -35,6 +35,12 @@ class DefaultTravelFragment : Fragment() {
             APIHandler.isTraveling = false
             (parentFragment as MasterTravelFragment).switchFragment(StartTravelFragment.newInstance())
         }
+
+        val showMapButton = view!!.findViewById<Button>(R.id.buttonShowMap)
+
+        showMapButton.setOnClickListener {
+            (parentFragment as MasterTravelFragment).switchFragment(MapTravelFragment.newInstance())
+        }
     }
 
     companion object {

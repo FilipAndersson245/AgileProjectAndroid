@@ -45,7 +45,8 @@ class ChooseLoginRegister : Fragment() {
         }
     }
 
-    companion object {
+    companion object
+    {
         fun newInstance(): ChooseLoginRegister {
             return ChooseLoginRegister()
         }
