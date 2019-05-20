@@ -28,7 +28,7 @@ class LoginActivity: AppCompatActivity() {
             startActivity(Intent(this, Main2Activity::class.java))
         }
 
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.activity_login)
     }
 
     fun switchFragment(fragment: Fragment)
