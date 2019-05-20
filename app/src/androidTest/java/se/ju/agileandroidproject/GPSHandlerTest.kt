@@ -71,7 +71,7 @@ class GPSHandlerTest {
 
 
     @Test
-    fun correctlyDeterminePassage(){
+    fun correctlyDeterminePassage() {
         val appContext = InstrumentationRegistry.getTargetContext()
 
         GPSHandler.initializeContext(appContext)

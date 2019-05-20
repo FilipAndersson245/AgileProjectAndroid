@@ -16,8 +16,7 @@ import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.Models.Gantry
 import kotlin.concurrent.thread
 
-class BackgroundTravelService: Service(){
-
+class BackgroundTravelService : Service() {
     public val CHANNEL_ID = "backgroundServiceChannel"
 
     public var inTravelMode = false
@@ -37,8 +36,10 @@ class BackgroundTravelService: Service(){
         GPSHandler.initializeContext(this)
 
         var notificationIntent = Intent(this, MainActivity::class.java)
-        var pendingIntent = PendingIntent.getActivity(this,
-            0, notificationIntent,0)
+        var pendingIntent = PendingIntent.getActivity(
+            this,
+            0, notificationIntent, 0
+        )
 
         var notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Toll Gate")
@@ -65,9 +66,11 @@ class BackgroundTravelService: Service(){
         return START_NOT_STICKY
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onDestroy() {
         inTravelMode = false
-        isTravelingThreadLoop.join()
+        GPSHandler.stopListening()
         super.onDestroy()
     }
 
