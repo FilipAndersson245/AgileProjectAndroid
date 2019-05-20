@@ -10,7 +10,6 @@ import se.ju.agileandroidproject.Activities.MainActivity
 import kotlin.concurrent.thread
 
 class BackgroundTravelService: Service(){
-
     public val CHANNEL_ID = "backgroundServiceChannel"
 
     override fun onCreate() {

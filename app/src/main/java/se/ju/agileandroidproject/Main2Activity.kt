@@ -14,12 +14,11 @@ import android.support.v4.widget.DrawerLayout
 import android.support.design.widget.NavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.Activities.LoginActivity
-import se.ju.agileandroidproject.Fragments.Login
-import se.ju.agileandroidproject.Fragments.Register
-import se.ju.agileandroidproject.Fragments.StartTravelFragment
+import se.ju.agileandroidproject.Fragments.*
 
 class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,7 +44,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         super.onStart()
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_holder, StartTravelFragment.newInstance())
+        fragmentTransaction.add(R.id.fragment_holder, MasterTravelFragment.newInstance())
         fragmentTransaction.commit()
     }
 
@@ -62,7 +61,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack("")
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+//        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
         fragmentTransaction.replace(R.id.fragment_holder, fragment)
         fragmentTransaction.commit()
     }
@@ -88,13 +87,13 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
-
+                switchFragment(MasterTravelFragment.newInstance())
             }
             R.id.nav_invoices -> {
-
+                switchFragment(Login.newInstance())
             }
             R.id.nav_passages -> {
-
+                switchFragment(Register.newInstance())
             }
             R.id.nav_logout -> {
                 APIHandler.logout()

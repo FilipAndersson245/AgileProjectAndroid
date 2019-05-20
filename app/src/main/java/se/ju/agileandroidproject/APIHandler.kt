@@ -24,6 +24,8 @@ import javax.security.auth.callback.Callback
 @ImplicitReflectionSerializer
 object APIHandler {
 
+    var isTraveling = false
+
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
     var personalId = ""
