@@ -1,12 +1,8 @@
-package se.ju.agileandroidproject
+package se.ju.agileandroidproject.Activities
 
-import android.app.Fragment
-import android.app.FragmentManager
-import android.app.FragmentTransaction
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
@@ -14,11 +10,11 @@ import android.support.v4.widget.DrawerLayout
 import android.support.design.widget.NavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import kotlinx.serialization.ImplicitReflectionSerializer
-import se.ju.agileandroidproject.Activities.LoginActivity
+import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Fragments.*
+import se.ju.agileandroidproject.R
 
 class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,7 +28,9 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -96,6 +94,13 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 switchFragment(Register.newInstance())
             }
             R.id.nav_logout -> {
+
+                val sharedPref = this.getSharedPreferences("CRED", Context.MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.remove("TOKEN")
+                editor.remove("ID")
+                editor.apply()
+
                 APIHandler.logout()
 
                 startActivity(Intent(this, LoginActivity::class.java))

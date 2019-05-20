@@ -2,7 +2,7 @@ package se.ju.agileandroidproject.Fragments
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,12 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
-import se.ju.agileandroidproject.Main2Activity
+import se.ju.agileandroidproject.Activities.Main2Activity
 import se.ju.agileandroidproject.R
 
 
@@ -65,6 +64,12 @@ class Login : Fragment() {
                         activity?.runOnUiThread {
                             if (didLogin) {
                                 Toast.makeText(activity, "Signed in successfully!", Toast.LENGTH_SHORT).show()
+
+                                val sharedPref = context!!.getSharedPreferences("CRED", Context.MODE_PRIVATE)
+                                val editor = sharedPref.edit()
+                                editor.putString("TOKEN", APIHandler.token)
+                                editor.putString("ID", APIHandler.personalId)
+                                editor.apply()
 
                                 startActivity(Intent(activity, Main2Activity::class.java))
                             } else {
