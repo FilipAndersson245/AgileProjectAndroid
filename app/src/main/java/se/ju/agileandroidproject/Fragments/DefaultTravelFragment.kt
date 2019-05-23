@@ -22,8 +22,6 @@ class DefaultTravelFragment : Fragment() {
 
     lateinit var textLoop: Thread
 
-    var inTravel = false
-
     fun updateTextLoop(view: View) {
         if(GPSHandler.locationExists) {
             view.post {
@@ -61,7 +59,7 @@ class DefaultTravelFragment : Fragment() {
         }
         
         textLoop = Thread {
-            while (inTravel)
+            while (APIHandler.isTraveling)
             {
                 Log.d("EH", "Updating UI")
                 updateTextLoop(view)

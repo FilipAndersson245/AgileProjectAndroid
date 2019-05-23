@@ -98,8 +98,7 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
                     }
                     lastLocation = mMap.cameraPosition.target
                 }
-//                Thread.sleep(GPSHandler.updateTime.toLong())
-                Thread.sleep(1000)
+                Thread.sleep(GPSHandler.updateTime.toLong())
             }
         }.start()
     }
