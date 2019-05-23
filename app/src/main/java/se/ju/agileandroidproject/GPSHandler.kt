@@ -8,10 +8,13 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import se.ju.agileandroidproject.Activities.Main2Activity
 import se.ju.agileandroidproject.Models.Coordinate
 import se.ju.agileandroidproject.Models.Gantry
 
@@ -94,8 +97,10 @@ object GPSHandler {
                                         Coordinate(closestGantry!!.longitude, closestGantry!!.latitude)
                                     )
                                 ) {
-                                    APIHandler.registerPassage("TEMP", closestGantry!!.id)
-                                    //TODO: Send correct userID to function
+                                    APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
+
+                                    (context as Main2Activity).notif2(closestGantry!!)
+
                                     Log.d("EH", "Gantry was passed")
                                 } else {
                                     Log.d("EH", "Gantry was not passed")
