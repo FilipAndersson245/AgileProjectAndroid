@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Fragments.Adapters.MyPassageRecyclerViewAdapter
@@ -41,6 +42,11 @@ class PassageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(passageData.isEmpty()) {
+            view.findViewById<TextView>(R.id.no_invoices_message).visibility = View.VISIBLE
+        }
+
 
         recyclerView = view.findViewById(R.id.gantry_list)
 

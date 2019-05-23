@@ -19,8 +19,10 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
@@ -35,6 +37,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
     var notificationManager: NotificationManager? = null
 
+    @ImplicitReflectionSerializer
     @SuppressLint("ServiceCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,8 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        navView.getHeaderView(0).findViewById<TextView>(R.id.nav_username).text = "Signed in with personal id ${APIHandler.personalId}"
 
         navView.setNavigationItemSelectedListener(this)
 
@@ -74,15 +79,15 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
+        } else if(supportFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
         }
     }
 
     fun switchFragment(fragment: android.support.v4.app.Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.addToBackStack("")
-//        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+        fragmentTransaction.addToBackStack(fragment.javaClass.toString())
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
         fragmentTransaction.replace(R.id.fragment_holder, fragment)
         fragmentTransaction.commit()
     }
@@ -145,7 +150,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         }
     }
 
-    fun notif2(closestGantry: Gantry) {
+    fun pushNotificaion(closestGantry: Gantry) {
         val notificationID = System.currentTimeMillis().toInt()
 
         val channelID = packageName

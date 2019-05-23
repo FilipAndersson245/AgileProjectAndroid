@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Fragments.Adapters.MyInvoiceRecyclerViewAdapter
@@ -33,6 +34,7 @@ class InvoiceFragment : Fragment() {
             else -> listOf()
         }
 
+        Log.d("EH", notEmpty.toString())
     }
 
 
@@ -46,12 +48,14 @@ class InvoiceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView = view.findViewById<RecyclerView>(R.id.gantry_list)
+        if(invoiceData.isEmpty()) {
+            view.findViewById<TextView>(R.id.no_invoices_message).visibility = View.VISIBLE
+        }
 
+        recyclerView = view.findViewById<RecyclerView>(R.id.gantry_list)
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         recyclerView.adapter = MyInvoiceRecyclerViewAdapter(invoiceData)
         recyclerView.setHasFixedSize(true)
-
     }
 
     companion object {

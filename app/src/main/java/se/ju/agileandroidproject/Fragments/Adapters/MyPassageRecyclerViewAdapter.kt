@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Passage
 import se.ju.agileandroidproject.R
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MyPassageRecyclerViewAdapter(
     private val gantryData: List<Passage>
@@ -18,6 +20,7 @@ class MyPassageRecyclerViewAdapter(
     // Viewholder class
     class GantryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val coordinate : TextView = itemView.findViewById(R.id.gantry_coordinate)
+        val id : TextView = itemView.findViewById(R.id.gantry_id)
         val time : TextView = itemView.findViewById(R.id.gantry_time)
         val fee : TextView = itemView.findViewById(R.id.gantry_fee)
     }
@@ -31,8 +34,23 @@ class MyPassageRecyclerViewAdapter(
 
         val coord = gantryData[position].longitude.toString() + "," + gantryData[position].latitude.toString()
         holder.coordinate.text = coord
-        holder.time.text = gantryData[position].time
-        holder.fee.text = gantryData[position].price.toString()
+        holder.time.text = toNiceDateString(gantryData[position].time)
+        holder.fee.text = "${gantryData[position].price.toInt()} kr"
+        holder.id.text = gantryData[position].gantry_id
+    }
+
+    fun toNiceDateString(dateString: String): String? {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        var convertedDate: Date? = null
+        var formattedDate: String? = null
+        try {
+            convertedDate = sdf.parse(dateString)
+            formattedDate = SimpleDateFormat("yyyy-MM-dd HH:mm").format(convertedDate)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return formattedDate
     }
 
     override fun getItemCount() = gantryData.size

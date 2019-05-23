@@ -1,6 +1,9 @@
 package se.ju.agileandroidproject.Fragments.Adapters
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +14,12 @@ import org.w3c.dom.Text
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
-
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class MyInvoiceRecyclerViewAdapter(
@@ -21,9 +29,11 @@ class MyInvoiceRecyclerViewAdapter(
 
     // Viewholder class
     class InvoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val date : TextView = itemView.findViewById(R.id.invoice_listitem_date)
-        val dueDate : TextView = itemView.findViewById(R.id.invoice_listitem_due_date)
-        val cost : TextView = itemView.findViewById(R.id.invoice_listitem_cost)
+        val date: TextView = itemView.findViewById(R.id.invoice_listitem_date)
+        val dueDate: TextView = itemView.findViewById(R.id.invoice_listitem_due_date)
+        val cost: TextView = itemView.findViewById(R.id.invoice_listitem_cost)
+        val background: Drawable = itemView.findViewById<ConstraintLayout>(R.id.invoice_list_item_viewHolder).background
+        val status: TextView = itemView.findViewById<TextView>(R.id.paid_status)
     }
 
     // Create new views (invoked by the layout manager)
@@ -32,10 +42,46 @@ class MyInvoiceRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: InvoiceViewHolder, position: Int) {
+        val dueDate = toDate(invoiceData[position].dueDate)!!
 
-        holder.cost.text = invoiceData[position].amount.toString()
-        holder.date.text = invoiceData[position].issueDate
-        holder.dueDate.text = invoiceData[position].dueDate
+        holder.cost.text = "${invoiceData[position].amount} kr"
+        holder.date.text = toNiceDateString(invoiceData[position].issueDate)
+        holder.dueDate.text = toNiceDateString(invoiceData[position].dueDate)
+
+        if (invoiceData[position].isPaid) {
+            holder.status.text = "Paid"
+            holder.status.setTextColor(Color.GREEN)
+            holder.background.setTint(Color.parseColor("#a2f2b2"))
+        } else if (dueDate.before(Date())) {
+            holder.status.text = "Overdue"
+            holder.status.setTextColor(Color.RED)
+            holder.background.setTint(Color.parseColor("#ffaaaa"))
+        } else {
+            holder.status.text = "Not paid"
+            holder.background.setTint(Color.parseColor("#ffffff"))
+        }
+
+    }
+
+    fun toDate(dateString: String): Date? {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        var convertedDate: Date? = sdf.parse(dateString)
+
+        return convertedDate
+    }
+
+    fun toNiceDateString(dateString: String): String? {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        var convertedDate: Date? = null
+        var formattedDate: String? = null
+        try {
+            convertedDate = sdf.parse(dateString)
+            formattedDate = SimpleDateFormat("yyyy-MM-dd HH:mm").format(convertedDate)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+
+        return formattedDate
     }
 
     override fun getItemCount() = invoiceData.size
