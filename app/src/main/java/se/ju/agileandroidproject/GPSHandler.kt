@@ -123,7 +123,6 @@ object GPSHandler {
                             distanceToClosestGantry!! >= 0 && distanceToClosestGantry!! <= 200 && updateTime != 1000 -> {
                                 setGPSUpdateTime(500)
                             }
-
                         }
                     }
                 }
