@@ -95,10 +95,10 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 switchFragment(MasterTravelFragment.newInstance())
             }
             R.id.nav_invoices -> {
-                switchFragment(Login.newInstance())
+                switchFragment(InvoiceFragment.newInstance())
             }
             R.id.nav_passages -> {
-                switchFragment(Register.newInstance())
+                switchFragment(PassageFragment.newInstance())
             }
             R.id.nav_logout -> {
                 stopBackgroundService()
