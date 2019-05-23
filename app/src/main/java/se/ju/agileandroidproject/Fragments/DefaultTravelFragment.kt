@@ -22,8 +22,6 @@ class DefaultTravelFragment : Fragment() {
 
     lateinit var textLoop: Thread
 
-    var inTravel = false
-
     fun updateTextLoop(view: View) {
         if(GPSHandler.locationExists) {
             view.post {
@@ -33,10 +31,6 @@ class DefaultTravelFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -58,8 +52,14 @@ class DefaultTravelFragment : Fragment() {
             (parentFragment as MasterTravelFragment).switchFragment(StartTravelFragment.newInstance())
         }
 
+        val showMapButton = view!!.findViewById<Button>(R.id.buttonShowMap)
+
+        showMapButton.setOnClickListener {
+            (parentFragment as MasterTravelFragment).switchFragment(MapTravelFragment.newInstance())
+        }
+        
         textLoop = Thread {
-            while (inTravel)
+            while (APIHandler.isTraveling)
             {
                 Log.d("EH", "Updating UI")
                 updateTextLoop(view)

@@ -89,7 +89,10 @@ class BackgroundTravelService : Service() {
 
                 if (GPSHandler.locationExists){
                     Log.d("EH", "currentlocation exists")
-                    val closeGantries = APIHandler.requestGantries(0f, 0f)
+                    val closeGantries = APIHandler.requestGantries(
+                        GPSHandler.currentLocation.longitude.toFloat(),
+                        GPSHandler.currentLocation.latitude.toFloat()
+                    )
 
                     val gantriesList = mutableListOf<Gantry>()
 
