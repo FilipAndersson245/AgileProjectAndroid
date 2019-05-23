@@ -31,6 +31,7 @@ object APIHandler {
     var personalId = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
+        Log.d("EH", "Requesting gantries from API")
         val (_, _, result) =
             Fuel.get(url + "/gantries", listOf("lon" to lon, "lat" to lat))
                 .authentication()
@@ -77,6 +78,7 @@ object APIHandler {
     }
 
     fun logout(): Boolean {
+        isTraveling = false
         return when (token) {
             "" -> {
                 false

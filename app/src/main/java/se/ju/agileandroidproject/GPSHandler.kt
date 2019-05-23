@@ -40,9 +40,11 @@ object GPSHandler {
 
     private var closestGantry: Gantry? = null
 
-    private var distanceToClosestGantry: Int? = null
+    public var distanceToClosestGantry: Int? = null
 
     var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
+
+    var locationExists = false
 
     fun initializeContext(context: Context) {
         this.context = context
@@ -71,6 +73,7 @@ object GPSHandler {
             if (location != null) {
                 if (isBetterLocation(location, lastKnownLocation)) {
                     currentLocation = location
+                    locationExists = true
                     lastKnownLocation = location
                     Log.d("EH", "updated location")
                     if (distanceToClosestGantry != null && closestGantry != null) {
@@ -96,6 +99,29 @@ object GPSHandler {
                                     Log.d("EH", "Gantry was not passed")
                                 }
                                 closeProximityToGantryCoordinatesList.clear()
+                            }
+                        }
+                    }
+                    Log.d("EH", "outside distnace check")
+                    //Change update time of gps and requests based on distance to Gantry:
+                    if (distanceToClosestGantry != null) {
+                        Log.d("EH", "inside distnace check")
+                        Log.d("EH", distanceToClosestGantry.toString())
+                        when {
+                            distanceToClosestGantry!! > 5000 && updateTime != 30000 -> {
+                                setGPSUpdateTime(30000)
+                            }
+                            distanceToClosestGantry!! > 1000 && distanceToClosestGantry!! <= 5000 && updateTime != 10000 -> {
+                                setGPSUpdateTime(10000)
+                            }
+                            distanceToClosestGantry!! > 500 && distanceToClosestGantry!! <= 1000 && updateTime != 4000 -> {
+                                setGPSUpdateTime(4000)
+                            }
+                            distanceToClosestGantry!! > 200 && distanceToClosestGantry!! <= 500 && updateTime != 2000 -> {
+                                setGPSUpdateTime(1000)
+                            }
+                            distanceToClosestGantry!! >= 0 && distanceToClosestGantry!! <= 200 && updateTime != 1000 -> {
+                                setGPSUpdateTime(500)
                             }
                         }
                     }

@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.BackgroundTravelService
 import se.ju.agileandroidproject.Fragments.*
 import se.ju.agileandroidproject.R
 
@@ -93,7 +94,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 switchFragment(Register.newInstance())
             }
             R.id.nav_logout -> {
-
+                stopBackgroundService()
                 val sharedPref = this.getSharedPreferences("CRED", Context.MODE_PRIVATE)
                 val editor = sharedPref.edit()
                 editor.remove("TOKEN")
@@ -108,5 +109,15 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun startBackgroundService() {
+        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        startService(serviceIntent)
+    }
+
+    fun stopBackgroundService() {
+        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        stopService(serviceIntent)
     }
 }
