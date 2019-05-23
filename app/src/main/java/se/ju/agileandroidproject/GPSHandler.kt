@@ -40,7 +40,7 @@ object GPSHandler {
 
     private var closestGantry: Gantry? = null
 
-    private var distanceToClosestGantry: Int? = null
+    public var distanceToClosestGantry: Int? = null
 
     var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
 
