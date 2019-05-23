@@ -5,6 +5,8 @@ import com.github.kittinunf.fuel.*
 import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.coroutines.awaitStringResponseResult
+import com.github.kittinunf.result.Result
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
@@ -14,6 +16,7 @@ import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.Models.Session
 import se.ju.agileandroidproject.Models.User
+import java.util.logging.Handler
 import java.util.*
 import javax.security.auth.callback.Callback
 
@@ -21,11 +24,14 @@ import javax.security.auth.callback.Callback
 @ImplicitReflectionSerializer
 object APIHandler {
 
+    var isTraveling = false
+
     private const val url = "http://agileserver-env.yttgtpappn.eu-central-1.elasticbeanstalk.com"
     var token = ""
     var personalId = ""
 
     suspend fun requestGantries(lon: Float, lat: Float): List<Gantry> {
+        Log.d("EH", "Requesting gantries from API")
         val (_, _, result) =
             Fuel.get(url + "/gantries", listOf("lon" to lon, "lat" to lat))
                 .authentication()
@@ -72,7 +78,8 @@ object APIHandler {
     }
 
     fun logout(): Boolean {
-        return when(token) {
+        isTraveling = false
+        return when (token) {
             "" -> {
                 false
             }
@@ -106,7 +113,7 @@ object APIHandler {
 
     suspend fun registerRequest(user: User): Boolean {
         val (_, _, result) = runBlocking {
-            Fuel.post("$url/user/")
+            Fuel.post("$url/users/")
                 .jsonBody(Json.stringify(user))
                 .awaitStringResponseResult()
         }
