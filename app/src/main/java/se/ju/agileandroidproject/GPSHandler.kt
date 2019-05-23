@@ -46,6 +46,8 @@ object GPSHandler {
 
     var locationExists = false
 
+   var closeGantries: List<Gantry> = listOf()
+
     fun initializeContext(context: Context) {
         this.context = context
         locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -162,6 +164,8 @@ object GPSHandler {
     }
 
     public fun updateClosestGantry(gantries: List<Gantry>) {
+        closeGantries = gantries
+
         for (gantry in gantries) {
             val distance = coordinatesDistance(
                 currentLocation.latitude.toFloat(),

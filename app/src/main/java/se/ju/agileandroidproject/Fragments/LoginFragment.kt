@@ -72,6 +72,7 @@ class Login : Fragment() {
                                 editor.apply()
 
                                 startActivity(Intent(activity, Main2Activity::class.java))
+                                activity!!.finish()
                             } else {
                                 Toast.makeText(activity, "Failed signing in.", Toast.LENGTH_SHORT).show()
                             }

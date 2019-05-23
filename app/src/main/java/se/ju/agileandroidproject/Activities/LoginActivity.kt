@@ -26,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (!APIHandler.token.equals("")) {
             startActivity(Intent(this, Main2Activity::class.java))
+            finish()
         }
 
         setContentView(R.layout.activity_login)
