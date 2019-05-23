@@ -24,15 +24,19 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mapFragment: SupportMapFragment;
     private lateinit var mMap: GoogleMap
+    var following = true
+    var zoom = 14.0f
+    var tilt = 0f
+    var location = LatLng(58.0,14.0)
+    var lastLocation : LatLng? = null
 
     @SuppressLint("ResourceType")
     @ImplicitReflectionSerializer
     override fun onMapReady(googleMap: GoogleMap) {
-        Log.d("EH", "DOING STUFF 2")
         mMap = googleMap
 
         mMap.uiSettings.setZoomGesturesEnabled(true)
-        mMap.uiSettings.setScrollGesturesEnabled(false)
+//        mMap.uiSettings.setScrollGesturesEnabled(false)
         mMap.uiSettings.setZoomControlsEnabled(true)
 
         val zoomControls = mapFragment.view!!.findViewById<View>(0x1)
@@ -50,13 +54,9 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
             params.setMargins(margin, margin, margin, margin);
         }
 
-        var location = when(GPSHandler.locationExists){
-            true -> LatLng(GPSHandler.currentLocation.latitude, GPSHandler.currentLocation.longitude)
-            else -> LatLng(0.0, 0.0)
+        if (GPSHandler.locationExists) {
+            location = LatLng(GPSHandler.currentLocation.latitude, GPSHandler.currentLocation.longitude)
         }
-
-        var zoom = 14.0f
-        var tilt = 0f
 
         view?.post {
             var cameraPosition = CameraPosition.Builder().target(location).zoom(zoom).tilt(tilt).build()
@@ -69,10 +69,16 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
         Thread {
             while(APIHandler.isTraveling) {
                 view?.post {
+
+                    if(lastLocation!= null && !mMap.cameraPosition.target.equals(lastLocation)) {
+                        following = false
+                    }
+
                     if(GPSHandler.locationExists)
                     {
                         location = LatLng(GPSHandler.currentLocation.latitude, GPSHandler.currentLocation.longitude)
                     }
+
                     zoom = mMap.cameraPosition.zoom
                     tilt = mMap.cameraPosition.tilt
                     mMap.clear()
@@ -85,11 +91,14 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
                     mMap.addMarker(MarkerOptions()
                         .position(location)
                         .icon(carBitmap))
-
-                    var cameraPosition = CameraPosition.Builder().target(location).zoom(zoom).tilt(tilt).build()
-                    var cameraUpdate = newCameraPosition(cameraPosition)
-                    mMap.moveCamera(cameraUpdate)
+                    if(following) {
+                        var cameraPosition = CameraPosition.Builder().target(location).zoom(zoom).tilt(tilt).build()
+                        var cameraUpdate = newCameraPosition(cameraPosition)
+                        mMap.moveCamera(cameraUpdate)
+                    }
+                    lastLocation = mMap.cameraPosition.target
                 }
+//                Thread.sleep(GPSHandler.updateTime.toLong())
                 Thread.sleep(1000)
             }
         }.start()
@@ -123,6 +132,22 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
 
         showMapButton.setOnClickListener {
             (parentFragment as MasterTravelFragment).switchFragment(DefaultTravelFragment.newInstance())
+        }
+
+        val followButton = view!!.findViewById<Button>(R.id.buttonFollowMe)
+
+        followButton.setOnClickListener {
+            zoom = 14.0f
+            following = true
+            lastLocation = null
+            if(mMap != null) {
+                view.post {
+                    val location = LatLng(location.latitude, location.longitude)
+                    var cameraPosition = CameraPosition.Builder().target(location).zoom(zoom).tilt(tilt).build()
+                    var cameraUpdate = newCameraPosition(cameraPosition)
+                    mMap.moveCamera(cameraUpdate)
+                }
+            }
         }
     }
 

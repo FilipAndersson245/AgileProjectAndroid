@@ -23,20 +23,28 @@
                 android:text="Hide map"
                 android:textColor="@color/KapschOrange"
                 android:background="#000000"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/buttonMapHideMap"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="15dp"/>
         <Button
                 android:text="Stop travel"
                 android:textColor="@color/KapschOrange"
                 android:background="#000000"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/buttonMapStopTravel"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="15dp"/>
     </LinearLayout>
+    <Button
+            android:text="Follow me"
+            android:textColor="@color/KapschOrange"
+            android:background="#000000"
+            android:layout_marginLeft="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/buttonFollowMe"
+            android:layout_marginRight="30dp" android:layout_marginTop="15dp"/>
 
     <!--<fragment android:id="@+id/aa" android:layout_width="match_parent" android:layout_height="400dp"/>-->
 
