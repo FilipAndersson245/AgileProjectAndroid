@@ -24,8 +24,12 @@ class DefaultTravelFragment : Fragment() {
 
     fun updateTextLoop(view: View) {
         if(GPSHandler.locationExists) {
-            view.findViewById<TextView>(R.id.coordinatesText).text = "(${GPSHandler.currentLocation.latitude}, ${GPSHandler.currentLocation.longitude})"
-            view.findViewById<TextView>(R.id.distanceText).text = "${GPSHandler.distanceToClosestGantry} meters"
+            view.post {
+                view.findViewById<TextView>(R.id.coordinatesText).text = "(${(GPSHandler.currentLocation.latitude * 1000).toInt().toDouble() / 1000}, ${(GPSHandler.currentLocation.longitude * 1000).toInt().toDouble() / 1000})"
+                if (GPSHandler.distanceToClosestGantry != null) {
+                    view.findViewById<TextView>(R.id.distanceText).text = "${(GPSHandler.distanceToClosestGantry!!/100).toInt().toDouble()/10} km"
+                }
+            }
         }
     }
 
