@@ -3,12 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/invoice_list"
+        android:id="@+id/gantry_list"
         android:name="se.ju.agileandroidproject.GantryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".Fragments.GantryFragment"
-        tools:listitem="@layout/fragment_gantry"/>
+        tools:context=".Fragments.PassageFragment"
+        tools:listitem="@layout/gantry_list_item"/>

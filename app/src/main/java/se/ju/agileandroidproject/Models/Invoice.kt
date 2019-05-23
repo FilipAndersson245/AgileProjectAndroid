@@ -1,16 +1,20 @@
 package se.ju.agileandroidproject.Models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 class Invoice(
-    val id: String,
+    val id: Int,
     val amount: Int,
-    val firstName: String,
-    val lastName: String,
-    val address: String,
-    val personalId: String,
-    val issuedAt: String,
+    val userId: String,
+    val issueDate: String,
     val dueDate: String,
-    val paid: Boolean
-)
+    val paid: String
+) {
+    @Transient
+    val isPaid = when (paid) {
+        "1" -> true
+        else -> false
+    }
+}
