@@ -69,7 +69,7 @@
 
                 <TextView
                         android:id="@+id/coordinatesText"
-                        android:layout_width="9dp"
+                        android:layout_width="wrap_content"
                         android:textColor="#000000"
                         android:layout_height="match_parent"
                         android:textSize="18dp"
@@ -98,7 +98,7 @@
 
                 <TextView
                         android:id="@+id/distanceText"
-                        android:layout_width="9dp"
+                        android:layout_width="wrap_content"
                         android:textColor="#000000"
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"

@@ -69,7 +69,6 @@ class DefaultTravelFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        textLoop.stop()
     }
 
     companion object {
