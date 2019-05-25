@@ -2,7 +2,6 @@ package se.ju.agileandroidproject.Fragments
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -14,7 +13,7 @@ import android.widget.Toast
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
-import se.ju.agileandroidproject.Activities.Main2Activity
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.R
 
 
@@ -71,7 +70,7 @@ class Login : Fragment() {
                                 editor.putString("ID", APIHandler.personalId)
                                 editor.apply()
 
-                                startActivity(Intent(activity, Main2Activity::class.java))
+                                startActivity(Intent(activity, MainActivity::class.java))
                                 activity!!.finish()
                             } else {
                                 Toast.makeText(activity, "Failed signing in.", Toast.LENGTH_SHORT).show()

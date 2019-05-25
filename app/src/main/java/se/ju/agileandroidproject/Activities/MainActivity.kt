@@ -1,7 +1,6 @@
 package se.ju.agileandroidproject.Activities
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,13 +17,9 @@ import android.support.v4.widget.DrawerLayout
 import android.support.design.widget.NavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
-import android.view.Menu
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -35,11 +30,9 @@ import se.ju.agileandroidproject.BackgroundTravelService
 import se.ju.agileandroidproject.Fragments.*
 import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.R
-import java.nio.channels.GatheringByteChannel
-import java.sql.Timestamp
 import android.Manifest
 
-class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     var notificationManager: NotificationManager? = null
 
@@ -107,9 +100,9 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUEST_PERMISSION_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this@Main2Activity, "Permission granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Permission granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@Main2Activity, "Permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -195,7 +188,7 @@ class Main2Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
 
         val channelID = packageName
 
-        val intent = Intent(this, Main2Activity::class.java).apply {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 

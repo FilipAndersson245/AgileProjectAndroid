@@ -12,7 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import se.ju.agileandroidproject.Activities.Main2Activity
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.Models.Coordinate
 import se.ju.agileandroidproject.Models.Gantry
 
@@ -97,7 +97,7 @@ object GPSHandler {
                                 ) {
                                     APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
 
-                                    (context as Main2Activity).pushNotificaion(closestGantry!!)
+                                    (context as MainActivity).pushNotificaion(closestGantry!!)
 
                                     Log.d("EH", "Gantry was passed")
                                 } else {

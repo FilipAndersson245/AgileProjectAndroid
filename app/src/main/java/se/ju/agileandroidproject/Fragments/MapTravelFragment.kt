@@ -3,7 +3,6 @@ package se.ju.agileandroidproject.Fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition
 import com.google.android.gms.maps.model.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
-import se.ju.agileandroidproject.Activities.Main2Activity
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.R
 
@@ -123,7 +122,7 @@ class MapTravelFragment : Fragment(), OnMapReadyCallback {
 
         stopTravelButton.setOnClickListener {
             APIHandler.isTraveling = false
-            (activity as Main2Activity).stopBackgroundService()
+            (activity as MainActivity).stopBackgroundService()
             (parentFragment as MasterTravelFragment).switchFragment(StartTravelFragment.newInstance())
         }
 

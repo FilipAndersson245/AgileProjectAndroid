@@ -1,27 +1,17 @@
 package se.ju.agileandroidproject.Fragments
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import kotlinx.coroutines.delay
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
-import se.ju.agileandroidproject.Activities.Main2Activity
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.GPSHandler
-import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.R
 
 class DefaultTravelFragment : Fragment() {
@@ -54,7 +44,7 @@ class DefaultTravelFragment : Fragment() {
 
         stopTravelButton.setOnClickListener {
             APIHandler.isTraveling = false
-            (activity as Main2Activity).stopBackgroundService()
+            (activity as MainActivity).stopBackgroundService()
             (parentFragment as MasterTravelFragment).switchFragment(StartTravelFragment.newInstance())
         }
 

@@ -1,17 +1,14 @@
 package se.ju.agileandroidproject.Fragments
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
-import se.ju.agileandroidproject.Activities.Main2Activity
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.R
 
 class StartTravelFragment : Fragment() {
@@ -30,7 +27,7 @@ class StartTravelFragment : Fragment() {
 
         startTravelButton.setOnClickListener {
             APIHandler.isTraveling = true
-            (activity as Main2Activity).startBackgroundService()
+            (activity as MainActivity).startBackgroundService()
             (parentFragment as MasterTravelFragment).switchFragment(DefaultTravelFragment.newInstance())
         }
     }

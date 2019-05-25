@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import se.ju.agileandroidproject.Activities.Main2Activity
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.Models.Gantry
 import kotlin.concurrent.thread
 
@@ -33,7 +33,7 @@ class BackgroundTravelService : Service() {
 
         GPSHandler.initializeContext(this)
 
-        var notificationIntent = Intent(this, Main2Activity::class.java)
+        var notificationIntent = Intent(this, MainActivity::class.java)
         var pendingIntent = PendingIntent.getActivity(
             this,
             0, notificationIntent, 0
