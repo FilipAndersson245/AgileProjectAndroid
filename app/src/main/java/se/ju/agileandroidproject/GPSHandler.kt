@@ -107,7 +107,7 @@ object GPSHandler {
                                         Coordinate(closestGantry!!.longitude, closestGantry!!.latitude)
                                     )
                                 ) {
-                                    val foo = APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
+                                    APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
 
                                     (context as MainActivity).pushNotification(closestGantry!!)
                                 }
