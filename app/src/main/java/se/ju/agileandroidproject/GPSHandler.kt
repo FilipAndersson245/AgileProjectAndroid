@@ -20,6 +20,16 @@ private const val GANTRY_INNER_CIRCLE_DISTANCE = 25
 
 private const val GANTRY_OUTER_CIRCLE_DISTANCE = 50
 
+private const val BIG_DISTANCE = 5000
+
+private const val MEDIUM_DISTANCE = 1000
+
+private const val SMALL_DISTANCE = 500
+
+private const val SMALLEST_DISTANCE = 200
+
+
+
 @SuppressLint("StaticFieldLeak")
 object GPSHandler {
 
@@ -97,7 +107,7 @@ object GPSHandler {
                                 ) {
                                     APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
 
-                                    (context as MainActivity).pushNotificaion(closestGantry!!)
+                                    (context as MainActivity).pushNotification(closestGantry!!)
 
                                     Log.d("EH", "Gantry was passed")
                                 } else {
@@ -113,19 +123,19 @@ object GPSHandler {
                         Log.d("EH", "inside distnace check")
                         Log.d("EH", distanceToClosestGantry.toString())
                         when {
-                            distanceToClosestGantry!! > 5000 && updateTime != 30000 -> {
+                            distanceToClosestGantry!! > BIG_DISTANCE && updateTime != 30000 -> {
                                 setGPSUpdateTime(30000)
                             }
-                            distanceToClosestGantry!! > 1000 && distanceToClosestGantry!! <= 5000 && updateTime != 10000 -> {
+                            distanceToClosestGantry!! > MEDIUM_DISTANCE && distanceToClosestGantry!! <= BIG_DISTANCE && updateTime != 10000 -> {
                                 setGPSUpdateTime(10000)
                             }
-                            distanceToClosestGantry!! > 500 && distanceToClosestGantry!! <= 1000 && updateTime != 4000 -> {
+                            distanceToClosestGantry!! > SMALL_DISTANCE && distanceToClosestGantry!! <= MEDIUM_DISTANCE && updateTime != 4000 -> {
                                 setGPSUpdateTime(4000)
                             }
-                            distanceToClosestGantry!! > 200 && distanceToClosestGantry!! <= 500 && updateTime != 2000 -> {
+                            distanceToClosestGantry!! > SMALLEST_DISTANCE && distanceToClosestGantry!! <= SMALL_DISTANCE && updateTime != 2000 -> {
                                 setGPSUpdateTime(1000)
                             }
-                            distanceToClosestGantry!! >= 0 && distanceToClosestGantry!! <= 200 && updateTime != 1000 -> {
+                            distanceToClosestGantry!! >= 0 && distanceToClosestGantry!! <= SMALLEST_DISTANCE && updateTime != 1000 -> {
                                 setGPSUpdateTime(500)
                             }
                         }

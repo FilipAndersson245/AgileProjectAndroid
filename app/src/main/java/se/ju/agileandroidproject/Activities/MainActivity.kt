@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun pushNotificaion(closestGantry: Gantry) {
+    fun pushNotification(closestGantry: Gantry) {
         val notificationID = System.currentTimeMillis().toInt()
 
         val channelID = packageName
