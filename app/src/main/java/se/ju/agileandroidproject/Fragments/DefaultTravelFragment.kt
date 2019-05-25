@@ -1,7 +1,7 @@
 package se.ju.agileandroidproject.Fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,7 @@ import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.R
 
-class DefaultTravelFragment : Fragment() {
+class DefaultTravelFragment : androidx.fragment.app.Fragment() {
 
     lateinit var textLoop: Thread
 

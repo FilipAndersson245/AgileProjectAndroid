@@ -1,9 +1,9 @@
 package se.ju.agileandroidproject.Fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +15,9 @@ import se.ju.agileandroidproject.Models.Passage
 import se.ju.agileandroidproject.R
 
 
-class PassageFragment : Fragment() {
+class PassageFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private lateinit var passageData : List<Passage>
 
@@ -50,7 +50,7 @@ class PassageFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.gantry_list)
 
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this.context)
         recyclerView.adapter = MyPassageRecyclerViewAdapter(passageData)
         recyclerView.setHasFixedSize(true)
 

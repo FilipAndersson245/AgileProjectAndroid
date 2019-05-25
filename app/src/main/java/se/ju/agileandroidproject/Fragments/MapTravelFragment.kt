@@ -2,7 +2,7 @@ package se.ju.agileandroidproject.Fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +19,7 @@ import se.ju.agileandroidproject.GPSHandler
 import se.ju.agileandroidproject.R
 
 
-class MapTravelFragment : Fragment(), OnMapReadyCallback {
+class MapTravelFragment : androidx.fragment.app.Fragment(), OnMapReadyCallback {
 
     private lateinit var mapFragment: SupportMapFragment;
     private lateinit var mMap: GoogleMap

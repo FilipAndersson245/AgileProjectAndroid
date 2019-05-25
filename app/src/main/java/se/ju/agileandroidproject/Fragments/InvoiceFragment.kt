@@ -1,9 +1,9 @@
 package se.ju.agileandroidproject.Fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +17,9 @@ import se.ju.agileandroidproject.R
 import kotlin.math.log
 
 
-class InvoiceFragment : Fragment() {
+class InvoiceFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
     private lateinit var invoiceData : List<Invoice>
 
@@ -52,8 +52,8 @@ class InvoiceFragment : Fragment() {
             view.findViewById<TextView>(R.id.no_invoices_message).visibility = View.VISIBLE
         }
 
-        recyclerView = view.findViewById<RecyclerView>(R.id.gantry_list)
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.gantry_list)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this.context)
         recyclerView.adapter = MyInvoiceRecyclerViewAdapter(invoiceData)
         recyclerView.setHasFixedSize(true)
     }

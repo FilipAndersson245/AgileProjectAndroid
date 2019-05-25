@@ -1,6 +1,6 @@
 package se.ju.agileandroidproject.Fragments.Adapters
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +15,10 @@ import java.util.*
 class MyPassageRecyclerViewAdapter(
     private val gantryData: List<Passage>
 //    val context: Context
-) : RecyclerView.Adapter<MyPassageRecyclerViewAdapter.GantryViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<MyPassageRecyclerViewAdapter.GantryViewHolder>() {
 
     // Viewholder class
-    class GantryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class GantryViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         val coordinate : TextView = itemView.findViewById(R.id.gantry_coordinate)
         val id : TextView = itemView.findViewById(R.id.gantry_id)
         val time : TextView = itemView.findViewById(R.id.gantry_time)

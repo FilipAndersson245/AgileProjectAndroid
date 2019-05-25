@@ -3,7 +3,7 @@ package se.ju.agileandroidproject.Fragments
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.R
 
-class MasterTravelFragment : Fragment() {
+class MasterTravelFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,7 +38,7 @@ class MasterTravelFragment : Fragment() {
         }
     }
 
-    fun switchFragment(fragment: android.support.v4.app.Fragment) {
+    fun switchFragment(fragment: androidx.fragment.app.Fragment) {
         val fragmentTransaction = childFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_fragment_holder, fragment)
         fragmentTransaction.commit()

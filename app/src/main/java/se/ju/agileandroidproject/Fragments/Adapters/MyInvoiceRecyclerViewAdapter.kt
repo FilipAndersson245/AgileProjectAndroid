@@ -3,8 +3,8 @@ package se.ju.agileandroidproject.Fragments.Adapters
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,10 +25,10 @@ import java.util.*
 class MyInvoiceRecyclerViewAdapter(
     private val invoiceData: List<Invoice>
 //    val context: Context
-) : RecyclerView.Adapter<MyInvoiceRecyclerViewAdapter.InvoiceViewHolder>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<MyInvoiceRecyclerViewAdapter.InvoiceViewHolder>() {
 
     // Viewholder class
-    class InvoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class InvoiceViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         val date: TextView = itemView.findViewById(R.id.invoice_listitem_date)
         val dueDate: TextView = itemView.findViewById(R.id.invoice_listitem_due_date)
         val cost: TextView = itemView.findViewById(R.id.invoice_listitem_cost)
