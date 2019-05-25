@@ -81,13 +81,10 @@ class BackgroundTravelService : Service() {
     @ImplicitReflectionSerializer
     fun travelingThreadLoop() = runBlocking<Unit> {
 
-        Log.d("EH", "Thread started")
         while (inTravelMode) {
-            Log.d("EH", "Looping in thread")
             launch {
 
                 if (GPSHandler.locationExists){
-                    Log.d("EH", "currentlocation exists")
                     val closeGantries = APIHandler.requestGantries(
                         GPSHandler.currentLocation.longitude.toFloat(),
                         GPSHandler.currentLocation.latitude.toFloat()

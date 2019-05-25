@@ -57,7 +57,7 @@ class DefaultTravelFragment : Fragment() {
         textLoop = Thread {
             while (APIHandler.isTraveling)
             {
-                Log.d("EH", "Updating UI")
+//                Log.d("EH", "Updating UI")
                 updateTextLoop(view)
                 Thread.sleep(GPSHandler.updateTime.toLong())
             }

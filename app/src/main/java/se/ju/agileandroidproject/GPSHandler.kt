@@ -82,16 +82,18 @@ object GPSHandler {
         }
 
         override fun onLocationChanged(location: Location?) {
-            Log.d("EH", location.toString())
+//            Log.d("EH", location.toString())
             if (location != null) {
                 if (isBetterLocation(location, lastKnownLocation)) {
                     currentLocation = location
                     locationExists = true
                     lastKnownLocation = location
-                    Log.d("EH", "updated location")
+
                     if (distanceToClosestGantry != null && closestGantry != null) {
+
+
+
                         if (distanceToClosestGantry!! < GANTRY_OUTER_CIRCLE_DISTANCE) {
-                            Log.d("EH", "Driving close to a gantry")
                             closeProximityToGantryCoordinatesList.add(
                                 Coordinate(
                                     currentLocation.longitude.toFloat(),
@@ -105,23 +107,19 @@ object GPSHandler {
                                         Coordinate(closestGantry!!.longitude, closestGantry!!.latitude)
                                     )
                                 ) {
-                                    APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
+                                    val foo = APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
 
                                     (context as MainActivity).pushNotification(closestGantry!!)
-
-                                    Log.d("EH", "Gantry was passed")
-                                } else {
-                                    Log.d("EH", "Gantry was not passed")
                                 }
                                 closeProximityToGantryCoordinatesList.clear()
                             }
                         }
                     }
-                    Log.d("EH", "outside distnace check")
+
                     //Change update time of gps and requests based on distance to Gantry:
                     if (distanceToClosestGantry != null) {
-                        Log.d("EH", "inside distnace check")
-                        Log.d("EH", distanceToClosestGantry.toString())
+//                        Log.d("EH", "inside distnace check")
+//                        Log.d("EH", distanceToClosestGantry.toString())
                         when {
                             distanceToClosestGantry!! > BIG_DISTANCE && updateTime != 30000 -> {
                                 setGPSUpdateTime(30000)
@@ -147,6 +145,7 @@ object GPSHandler {
 
     fun wasGantryPassed(coordList: List<Coordinate>, closestGantry: Coordinate): Boolean {
         val midPoint = middlePointOfPassage(coordList)
+
         if (coordinatesDistance(
                 midPoint.lat,
                 midPoint.lon,
@@ -179,6 +178,8 @@ object GPSHandler {
     public fun updateClosestGantry(gantries: List<Gantry>) {
         closeGantries = gantries
 
+        val listOfClosest = mutableListOf<Pair<Int, Gantry>>()
+
         for (gantry in gantries) {
             val distance = coordinatesDistance(
                 currentLocation.latitude.toFloat(),
@@ -186,16 +187,14 @@ object GPSHandler {
                 gantry.latitude,
                 gantry.longitude
             )
-            if (distanceToClosestGantry == null) {
-                distanceToClosestGantry = distance.toInt()
-                closestGantry = gantry
-                Log.d("EH", "Updated closest coordinate to" + gantry.toString())
-            } else if (distance.toInt() < distanceToClosestGantry!!) {
-                distanceToClosestGantry = distance.toInt()
-                closestGantry = gantry
-                Log.d("EH", "Updated closest coordinate to" + gantry.toString())
-            }
+
+            listOfClosest.add(Pair(distance.toInt(), gantry))
         }
+
+        listOfClosest.sortBy { x -> x.first }
+
+        distanceToClosestGantry = listOfClosest.first().first
+        closestGantry = listOfClosest.first().second
     }
 
     @UnstableDefault
@@ -204,9 +203,7 @@ object GPSHandler {
         newUpdateTime = newTime
         if (newUpdateTime != updateTime) {
             stopListening()
-            Log.d("EH", "Stopped listening with " + updateTime / 1000 + " second interval")
             startListening(newUpdateTime)
-            Log.d("EH", "Started listening with " + newUpdateTime / 1000 + " second interval")
             updateTime = newUpdateTime
             longestUpdateTime = updateTime * 2.5
         }
@@ -227,7 +224,6 @@ object GPSHandler {
                 0f,
                 locationListener
             )
-            Log.d("EH", "bok")
 
         } else {
             //TODO: Handle it.
@@ -259,8 +255,6 @@ object GPSHandler {
 
     //Determine if the new GPS coordinate is accurate enough to warrant an update
     fun isBetterLocation(location: Location, currentBestLocation: Location?): Boolean {
-        Log.d("EH", "new location" + location.toString())
-        Log.d("EH", "last known: " + currentBestLocation.toString())
         if (currentBestLocation == null) {
 
             return true
