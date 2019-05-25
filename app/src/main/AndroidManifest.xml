@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="se.ju.agileandroidproject">
+          xmlns:tools="http://schemas.android.com/tools" package="se.ju.agileandroidproject">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <uses-feature android:name="android.hardware.location.gps"/>
 
@@ -21,16 +22,18 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true" tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <meta-data android:name="com.google.android.geo.API_KEY"
                    android:value="${GOOGLE_MAPS_API_KEY}"/>
         <activity
-                android:name=".Activities.MainActivity"
+                android:name=".Activities$MainActivity"
                 android:label="@string/title_activity_main2"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-                android:name=".Activities.LoginActivity"
+                android:name=".Activities$LoginActivity"
                 android:theme="@style/AppTheme.NoActionBar"
         >
             <intent-filter>

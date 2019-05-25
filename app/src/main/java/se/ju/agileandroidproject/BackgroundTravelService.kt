@@ -98,9 +98,7 @@ class BackgroundTravelService : Service() {
 
                     GPSHandler.updateClosestGantry(gantriesList)
 
-
                 }
-
 
             }
 
