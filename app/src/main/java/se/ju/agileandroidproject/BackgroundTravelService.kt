@@ -40,7 +40,7 @@ class BackgroundTravelService : Service() {
         )
 
         var notification = NotificationCompat.Builder(this, packageName)
-            .setContentTitle("Toll Gate")
+            .setContentTitle("Tollgate")
             .setContentText("You are in travel mode")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
