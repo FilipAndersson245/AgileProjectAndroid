@@ -16,7 +16,6 @@ import se.ju.agileandroidproject.Models.Gantry
 import kotlin.concurrent.thread
 
 class BackgroundTravelService : Service() {
-    public val CHANNEL_ID = "backgroundServiceChannel"
 
     public var inTravelMode = false
 
@@ -40,7 +39,7 @@ class BackgroundTravelService : Service() {
             0, notificationIntent, 0
         )
 
-        var notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        var notification = NotificationCompat.Builder(this, packageName)
             .setContentTitle("Toll Gate")
             .setContentText("You are in travel mode")
             .setSmallIcon(R.mipmap.ic_launcher)
