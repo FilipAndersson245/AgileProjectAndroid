@@ -7,9 +7,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlinx-serialization'
 
 def getApiKey(){
-    def Properties props = new Properties()
-    props.load(new FileInputStream(new File('secrets.properties')))
-    return props['GOOGLE_MAPS_API_KEY']
+    def apiKey = System.getenv('GOOGLE_MAPS_API_KEY')
+    if (apiKey != null) {
+        return apiKey
+    } else {
+        Properties props = new Properties()
+        props.load(new FileInputStream(new File('secrets.properties')))
+        return props['GOOGLE_MAPS_API_KEY']
+    }
+
 }
 
 buildscript {
