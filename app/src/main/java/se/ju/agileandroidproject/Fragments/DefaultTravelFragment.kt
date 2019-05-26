@@ -12,6 +12,7 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.GPSHandler
+import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.R
 
 class DefaultTravelFragment : androidx.fragment.app.Fragment() {

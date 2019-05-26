@@ -1,8 +1,13 @@
 package se.ju.agileandroidproject
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import android.util.Log
@@ -19,6 +24,8 @@ class BackgroundTravelService : Service() {
 
     public var inTravelMode = false
 
+    var notificationManager: NotificationManager? = null
+
     lateinit var isTravelingThreadLoop : Thread
 
     override fun onCreate() {
@@ -32,6 +39,13 @@ class BackgroundTravelService : Service() {
         inTravelMode = true
 
         GPSHandler.initializeContext(this)
+
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        createNotificationChannel(
+            packageName,
+            "Gantry passing",
+            "Gantry passing information.")
 
         var notificationIntent = Intent(this, MainActivity::class.java)
         var pendingIntent = PendingIntent.getActivity(
@@ -104,6 +118,46 @@ class BackgroundTravelService : Service() {
 
             delay(GPSHandler.updateTime.toLong())
         }
+    }
+
+    private fun createNotificationChannel(id: String, name: String, description: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_LOW
+            val channel = NotificationChannel(id, name, importance)
+
+            channel.description = description
+            channel.enableLights(true)
+            channel.lightColor = Color.RED
+            channel.enableVibration(true)
+            channel.vibrationPattern =
+                longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+            notificationManager?.createNotificationChannel(channel)
+        }
+    }
+
+    fun pushNotification(closestGantry: Gantry) {
+        val notificationID = System.currentTimeMillis().toInt()
+
+        val channelID = packageName
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val notification =
+            NotificationCompat.Builder(this,
+                channelID)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle("Gantry passed")
+                .setContentText("${closestGantry!!.price} kr")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setChannelId(channelID)
+                .setContentIntent(pendingIntent)
+                .build()
+
+        notificationManager!!.notify(notificationID, notification)
     }
 
 }

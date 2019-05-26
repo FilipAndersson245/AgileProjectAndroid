@@ -34,8 +34,6 @@ import android.Manifest
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    var notificationManager: NotificationManager? = null
-
     private val REQUEST_PERMISSION_LOCATION = 10
 
     @ImplicitReflectionSerializer
@@ -59,13 +57,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navView.getHeaderView(0).findViewById<TextView>(R.id.nav_username).text = "Signed in with personal id ${APIHandler.personalId}"
 
         navView.setNavigationItemSelectedListener(this)
-
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        createNotificationChannel(
-            packageName,
-            "Gantry passing",
-            "Gantry passing information.")
     }
 
     override fun onStart() {
@@ -164,48 +155,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun stopBackgroundService() {
         var serviceIntent = Intent(this, BackgroundTravelService::class.java)
         stopService(serviceIntent)
-    }
-
-
-
-    private fun createNotificationChannel(id: String, name: String, description: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_LOW
-            val channel = NotificationChannel(id, name, importance)
-
-            channel.description = description
-            channel.enableLights(true)
-            channel.lightColor = Color.RED
-            channel.enableVibration(true)
-            channel.vibrationPattern =
-                longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
-            notificationManager?.createNotificationChannel(channel)
-        }
-    }
-
-    fun pushNotification(closestGantry: Gantry) {
-        val notificationID = System.currentTimeMillis().toInt()
-
-        val channelID = packageName
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
-
-        val notification =
-            NotificationCompat.Builder(this,
-                channelID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("Gantry passed")
-                .setContentText("${closestGantry!!.price} kr")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setChannelId(channelID)
-                .setContentIntent(pendingIntent)
-                .build()
-
-        notificationManager!!.notify(notificationID, notification)
     }
 
 }

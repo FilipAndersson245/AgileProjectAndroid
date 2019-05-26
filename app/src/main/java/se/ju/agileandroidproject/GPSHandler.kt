@@ -83,6 +83,7 @@ object GPSHandler {
 
         override fun onLocationChanged(location: Location?) {
 //            Log.d("EH", location.toString())
+
             if (location != null) {
                 if (isBetterLocation(location, lastKnownLocation)) {
                     currentLocation = location
@@ -109,7 +110,7 @@ object GPSHandler {
                                 ) {
                                     APIHandler.registerPassage(APIHandler.personalId, closestGantry!!.id)
 
-                                    (context as MainActivity).pushNotification(closestGantry!!)
+                                    (context as BackgroundTravelService).pushNotification(closestGantry!!)
                                 }
                                 closeProximityToGantryCoordinatesList.clear()
                             }
