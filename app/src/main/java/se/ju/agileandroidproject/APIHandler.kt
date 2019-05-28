@@ -10,12 +10,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
-import se.ju.agileandroidproject.Models.Coordinate
+import se.ju.agileandroidproject.Models.*
 
-import se.ju.agileandroidproject.Models.Gantry
-import se.ju.agileandroidproject.Models.Invoice
-import se.ju.agileandroidproject.Models.Session
-import se.ju.agileandroidproject.Models.User
 import java.util.logging.Handler
 import java.util.*
 import javax.security.auth.callback.Callback
@@ -77,6 +73,7 @@ object APIHandler {
     }
 
     fun logout(): Boolean {
+        isTraveling = false
         return when (token) {
             "" -> {
                 false
@@ -154,6 +151,38 @@ object APIHandler {
         }
     }
 
+    fun passagesRequest(personalId: String): List<Passage> {
+        val (_, _, result) = runBlocking {
+            Fuel.get("$url/passages?personalId=$personalId")
+                .authentication()
+                .bearer(token)
+                .awaitStringResponseResult()
+        }
+
+        var responseData = listOf<Passage>()
+
+        result.fold(
+            { data ->
+                responseData = Json.parse(Passage.serializer().list, data.toString())
+                return responseData
+            },
+            { error ->
+                Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
+            })
+
+        return responseData
+    }
+
+    fun passages(personalId: String): Pair<Boolean, List<Passage>> {
+        val passages = when {
+            (personalId.length == 10 || personalId.length == 12) -> {
+                passagesRequest(personalId)
+            }
+            else -> listOf()
+        }
+        return passages.isNotEmpty() to passages
+    }
+
     fun invoiceRequest(personalId: String): List<Invoice> {
         val (_, _, result) = runBlocking {
             Fuel.get("$url/invoices?personalId=$personalId")
@@ -162,11 +191,11 @@ object APIHandler {
                 .awaitStringResponseResult()
         }
 
-        val responseData = mutableListOf<Invoice>()
+        var responseData = listOf<Invoice>()
 
         result.fold(
             { data ->
-                responseData.add(Json.parse(Invoice.serializer(), data))
+                responseData = Json.parse(Invoice.serializer().list, data)
             },
             { error ->
                 print("An error of type ${error.exception} happened: ${error.message}")

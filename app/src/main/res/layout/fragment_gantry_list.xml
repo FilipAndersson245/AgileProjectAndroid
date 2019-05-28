@@ -1,149 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context=".Fragments.Login"
-              android:orientation="vertical"
-              android:padding="10dp"
-              android:background="#fcfcfc"
-              android:gravity="center">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="80dp"
-                android:textSize="20dp"
-                android:textColor="#000000"
-                android:text="This month's expenses:"
-                android:textStyle="bold"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="#000000"
-            android:padding="2dp"
-            android:orientation="horizontal">
-
-
-        <LinearLayout android:orientation="vertical"
-                      android:background="#FFFFFF"
-                      android:id="@+id/gntry_background"
-                      android:layout_width="match_parent"
-                      android:layout_height="78dp">
-
-            <TextView
-                    android:text="Gantries Passed: "
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-
-            <TextView
-                    android:id="@+id/item_number"
-                    android:layout_marginLeft="143dp"
-                    android:layout_marginTop="-38dp"
-                    android:text="xx:xx:xx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-
-            <TextView
-                    android:text="Time: "
-                    android:layout_marginLeft="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-
-            <TextView
-                    android:id="@+id/due_date"
-                    android:text="xx:xx:xx"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginTop="-22dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-
-            <TextView
-                    android:text="Total:"
-                    android:textSize="22dp"
-                    android:layout_marginTop="-34dp"
-                    android:layout_marginLeft="220dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-
-            <TextView
-                    android:id="@+id/invoice_payment"
-                    android:text="xxx sek"
-                    android:textSize="22dp"
-                    android:layout_marginTop="-30dp"
-                    android:layout_marginLeft="280dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-
-            <TextView
-                    android:id="@+id/content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:textAppearance="?attr/textAppearanceListItem"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="110dp"
-                android:textSize="20dp"
-                android:textColor="#000000"
-                android:text="Gantries passed:"
-                android:textStyle="bold"/>
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:background="#000000"
-            android:padding="2dp"
-            android:orientation="horizontal">
-
-
-        <LinearLayout android:orientation="vertical"
-                      android:background="#FFFFFF"
-                      android:layout_width="match_parent"
-                      android:layout_height="398dp">
-
-            <android.support.v7.widget.RecyclerView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/list"
-                    android:name="se.ju.agileandroidproject.InvoiceFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:context=".Fragments.InvoiceFragment"
-                    tools:listitem="@layout/fragment_invoice"/>
-
-        </LinearLayout>
-    </LinearLayout>
-
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="You have no passed gantries."
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:id="@+id/no_invoices_message"
+        android:gravity="center" android:visibility="gone"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gantry_list"
+        android:name="se.ju.agileandroidproject.GantryFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".Fragments.PassageFragment"
+        tools:listitem="@layout/gantry_list_item"/>
 </LinearLayout>

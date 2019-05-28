@@ -1,19 +1,17 @@
 package se.ju.agileandroidproject.Fragments
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Activities.MainActivity
 import se.ju.agileandroidproject.R
 
-class StartTravelFragment : Fragment() {
+class StartTravelFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +27,7 @@ class StartTravelFragment : Fragment() {
 
         startTravelButton.setOnClickListener {
             APIHandler.isTraveling = true
+            (activity as MainActivity).startBackgroundService()
             (parentFragment as MasterTravelFragment).switchFragment(DefaultTravelFragment.newInstance())
         }
     }

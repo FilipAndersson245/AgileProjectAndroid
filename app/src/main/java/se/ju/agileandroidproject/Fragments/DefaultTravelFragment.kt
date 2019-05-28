@@ -1,21 +1,33 @@
 package se.ju.agileandroidproject.Fragments
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import kotlinx.serialization.ImplicitReflectionSerializer
 import se.ju.agileandroidproject.APIHandler
+import se.ju.agileandroidproject.Activities.MainActivity
+import se.ju.agileandroidproject.GPSHandler
+import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.R
 
-class DefaultTravelFragment : Fragment() {
+class DefaultTravelFragment : androidx.fragment.app.Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    lateinit var textLoop: Thread
+
+    fun updateTextLoop(view: View) {
+        if(GPSHandler.locationExists) {
+            view.post {
+                view.findViewById<TextView>(R.id.coordinatesText).text = "(${(GPSHandler.currentLocation.latitude * 1000).toInt().toDouble() / 1000}, ${(GPSHandler.currentLocation.longitude * 1000).toInt().toDouble() / 1000})"
+                if (GPSHandler.distanceToClosestGantry != null) {
+                    view.findViewById<TextView>(R.id.distanceText).text = "${(GPSHandler.distanceToClosestGantry!!/100).toInt().toDouble()/10} km"
+                }
+            }
+        }
     }
 
     override fun onCreateView(
@@ -33,8 +45,25 @@ class DefaultTravelFragment : Fragment() {
 
         stopTravelButton.setOnClickListener {
             APIHandler.isTraveling = false
+            (activity as MainActivity).stopBackgroundService()
             (parentFragment as MasterTravelFragment).switchFragment(StartTravelFragment.newInstance())
         }
+
+        val showMapButton = view!!.findViewById<Button>(R.id.buttonShowMap)
+
+        showMapButton.setOnClickListener {
+            (parentFragment as MasterTravelFragment).switchFragment(MapTravelFragment.newInstance())
+        }
+        
+        textLoop = Thread {
+            while (APIHandler.isTraveling)
+            {
+//                Log.d("EH", "Updating UI")
+                updateTextLoop(view)
+                Thread.sleep(GPSHandler.updateTime.toLong())
+            }
+        }
+        textLoop.start()
     }
 
     companion object {
