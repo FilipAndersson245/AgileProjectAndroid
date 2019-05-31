@@ -1,14 +1,12 @@
 package se.ju.agileandroidproject.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Fragments.Adapters.MyPassageRecyclerViewAdapter
 import se.ju.agileandroidproject.Models.Passage
@@ -19,15 +17,16 @@ class PassageFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
 
-    private lateinit var passageData : List<Passage>
+    private lateinit var passageData: List<Passage>
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val (notEmpty, data) = APIHandler.passages(APIHandler.personalId)
 
-        passageData = when(notEmpty) {
+        passageData = when (notEmpty) {
             true -> data
             else -> listOf()
         }
@@ -43,7 +42,7 @@ class PassageFragment : androidx.fragment.app.Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(passageData.isEmpty()) {
+        if (passageData.isEmpty()) {
             view.findViewById<TextView>(R.id.no_invoices_message).visibility = View.VISIBLE
         }
 

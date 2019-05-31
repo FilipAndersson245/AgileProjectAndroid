@@ -1,6 +1,6 @@
 package se.ju.agileandroidproject.Fragments.Adapters
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -9,26 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.w3c.dom.Text
-
-import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.Models.Invoice
 import se.ju.agileandroidproject.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 class MyInvoiceRecyclerViewAdapter(
     private val invoiceData: List<Invoice>
-//    val context: Context
-) : androidx.recyclerview.widget.RecyclerView.Adapter<MyInvoiceRecyclerViewAdapter.InvoiceViewHolder>() {
+) : RecyclerView.Adapter<MyInvoiceRecyclerViewAdapter.InvoiceViewHolder>() {
 
     // Viewholder class
-    class InvoiceViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+    class InvoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val date: TextView = itemView.findViewById(R.id.invoice_listitem_date)
         val dueDate: TextView = itemView.findViewById(R.id.invoice_listitem_due_date)
         val cost: TextView = itemView.findViewById(R.id.invoice_listitem_cost)
@@ -41,6 +34,7 @@ class MyInvoiceRecyclerViewAdapter(
         return InvoiceViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.invoice_list_item, parent, false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: InvoiceViewHolder, position: Int) {
         val dueDate = toDate(invoiceData[position].dueDate)!!
 
@@ -63,13 +57,15 @@ class MyInvoiceRecyclerViewAdapter(
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun toDate(dateString: String): Date? {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-        var convertedDate: Date? = sdf.parse(dateString)
+        val convertedDate: Date? = sdf.parse(dateString)
 
         return convertedDate
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun toNiceDateString(dateString: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         var convertedDate: Date? = null

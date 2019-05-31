@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.Fragments.ChooseLoginRegister
 import se.ju.agileandroidproject.R
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LoginActivity : AppCompatActivity() {
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
     }
 
-    fun switchFragment(fragment: androidx.fragment.app.Fragment) {
+    fun switchFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack("")
         fragmentTransaction.setCustomAnimations(
@@ -44,12 +47,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         supportFragmentManager.popBackStack()
-//        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-//        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//        } else {
-//            super.onBackPressed()
-//        }
     }
 
     override fun onStart() {

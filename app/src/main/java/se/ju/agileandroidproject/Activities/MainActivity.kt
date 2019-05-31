@@ -7,28 +7,22 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.view.MenuItem
-import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import se.ju.agileandroidproject.APIHandler
 import se.ju.agileandroidproject.BackgroundTravelService
 import se.ju.agileandroidproject.Fragments.*
-import se.ju.agileandroidproject.Models.Gantry
 import se.ju.agileandroidproject.R
 import android.Manifest
 
@@ -36,8 +30,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val REQUEST_PERMISSION_LOCATION = 10
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
-    @SuppressLint("ServiceCast")
+    @SuppressLint("ServiceCast", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
@@ -54,7 +49,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        navView.getHeaderView(0).findViewById<TextView>(R.id.nav_username).text = "Signed in with personal id ${APIHandler.personalId}"
+        navView.getHeaderView(0).findViewById<TextView>(R.id.nav_username).text =
+            "Signed in with personal id ${APIHandler.personalId}"
 
         navView.setNavigationItemSelectedListener(this)
     }
@@ -103,7 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawerLayout: androidx.drawerlayout.widget.DrawerLayout = findViewById(R.id.drawer_layout)
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else if(supportFragmentManager.backStackEntryCount > 0) {
+        } else if (supportFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
         }
     }
@@ -111,11 +107,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun switchFragment(fragment: androidx.fragment.app.Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.addToBackStack(fragment.javaClass.toString())
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+        fragmentTransaction.setCustomAnimations(
+            R.anim.slide_in_right,
+            R.anim.slide_out_left,
+            android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right
+        )
         fragmentTransaction.replace(R.id.fragment_holder, fragment)
         fragmentTransaction.commit()
     }
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
@@ -148,12 +150,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun startBackgroundService() {
-        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        val serviceIntent = Intent(this, BackgroundTravelService::class.java)
         startService(serviceIntent)
     }
 
     fun stopBackgroundService() {
-        var serviceIntent = Intent(this, BackgroundTravelService::class.java)
+        val serviceIntent = Intent(this, BackgroundTravelService::class.java)
         stopService(serviceIntent)
     }
 

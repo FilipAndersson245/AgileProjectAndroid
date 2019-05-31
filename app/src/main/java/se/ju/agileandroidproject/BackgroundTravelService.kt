@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import android.util.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,16 +21,11 @@ import kotlin.concurrent.thread
 
 class BackgroundTravelService : Service() {
 
-    public var inTravelMode = false
+    private var inTravelMode = false
 
     var notificationManager: NotificationManager? = null
 
-    lateinit var isTravelingThreadLoop : Thread
-
-    override fun onCreate() {
-        super.onCreate()
-    }
-
+    lateinit var isTravelingThreadLoop: Thread
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -45,15 +39,16 @@ class BackgroundTravelService : Service() {
         createNotificationChannel(
             packageName,
             "Gantry passing",
-            "Gantry passing information.")
+            "Gantry passing information."
+        )
 
-        var notificationIntent = Intent(this, MainActivity::class.java)
-        var pendingIntent = PendingIntent.getActivity(
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
             this,
             0, notificationIntent, 0
         )
 
-        var notification = NotificationCompat.Builder(this, packageName)
+        val notification = NotificationCompat.Builder(this, packageName)
             .setContentTitle("Tollgate")
             .setContentText("You are in travel mode")
             .setSmallIcon(R.mipmap.ic_launcher)
@@ -62,16 +57,11 @@ class BackgroundTravelService : Service() {
 
         startForeground(1, notification)
 
-        isTravelingThreadLoop =  thread(start = false, name = "ThreadLoop") {
+        isTravelingThreadLoop = thread(start = false, name = "ThreadLoop") {
             travelingThreadLoop()
         }
 
         isTravelingThreadLoop.start()
-        //TODO: skapa tråd med allt arbete.
-
-        /*thread (start = true, name = "backgroundThreadLoop") {
-            gpsHandler.startListening(1000)
-        }*/
 
         GPSHandler.startListening(1000)
         GPSHandler.updateTime = 1000
@@ -98,7 +88,7 @@ class BackgroundTravelService : Service() {
         while (inTravelMode) {
             launch {
 
-                if (GPSHandler.locationExists){
+                if (GPSHandler.locationExists) {
                     val closeGantries = APIHandler.requestGantries(
                         GPSHandler.currentLocation.longitude.toFloat(),
                         GPSHandler.currentLocation.latitude.toFloat()
@@ -147,11 +137,13 @@ class BackgroundTravelService : Service() {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val notification =
-            NotificationCompat.Builder(this,
-                channelID)
+            NotificationCompat.Builder(
+                this,
+                channelID
+            )
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Gantry passed")
-                .setContentText("${closestGantry!!.price} kr")
+                .setContentText("${closestGantry.price} kr")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setChannelId(channelID)
                 .setContentIntent(pendingIntent)

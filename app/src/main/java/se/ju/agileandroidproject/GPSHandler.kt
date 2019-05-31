@@ -29,7 +29,6 @@ private const val SMALL_DISTANCE = 500
 private const val SMALLEST_DISTANCE = 200
 
 
-
 @SuppressLint("StaticFieldLeak")
 object GPSHandler {
 
@@ -51,13 +50,13 @@ object GPSHandler {
 
     private var closestGantry: Gantry? = null
 
-    public var distanceToClosestGantry: Int? = null
+    var distanceToClosestGantry: Int? = null
 
     var closeProximityToGantryCoordinatesList = mutableListOf<Coordinate>()
 
     var locationExists = false
 
-   var closeGantries: List<Gantry> = listOf()
+    var closeGantries: List<Gantry> = listOf()
 
     fun initializeContext(context: Context) {
         this.context = context
@@ -82,7 +81,6 @@ object GPSHandler {
         }
 
         override fun onLocationChanged(location: Location?) {
-//            Log.d("EH", location.toString())
 
             if (location != null) {
                 if (isBetterLocation(location, lastKnownLocation)) {
@@ -91,7 +89,6 @@ object GPSHandler {
                     lastKnownLocation = location
 
                     if (distanceToClosestGantry != null && closestGantry != null) {
-
 
 
                         if (distanceToClosestGantry!! < GANTRY_OUTER_CIRCLE_DISTANCE) {
@@ -119,8 +116,6 @@ object GPSHandler {
 
                     //Change update time of gps and requests based on distance to Gantry:
                     if (distanceToClosestGantry != null) {
-//                        Log.d("EH", "inside distnace check")
-//                        Log.d("EH", distanceToClosestGantry.toString())
                         when {
                             distanceToClosestGantry!! > BIG_DISTANCE && updateTime != 30000 -> {
                                 setGPSUpdateTime(30000)
@@ -176,7 +171,7 @@ object GPSHandler {
         return (earthRadius * c)
     }
 
-    public fun updateClosestGantry(gantries: List<Gantry>) {
+    fun updateClosestGantry(gantries: List<Gantry>) {
         closeGantries = gantries
 
         val listOfClosest = mutableListOf<Pair<Int, Gantry>>()
@@ -213,7 +208,7 @@ object GPSHandler {
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    public fun startListening(updateTime: Int) {
+    fun startListening(updateTime: Int) {
         if (ContextCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -227,30 +222,13 @@ object GPSHandler {
             )
 
         } else {
-            //TODO: Handle it.
-        }
-    }
-
-
-    public fun getLastLocation() {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-
-            lastKnownLocation = locationManager.getLastKnownLocation(locationProvider)
-            if (lastKnownLocation != null) {
-                currentLocation = lastKnownLocation!!
-            }
-        } else {
-            //TODO: Handle it.
+            //TODO: Handle permission not given.
         }
     }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    public fun stopListening() {
+    fun stopListening() {
         locationManager.removeUpdates(locationListener)
     }
 

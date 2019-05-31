@@ -41,7 +41,7 @@ object APIHandler {
                 return responseData
             },
             { error ->
-                Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
+                Log.e("error", "An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData
@@ -151,7 +151,7 @@ object APIHandler {
         }
     }
 
-    fun passagesRequest(personalId: String): List<Passage> {
+    private fun passagesRequest(personalId: String): List<Passage> {
         val (_, _, result) = runBlocking {
             Fuel.get("$url/passages?personalId=$personalId")
                 .authentication()
@@ -163,11 +163,11 @@ object APIHandler {
 
         result.fold(
             { data ->
-                responseData = Json.parse(Passage.serializer().list, data.toString())
+                responseData = Json.parse(Passage.serializer().list, data)
                 return responseData
             },
             { error ->
-                Log.d("EH", "An error of type ${error.exception} happened: ${error.message}")
+                Log.e("error", "An error of type ${error.exception} happened: ${error.message}")
             })
 
         return responseData
@@ -183,7 +183,7 @@ object APIHandler {
         return passages.isNotEmpty() to passages
     }
 
-    fun invoiceRequest(personalId: String): List<Invoice> {
+    private fun invoiceRequest(personalId: String): List<Invoice> {
         val (_, _, result) = runBlocking {
             Fuel.get("$url/invoices?personalId=$personalId")
                 .authentication()

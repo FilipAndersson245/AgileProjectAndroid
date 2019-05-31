@@ -1,5 +1,6 @@
 package se.ju.agileandroidproject.Fragments.Adapters
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,15 +15,14 @@ import java.util.*
 
 class MyPassageRecyclerViewAdapter(
     private val gantryData: List<Passage>
-//    val context: Context
-) : androidx.recyclerview.widget.RecyclerView.Adapter<MyPassageRecyclerViewAdapter.GantryViewHolder>() {
+) : RecyclerView.Adapter<MyPassageRecyclerViewAdapter.GantryViewHolder>() {
 
     // Viewholder class
-    class GantryViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-        val coordinate : TextView = itemView.findViewById(R.id.gantry_coordinate)
-        val id : TextView = itemView.findViewById(R.id.gantry_id)
-        val time : TextView = itemView.findViewById(R.id.gantry_time)
-        val fee : TextView = itemView.findViewById(R.id.gantry_fee)
+    class GantryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val coordinate: TextView = itemView.findViewById(R.id.gantry_coordinate)
+        val id: TextView = itemView.findViewById(R.id.gantry_id)
+        val time: TextView = itemView.findViewById(R.id.gantry_time)
+        val fee: TextView = itemView.findViewById(R.id.gantry_fee)
     }
 
     // Create new views (invoked by the layout manager)
@@ -30,6 +30,7 @@ class MyPassageRecyclerViewAdapter(
         return GantryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.gantry_list_item, parent, false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: GantryViewHolder, position: Int) {
 
         val coord = gantryData[position].longitude.toString() + "," + gantryData[position].latitude.toString()
@@ -39,6 +40,7 @@ class MyPassageRecyclerViewAdapter(
         holder.id.text = gantryData[position].gantry_id
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun toNiceDateString(dateString: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         var convertedDate: Date? = null
