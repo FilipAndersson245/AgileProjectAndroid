@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="wrap_content"
+                                                   android:id="@+id/invoice_list_item_viewHolder"
+                                                   android:background="@android:drawable/dialog_holo_light_frame"
+                                                   android:backgroundTint="#FFFFFF"
+                                                   android:backgroundTintMode="multiply">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/constraintLayout2"
+            android:layout_marginStart="16dp">
+
+        <TextView
+                android:text="Coordinates: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/textView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="4dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+                android:text="AAAAAAAAAAAA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/gantry_id"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                android:layout_marginStart="27dp" app:layout_constraintTop_toBottomOf="@+id/gantry_coordinate"/>
+        <TextView
+                android:text="XX Coordinate XX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/gantry_coordinate"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                android:layout_marginStart="4dp" app:layout_constraintTop_toTopOf="parent"
+        />
+        <TextView
+                android:text="Gantry ID:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/textView2"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp">
+
+        <TextView
+                android:text="XX TIME XX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gantry_time"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toStartOf="parent" android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+            android:text="30 kr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gantry_fee"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="36sp" app:layout_constraintVertical_bias="0.512" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

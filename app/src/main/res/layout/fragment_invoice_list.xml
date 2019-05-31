@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/list"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:text="You have no invoices."
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:id="@+id/no_invoices_message"
+        android:gravity="center" android:visibility="gone"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gantry_list"
         android:name="se.ju.agileandroidproject.InvoiceFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".InvoiceFragment"
-        tools:listitem="@layout/fragment_invoice"/>
+        tools:context=".Fragments.InvoiceFragment"
+        tools:listitem="@layout/invoice_list_item"/>
+</LinearLayout>
